@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
   root controller: :chatrooms, action: :index
 
-  resources :messages
-  resources :chatrooms
+  scope "/social" do
+    resources :chatrooms
+    resources :messages
+  end
 end

@@ -11,11 +11,16 @@ class ChatroomsController < ApplicationController
   end
 
   def new
-    @chatroom = Chatroom.new
+    @chatroom = Chatroom.new(
+      visibility: Chatroom.visibilities[:public],
+    )
   end
 
   def create
-    @chatroom = Chatroom.new permitted_parameters
+    @chatroom = Chatroom.new(permitted_parameters.merge(
+      slug: SecureRandom.alphanumeric(10),
+      owner_id: current_user.id,
+    ))
 
     if @chatroom.save
       flash[:success] = "Chatroom #{@chatroom.name} was created successfully"
@@ -45,6 +50,6 @@ class ChatroomsController < ApplicationController
   end
 
   def permitted_parameters
-    params.require(:chatroom).permit(:name)
+    params.require(:chatroom).permit(:name, :visibility, :password)
   end
 end

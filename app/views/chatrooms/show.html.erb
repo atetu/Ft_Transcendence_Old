@@ -19,7 +19,7 @@
             <div class="col">
               <div class="message-content">
                 <p class="mb-1">
-                  <%= message.message %>
+                  <%= message.content %>
                 </p>
 
                 <div class="text-right">
@@ -36,11 +36,13 @@
 
     <%= simple_form_for @message, remote: true do |form| %>
       <div class="input-group mb-3">
-        <%= form.input :message, as: :string,
+        <%= form.input :content, as: :string,
                                  wrapper: false,
                                  label: false,
                                  input_html: {
                                    class: "chat-input",
+                                   minlength: 1,
+                                   maxlength: 200,
                                  } %>
         <div class="input-group-append">
           <%= form.submit "Send", class: "btn btn-primary chat-input" %>

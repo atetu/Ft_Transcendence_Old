@@ -13,13 +13,20 @@
 ActiveRecord::Schema.define(version: 2021_03_23_202239) do
 
   create_table "chatrooms", charset: "utf8mb4", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.integer "visibility", null: false
+    t.string "slug", limit: 10, null: false
+    t.string "password"
+    t.bigint "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["name"], name: "index_chatrooms_on_name", unique: true
+    t.index ["owner_id"], name: "index_chatrooms_on_owner_id"
+    t.index ["slug"], name: "index_chatrooms_on_slug", unique: true
   end
 
   create_table "messages", charset: "utf8mb4", force: :cascade do |t|
+    t.integer "content_type", null: false
+    t.string "content", limit: 200, null: false
     t.bigint "chatroom_id", null: false
     t.bigint "user_id", null: false
     t.text "message"
@@ -30,7 +37,7 @@ ActiveRecord::Schema.define(version: 2021_03_23_202239) do
   end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
-    t.string "email", default: "", null: false
+    t.string "email", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -38,7 +45,6 @@ ActiveRecord::Schema.define(version: 2021_03_23_202239) do
     t.string "username", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "nickname"
     t.string "provider"
     t.string "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -48,6 +54,7 @@ ActiveRecord::Schema.define(version: 2021_03_23_202239) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "chatrooms", "users", column: "owner_id"
   add_foreign_key "messages", "chatrooms"
   add_foreign_key "messages", "users"
 end

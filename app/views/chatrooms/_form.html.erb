@@ -1,4 +1,6 @@
 <%= simple_form_for @chatroom do |form| %>
-  <%= form.input :name %>
+  <%= form.input :name, required: true %>
+  <%= form.input :visibility, collection: Chatroom.visibilities.keys, required: true %>
+  <%= form.input :password, input_html: { maxlength: 20 }, required: false %>
   <%= form.submit "Save", class: "btn btn-success" %>
 <% end %>

@@ -31,3 +31,10 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        chatroom:
+          attributes:
+            visibility:
+              invalid_enum: "can't be '%{value}'. Valid values are: %{valid_values}"
