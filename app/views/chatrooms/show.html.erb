@@ -1,0 +1,73 @@
+<h1>
+  <%= @chatroom.name %>
+</h1>
+
+<div class="row">
+  <div class="col-12 col-md-3">
+    <%= render partial: "chatrooms" %>
+  </div>
+
+  <div class="col">
+    <div class="chat" data-channel-subscribe="chatroom" data-chatroom-id="<%= @chatroom.id %>">
+      <% @messages.each do |message| %>
+        <div class="chat-message-container">
+          <div class="row no-gutters">
+            <div class="col-auto text-center">
+              <img src="<%= message.user.gravatar_url %>" class="avatar" alt="">
+            </div>
+
+            <div class="col">
+              <div class="message-content">
+                <p class="mb-1">
+                  <%= message.message %>
+                </p>
+
+                <div class="text-right">
+                  <small>
+                    <%= message.created_at %>
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <%= simple_form_for @message, remote: true do |form| %>
+      <div class="input-group mb-3">
+        <%= form.input :message, as: :string,
+                                 wrapper: false,
+                                 label: false,
+                                 input_html: {
+                                   class: "chat-input",
+                                 } %>
+        <div class="input-group-append">
+          <%= form.submit "Send", class: "btn btn-primary chat-input" %>
+        </div>
+      </div>
+
+      <%= form.input :chatroom_id, as: :hidden %>
+    <% end %>
+  </div>
+</div>
+
+<div class="d-none" data-role="message-template">
+  <div class="chat-message-container">
+    <div class="row no-gutters">
+      <div class="col-auto text-center">
+        <img src="" class="avatar" alt="" data-role="user-avatar">
+      </div>
+
+      <div class="col">
+        <div class="message-content">
+          <p class="mb-1" data-role="message-text"></p>
+
+          <div class="text-right">
+            <small data-role="message-date"></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
