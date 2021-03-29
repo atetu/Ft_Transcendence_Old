@@ -1,5 +1,12 @@
 version: '2'
 services:
+  webpacker:
+    build: .
+    command: bash -c "rm -rf /usr/src/app/public/packs; /usr/src/app/bin/webpack-dev-server"
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3035:3035"
   db:
     image: postgres:9.4.1
     # ports:
@@ -7,15 +14,19 @@ services:
     volumes:
       # - db-data:/var/lib/postgresql/data
       - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
 
   web:
     build: .
   #  command: bin/rails server --port 3000 --binding 0.0.0.0
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     ports:
       - "3000:3000"
-    links:
-      - db
+    # links:
+    #   - db
     volumes:
       - .:/myapp
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
+      - webpacker

@@ -29,10 +29,11 @@ gem "jbuilder", "~> 2.7"
 #gem 'pg'
 # group :production do
 gem 'pg'
+gem 'mini_racer'
 # end
 #https://stackoverflow.com/questions/17051358/rails-execjs-runtime-error
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms: :ruby
+# gem 'therubyracer', platforms: :ruby
 
 # gem 'postgres-pr'
 
