@@ -5,7 +5,7 @@ ruby "2.5.1"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem "rails", "~> 6.1.3"
-# Use mysql as the database for Active Record
+#Use mysql as the database for Active Record
 gem "mysql2", "~> 0.5"
 # Use Puma as the app server
 gem "puma", "~> 5.0"
@@ -24,6 +24,17 @@ gem "jbuilder", "~> 2.7"
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+
+#gem 'execjs'
+#gem 'pg'
+# group :production do
+gem 'pg'
+# end
+#https://stackoverflow.com/questions/17051358/rails-execjs-runtime-error
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+gem 'therubyracer', platforms: :ruby
+
+# gem 'postgres-pr'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false

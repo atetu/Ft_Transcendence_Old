@@ -1,15 +1,36 @@
-FROM ubuntu
-RUN apt-get update && apt-get install -y ruby ruby-dev ruby-bundler build-essential ruby-dev
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-#RUN apt-get install ruby-full
-RUN bundle config --global frozen
-#RUN bundle install
-#RUN apk add build-base
-#RUN bundle update mime-types
-#RUN gem install -N rails
-#RUN apt-get install ruby-full
+FROM ruby:2.5.1
 
-RUN gem install rails -v '6.1.1'
-#WORKDIR /app
-#ADD Gemfile Gemfile.lock /app/
-#RUN bundle install
+RUN apt-get update -qq && apt-get install -y ruby-dev ruby-bundler build-essential
+
+RUN bundle config --global frozen
+
+# for postgres
+RUN apt-get install -y libpq-dev
+
+# for nokogiri
+# RUN apt-get install -y libxml2-dev libxslt1-dev
+
+# for capybara-webkit
+# RUN apt-get install -y libqt4-webkit libqt4-dev xvfb
+
+#for a JS runtime
+RUN apt-get install -y nodejs
+
+ENV APP_HOME /myapp
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+COPY Gemfile /myapp/Gemfile
+COPY Gemfile.lock /myapp/Gemfile.lock
+# WORKDIR /usr/src/app
+# RUN gem install pg -v '0.18.1'
+# RUN yarn install
+RUN bundle install
+
+# ADD . $APP_HOME
+# COPY . /usr/src/app/
+# ENV POSTGRES_USER=postgres
+# ENV POSTGRES_DB=myapp_development
+# ENV DATABASE_HOST=database
+# CMD ["rails", "server"]
+CMD ["rails", "s", "-b", "0.0.0.0"]

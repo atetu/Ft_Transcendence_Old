@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2021_03_23_202239) do
 
-  create_table "chatrooms", charset: "utf8mb4", force: :cascade do |t|
+  create_table "chatrooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.integer "visibility", null: false
     t.string "slug", limit: 10, null: false
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2021_03_23_202239) do
     t.index ["slug"], name: "index_chatrooms_on_slug", unique: true
   end
 
-  create_table "messages", charset: "utf8mb4", force: :cascade do |t|
+  create_table "messages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "content_type", null: false
     t.string "content", limit: 200, null: false
     t.bigint "chatroom_id", null: false
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2021_03_23_202239) do
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
-  create_table "users", charset: "utf8mb4", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
