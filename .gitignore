@@ -45,7 +45,6 @@ yarn-debug.log*
 
 ### Eclipse ###
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
