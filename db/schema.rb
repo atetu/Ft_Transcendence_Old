@@ -10,29 +10,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_122011) do
+ActiveRecord::Schema.define(version: 2021_03_30_153700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "chatrooms", force: :cascade do |t|
+  create_table "balls", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "chatrooms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.integer "visibility", null: false
     t.string "slug", limit: 10, null: false
     t.string "password"
-    t.bigint "owner_id", null: false
+    t.uuid "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["owner_id"], name: "index_chatrooms_on_owner_id"
     t.index ["slug"], name: "index_chatrooms_on_slug", unique: true
   end
 
-  create_table "messages", force: :cascade do |t|
+  create_table "games", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "content_type", null: false
     t.string "content", limit: 200, null: false
-    t.bigint "chatroom_id", null: false
-    t.bigint "user_id", null: false
+    t.uuid "chatroom_id", null: false
+    t.uuid "user_id", null: false
     t.text "message"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -40,7 +50,12 @@ ActiveRecord::Schema.define(version: 2021_03_30_122011) do
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "paddles", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
