@@ -1,30 +1,30 @@
-class Ball < ApplicationRecord
-    BALL_X = 25
-    BALL_Y = 50
-    BALL_VEL_X = 3
-    BALL_VEL_Y = 3
+class Ball
+    has_one game
+    @ball_x = 25
+    @ball_y = 50
+    @ball_vel_x = 3
+    @ball_vel_y = 3
 
     def initialize(game)
         @game = game
     end
     
     def move
-        BALL_X += BALL_VEL_X;
-        BALL_Y += BALL_VEL_Y;
+        @ball_x += @ball_vel_x;
+        @ball_y += ball_vel_y;
 
-        if ((BALL_X < 0 || BALL_X > 150) {
-            BALL_VEL_X *= -1;
+        if (((@ball_x < 0 || @ball_x > 150) && in?) {
+            @ball_vel_x *= -1;
         }
 
-        if (BALL_Y < 0 || BALL_Y> 150) {
-            BALL_VEL_Y *= -1;
+        if ((@ball_y < 0 || @ball_y> 150) && !out? {
+            ball_vel_y *= -1;
     end
     
-    def out
-        if(BALL_X >= paddle1.x1 && BALL_X <= paddle1.x2
-            && BALL_Y >= paddle1.y1 && BALL_Y <=paddle1.y2)
-        return (true);
-        if(BALL_X >= paddle1.x1 && BALL_X <= paddle1.x2
-            && BALL_Y >= paddle1.y1 && BALL_Y <=paddle1.y2)
-        return (true);
+    def in?
+        @ball_x >= paddle1.x1 && @ball_x <= paddle1.x2
+            && @ball_y >= paddle1.y1 && @ball_y <=paddle1.y2
+        @ball_x >= paddle1.x1 && @ball_x <= paddle1.x2
+            && @ball_y >= paddle1.y1 && @ball_y <=paddle1.y2
+    end
 end
