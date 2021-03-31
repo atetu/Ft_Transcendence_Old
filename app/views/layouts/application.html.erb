@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>FtTranscendence2</title>
+    <title>ft_transcendence</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -12,15 +12,6 @@
   </head>
 
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <%= render partial: "shared/navigation_bar" %>
-          <div class="my-3">
-            <%= yield %>
-          </div>
-        </div>
-      </div>
-    </div>
+      <%= yield %>
   </body>
 </html>

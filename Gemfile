@@ -28,8 +28,8 @@ gem "jbuilder", "~> 2.7"
 #gem 'execjs'
 #gem 'pg'
 # group :production do
-gem 'pg'
-gem 'mini_racer'
+gem "pg"
+gem "mini_racer"
 # end
 #https://stackoverflow.com/questions/17051358/rails-execjs-runtime-error
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -68,8 +68,6 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "devise"
-gem "bootstrap", "~> 4.3.1"
-gem "jquery-rails"
 gem "simple_form"
 gem "omniauth-marvin", "~> 1.0.2"
 gem "dotenv-rails"
