@@ -1,0 +1,2 @@
+class ChannelUserBanController < ApplicationController
+end

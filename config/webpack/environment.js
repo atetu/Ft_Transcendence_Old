@@ -5,9 +5,12 @@ environment.plugins.prepend(
     "Provide",
     new webpack.ProvidePlugin({
         $: "jquery",
+        _: "underscore",
         jQuery: "jquery",
         jquery: "jquery",
+        underscore: "underscore",
         "window.jQuery": "jquery",
+        "window.underscore": "underscore",
         Popper: ["popper.js", "default"],
     })
 );

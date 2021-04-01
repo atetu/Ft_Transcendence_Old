@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_153700) do
+ActiveRecord::Schema.define(version: 2021_03_31_144008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -19,6 +19,41 @@ ActiveRecord::Schema.define(version: 2021_03_30_153700) do
   create_table "balls", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "channel_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "content_type", null: false
+    t.text "content", null: false
+    t.uuid "user_id", null: false
+    t.uuid "channel_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["channel_id"], name: "index_channel_messages_on_channel_id"
+    t.index ["user_id"], name: "index_channel_messages_on_user_id"
+  end
+
+  create_table "channel_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "channel_id", null: false
+    t.boolean "admin", default: false, null: false
+    t.boolean "muted", default: false, null: false
+    t.datetime "muted_until"
+    t.boolean "banned", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["channel_id"], name: "index_channel_users_on_channel_id"
+    t.index ["user_id", "channel_id"], name: "index_channel_users_on_user_id_and_channel_id", unique: true
+    t.index ["user_id"], name: "index_channel_users_on_user_id"
+  end
+
+  create_table "channels", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.integer "visibility", null: false
+    t.string "password"
+    t.uuid "owner_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["owner_id"], name: "index_channels_on_owner_id"
   end
 
   create_table "chatrooms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -74,6 +109,11 @@ ActiveRecord::Schema.define(version: 2021_03_30_153700) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "channel_messages", "channels"
+  add_foreign_key "channel_messages", "users"
+  add_foreign_key "channel_users", "channels"
+  add_foreign_key "channel_users", "users"
+  add_foreign_key "channels", "users", column: "owner_id"
   add_foreign_key "chatrooms", "users", column: "owner_id"
   add_foreign_key "messages", "chatrooms"
   add_foreign_key "messages", "users"

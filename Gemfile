@@ -72,3 +72,4 @@ gem "simple_form"
 gem "omniauth-marvin", "~> 1.0.2"
 gem "dotenv-rails"
 gem "enum_attributes_validation"
+gem "blueprinter", require: true

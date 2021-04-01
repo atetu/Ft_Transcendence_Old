@@ -7,14 +7,13 @@ require("@rails/ujs").start();
 require("turbolinks").start();
 require("@rails/activestorage").start();
 require("channels");
-require("underscore");
 require("jquery-ui");
 require("bootstrap");
-require("backbone");
+
+window._ = require("underscore");
+window.Backbone = require("backbone");
 
 document.addEventListener("turbolinks:load", () => {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
-  console.log("World");
 });
-console.log("Hello");

@@ -19,4 +19,11 @@ Rails.application.routes.draw do
     resources :chatrooms
     resources :messages
   end
+
+  scope "/api" do
+    get "/channels", to: "channel#all"
+    get "/channel/:id", to: "channel#get"
+    get "/channel/:channel_id/messages", to: "channel_message#all"
+    get "/channel/:channel_id/members", to: "channel_user#all"
+  end
 end
