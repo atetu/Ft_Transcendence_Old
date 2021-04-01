@@ -1,0 +1,7 @@
+<script type="text/template" id="template-channel-list">
+	<%% _.each(channels, function(channel) { %>
+		<a href="#channels/<%%= channel.id %>">
+			<%%= channel.id %> (owner by <%%= channel.owner.username %>)
+		</a>
+	<%% }); %>
+</script>
