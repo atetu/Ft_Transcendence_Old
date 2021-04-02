@@ -36,9 +36,9 @@ ActiveRecord::Schema.define(version: 2021_03_31_144008) do
     t.uuid "user_id", null: false
     t.uuid "channel_id", null: false
     t.boolean "admin", default: false, null: false
+    t.boolean "banned", default: false, null: false
     t.boolean "muted", default: false, null: false
     t.datetime "muted_until"
-    t.boolean "banned", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["channel_id"], name: "index_channel_users_on_channel_id"
