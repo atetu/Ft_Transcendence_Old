@@ -1,0 +1,13 @@
+<script type="text/template" id="template-channel-list">
+	<%% _.each(channels, function(channel) { %>
+		<a href="/#channel/<%%= channel.id %>">
+			<%%= channel.id %> (owner by <%%= channel.owner.username %>)
+		</a>
+	<%% }); %>
+</script>
+
+<script type="text/template" id="template-channel">
+	<%% _.each(messages, function(message) { %>
+		<%%= message.user.username %>: <%%= message.content %> <br>
+	<%% }); %>
+</script>

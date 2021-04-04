@@ -1,10 +1,15 @@
 import Backbone from "backbone";
 
+const Channel = require("./components/channel");
+
 const Router = Backbone.Router.extend({
   routes: {
     "": "home",
     channels: "channels",
     "channel/:channel_id": "channelById",
+  },
+  initialize(options) {
+	this.app = options.app;
   },
   home() {
     console.log("home()");
@@ -12,18 +17,26 @@ const Router = Backbone.Router.extend({
   },
   channels() {
     console.log("channels()");
-    //console.trace();
+
+    var channelCollection = new Channel.ChannelCollection();
+
+    this.app.setView(
+      new Channel.ChannelListView({
+        collection: channelCollection,
+      })
+    );
+
+    channelCollection.fetch();
   },
   channelById(channel_id) {
     console.log("channelById(" + channel_id + ")");
-    //console.trace();
+
+	this.app.setView(
+      new Channel.ChannelView({
+        channel_id: channel_id,
+      })
+    );
   },
 });
 
-const router = new Router();
-router.on("route", function (currentRoute, params) {
-  //console.trace([currentRoute, params]);
-  //Navbar.currentRoute.set({ route: curRoute });
-});
-
-export default router;
+export default Router;
