@@ -1,6 +1,6 @@
 class ChannelChannel < ApplicationCable::Channel
   def subscribed
-    channel = Channel.find params[:channel]
+    channel = Channel.find params[:channel_id]
 
     reject unless ChannelUser.exists?(
       user_id: current_user.id,

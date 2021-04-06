@@ -5,7 +5,7 @@ const Channel = require("./components/channel");
 const Router = Backbone.Router.extend({
   routes: {
     "": "home",
-    channels: "channels",
+    "channels": "channels",
     "channel/:channel_id": "channelById",
   },
   initialize(options) {

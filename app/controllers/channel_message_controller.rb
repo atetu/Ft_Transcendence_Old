@@ -8,7 +8,18 @@ class ChannelMessageController < ApplicationController
     )
   end
 
-  def post
+  def create
+    @message = ChannelMessage.create!(
+      user: current_user,
+      channel: @channel,
+      content_type: ChannelMessage.content_types[:text],
+      content: params.dig(:content),
+    )
+
+    ChannelChannel.broadcast_to @channel, ChannelMessageBlueprint.render_as_hash(
+      @message,
+      view: :user,
+    )
   end
 
   private

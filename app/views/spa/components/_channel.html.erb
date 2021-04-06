@@ -7,7 +7,52 @@
 </script>
 
 <script type="text/template" id="template-channel">
-	<%% _.each(messages, function(message) { %>
-		<%%= message.user.username %>: <%%= message.content %> <br>
-	<%% }); %>
+	<%% if (loading) { %>
+		loading...
+	<%% } else if (error) { %>
+		error: <%%= error %>
+	<%% } else { %>
+		<%% if (!connected) { %>
+			<div class="alert alert-warning" role="alert">
+				not connected, connecting...
+			</div>
+		<%% }%>
+		visibility: <%%= channel.visibility %> <br>
+		owner: <%%= channel.owner.username %> <br>
+  		<div class="dropdown-divider"></div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-lg-10">
+					<h3>Messages</h3>
+					<div id="message-container" style="height: 300px; overflow-y: scroll">
+						<%% _.each(messages, function(message) { %>
+							<%%= message.user.username %>: <%%= message.content %> <br>
+						<%% }); %>
+					</div>
+
+					<div class="dropdown-divider"></div>
+					<div class="form-group">
+						<label for="message-input">Message</label>
+						<input class="form-control" id="message-input" placeholder="Hi guys">
+					</div>
+					<button id="send-button" class="btn btn-primary">Send</button>
+				</div>
+				<div class="col-0 col-lg-2">
+					<h3>Members</h3>
+					<%% _.each(channel.members, function(member) { %>
+						<p>
+							<%%= member.user.username %>
+							<%% if (member.admin) { %>
+								<i class="mdi mdi-account-supervisor" aria-hidden="true"></i>
+							<%% } %>
+							<%% if (member.muted) { %>
+								<i class="mdi mdi-volume-mute" aria-hidden="true"></i>
+							<%% } %>
+						</p>
+					<%% }); %>
+				</div>
+			</div>
+		</div>
+	<%% } %>
 </script>
