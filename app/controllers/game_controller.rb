@@ -12,13 +12,18 @@ class GameController < ApplicationController
       end
     
       def create
-        @game = Game.new
-    
-        if @game.save
-          redirect_to @game
-        else
-          render :new
-        end
+        players_game = Game.new(players_game_params)
+        # players_game.save!
+        render :json => players_game
+      end
+
+      def players_game_params
+        params.permit(
+          :game_id,
+          :player_id,
+          :position,
+          :score
+        )
       end
    
 end

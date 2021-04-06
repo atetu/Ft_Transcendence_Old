@@ -71,6 +71,10 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # config.action_cable.allowed_request_origins = [ /http:\/\/.*/, /https:\/\/.*/ ]
+  config.action_cable.allowed_request_origins = ['http://localhost:3000']
+  config.action_cable.url = "ws://localhost:3000/cable"
+
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 end
