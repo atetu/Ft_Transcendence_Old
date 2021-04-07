@@ -77,6 +77,7 @@ const ChannelView = Backbone.View.extend({
     );
 
     this.delegateEvents();
+	this.scrollToBottom();
 
     return this;
   },
