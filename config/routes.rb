@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   end
 
   scope "/api" do
+    get "/user/current", to: "user#current"
     get "/channels", to: "channel#all"
     post "/channels", to: "channel#create"
     get "/channels/:id", to: "channel#get"

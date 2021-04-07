@@ -67,8 +67,10 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "devise"
 gem "simple_form"
-gem "omniauth-marvin", "~> 1.0.2"
 gem "dotenv-rails"
 gem "enum_attributes_validation"
 gem "blueprinter", require: true
 #gem "flamegraph", require: true
+#TODO MARVIN gem "omniauth-marvin", "~> 1.0.2"
+gem "omniauth-google-oauth2", "~> 0.8.0" # marvin and google are not compatible - require different library version
+gem "open-uri"
