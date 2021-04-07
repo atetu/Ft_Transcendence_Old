@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_31_144008) do
+ActiveRecord::Schema.define(version: 2021_04_07_153632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -49,10 +49,10 @@ ActiveRecord::Schema.define(version: 2021_03_31_144008) do
   create_table "channels", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.integer "visibility", null: false
-    t.string "password"
     t.uuid "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "password_digest"
     t.index ["owner_id"], name: "index_channels_on_owner_id"
   end
 

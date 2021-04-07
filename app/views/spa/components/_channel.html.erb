@@ -1,9 +1,45 @@
 <script type="text/template" id="template-channel-list">
+	<a href="/#channel/create">
+		create a channel
+	</a> <br /><br />
 	<%% _.each(channels, function(channel) { %>
 		<a href="/#channel/<%%= channel.id %>">
 			<%%= channel.id %> (owner by <%%= channel.owner.username %>)
-		</a>
+		</a> <br />
 	<%% }); %>
+</script>
+
+<script type="text/template" id="template-channel-create">
+	<form>
+		<div class="form-group">
+			<label for="name-input">Name</label>
+			<input class="form-control" id="name-input">
+			<div class="invalid-feedback">
+				Please choose a username.
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="visibility-input">Visibility</label>
+			<select class="form-control" id="visibility-input">
+				<option value="public">Public</option>
+				<option value="protected">Protected <small>(require a password)</small></option>
+				<option value="private">Private</option>
+			</select>
+			<div class="invalid-feedback">
+				Please choose a username.
+			</div>
+		</div>
+		<div class="form-group" style="display: none">
+			<label for="password-input">Password</label>
+			<input type="password" class="form-control" id="password-input">
+			<div class="invalid-feedback">
+				Please choose a username.
+			</div>
+		</div>
+	</form>
+	<div class="text-center">
+		<button type="button" class="btn btn-primary" id="submit-button">Submit</button>
+	</div>
 </script>
 
 <script type="text/template" id="template-channel">

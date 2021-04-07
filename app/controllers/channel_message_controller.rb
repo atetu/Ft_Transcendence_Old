@@ -12,13 +12,17 @@ class ChannelMessageController < ApplicationController
     @message = ChannelMessage.create!(
       user: current_user,
       channel: @channel,
-      content_type: ChannelMessage.content_types[:text],
-      content: params.dig(:content),
+      content_type: params[:content_type],
+      content: params[:content],
     )
 
     ChannelChannel.broadcast_to @channel, ChannelMessageBlueprint.render_as_hash(
       @message,
       view: :user,
+    )
+
+    render json: ChannelMessageBlueprint.render(
+      @message
     )
   end
 

@@ -1,6 +1,6 @@
 class ChannelController < ApplicationController
   def all
-    render json: ChannelBlueprint.render(Channel.all)
+    render json: ChannelBlueprint.render(Channel.includes(:owner))
   end
 
   def get
@@ -13,6 +13,16 @@ class ChannelController < ApplicationController
   end
 
   def create
+    args = permitted_parameters
+
+    channel = Channel.create!(
+      name: args[:name],
+      visibility: args[:visibility],
+      password: args[:password],
+      owner: current_user,
+    )
+
+    render json: ChannelBlueprint.render(channel)
   end
 
   private
@@ -22,7 +32,7 @@ class ChannelController < ApplicationController
   end
 
   def permitted_parameters
-    params.require(:channel).permit(:name, :visibility, :password)
+    params.permit(:name, :visibility, :password)
   end
 end
 

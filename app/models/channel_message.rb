@@ -4,5 +4,8 @@ class ChannelMessage < ApplicationRecord
   belongs_to :user
   belongs_to :channel
 
+  validates :user, presence: true
+  validates :channel, presence: true
   validates :content, presence: true
+  validate_enum_attributes :content_type
 end

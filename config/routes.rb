@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   scope "/api" do
     get "/channels", to: "channel#all"
+    post "/channels", to: "channel#create"
     get "/channels/:id", to: "channel#get"
     get "/channels/:channel_id/messages", to: "channel_message#all"
     post "/channels/:channel_id/messages", to: "channel_message#create"

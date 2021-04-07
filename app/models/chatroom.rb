@@ -7,7 +7,7 @@ class Chatroom < ApplicationRecord
 
   validates :name, presence: true, :length => { in: 1..20, allow_nil: false }
   validates :slug, presence: true, uniqueness: true
-  validate_enum_attributes :visibility
   validates :password, :presence => true, :length => { in: 8..20, allow_nil: false }, :if => Proc.new { |x| x.visibility == "protected" }
   validates :password, :absence => { :message => "can only be set for protected chatroom" }, :if => Proc.new { |x| x.visibility != "protected" }
+  validate_enum_attributes :visibility
 end

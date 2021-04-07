@@ -109,14 +109,11 @@ const ChannelView = Backbone.View.extend({
             self.channel.set("$connected", true);
           },
           disconnected(x) {
-			  "";
             console.log("disconnected(): " + x);
             self.channel.set("$connected", false);
           },
           received(data) {
             console.log("received(" + JSON.stringify(data) + ")");
-            console.log(self.collection);
-            console.log(self);
             self.collection.add(data);
           },
         }
@@ -135,13 +132,11 @@ const ChannelView = Backbone.View.extend({
 
     this.$("#message-input").val("");
 
-    const r = new ChannelMessage.ChannelMessageModel().save({
+    new ChannelMessage.ChannelMessageModel().save({
       channel_id: this.channel.id,
+	  content_type: "text",
       content: message,
     });
-
-    console.log(r);
-    console.log(message);
   },
   scrollToBottom() {
     const div = this.$("#message-container");
@@ -155,4 +150,16 @@ const ChannelView = Backbone.View.extend({
   },
 });
 
-export { ChannelModel, ChannelCollection, ChannelListView, ChannelView };
+
+const ChannelCreateOrEditView = Backbone.View.extend({
+	template: _.template($("script[id='template-channel-create']").html()),
+	render() {
+	  this.$el.html(
+		this.template()
+	  );
+  
+	  return this;
+	},
+});
+
+export { ChannelModel, ChannelCollection, ChannelListView, ChannelView, ChannelCreateOrEditView };
