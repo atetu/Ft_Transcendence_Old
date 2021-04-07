@@ -7,8 +7,8 @@ const Router = Backbone.Router.extend({
     "": "home",
     channels: "channels",
     "channel/create": "channelCreate",
-    "channel/edit/:channel_id": "channelEditById",
     "channel/:channel_id": "channelById",
+    "channel/:channel_id/edit": "channelByIdEdit",
   },
   initialize(options) {
     this.app = options.app;
@@ -35,20 +35,20 @@ const Router = Backbone.Router.extend({
 
     this.app.setView(new Channel.ChannelCreateOrEditView());
   },
-  channelEditById(channel_id) {
-    console.log("channelEditById(" + channel_id + ")");
-
-    this.app.setView(
-      new Channel.ChannelCreateOrEditView({
-        channel_id: channel_id,
-      })
-    );
-  },
   channelById(channel_id) {
     console.log("channelById(" + channel_id + ")");
 
     this.app.setView(
       new Channel.ChannelView({
+        channel_id: channel_id,
+      })
+    );
+  },
+  channelByIdEdit(channel_id) {
+    console.log("channelByIdEdit(" + channel_id + ")");
+
+    this.app.setView(
+      new Channel.ChannelCreateOrEditView({
         channel_id: channel_id,
       })
     );

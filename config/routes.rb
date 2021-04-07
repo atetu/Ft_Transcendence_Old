@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get "/channels", to: "channel#all"
     post "/channels", to: "channel#create"
     get "/channels/:id", to: "channel#get"
+    put "/channels/:id", to: "channel#edit"
     get "/channels/:channel_id/messages", to: "channel_message#all"
     post "/channels/:channel_id/messages", to: "channel_message#create"
     get "/channels/:channel_id/members", to: "channel_user#all"

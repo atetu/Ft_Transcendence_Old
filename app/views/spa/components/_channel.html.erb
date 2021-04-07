@@ -13,23 +13,23 @@
 	<form>
 		<div class="form-group">
 			<label for="name-input">Name</label>
-			<input class="form-control" id="name-input">
+			<input class="form-control" id="name-input" value="<%%= name %>">
 			<div class="invalid-feedback">
 				Please choose a username.
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="visibility-input">Visibility</label>
-			<select class="form-control" id="visibility-input">
-				<option value="public">Public</option>
-				<option value="protected">Protected <small>(require a password)</small></option>
-				<option value="private">Private</option>
+			<select class="form-control" id="visibility-select">
+				<option value="public" <%%= visibility == "public" ? 'selected' : '' %>>Public</option>
+				<option value="protected" <%%= visibility == "protected" ? 'selected' : '' %>>Protected <small>(require a password)</small></option>
+				<option value="private" <%%= visibility == "private" ? 'selected' : '' %>>Private</option>
 			</select>
 			<div class="invalid-feedback">
 				Please choose a username.
 			</div>
 		</div>
-		<div class="form-group" style="display: none">
+		<div class="form-group" style="display: none" id="password-form-group">
 			<label for="password-input">Password</label>
 			<input type="password" class="form-control" id="password-input">
 			<div class="invalid-feedback">
@@ -56,7 +56,10 @@
 		visibility: <%%= channel.visibility %> <br>
 		owner: <%%= channel.owner.username %> <br>
   		<div class="dropdown-divider"></div>
-
+		  <%% if (user_signed_in && current_user.id == channel.owner.id) { %>
+		  	<a href="#channel/<%%= channel.id %>/edit">edit</a>
+		  <%% } %>
+  		<div class="dropdown-divider"></div>
 		<div class="container">
 			<div class="row">
 				<div class="col-12 col-lg-10">
@@ -79,6 +82,9 @@
 					<%% _.each(channel.members, function(member) { %>
 						<p>
 							<%%= member.user.username %>
+							<%% if (member.user.id == channel.owner.id) { %>
+								<i class="mdi mdi-crown" aria-hidden="true"></i>
+							<%% } %>
 							<%% if (member.admin) { %>
 								<i class="mdi mdi-account-supervisor" aria-hidden="true"></i>
 							<%% } %>
