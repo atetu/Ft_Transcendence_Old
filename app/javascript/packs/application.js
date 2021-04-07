@@ -7,6 +7,7 @@ require("jquery-ui");
 require("bootstrap");
 
 import Router from "./router";
+const NavigationBar = require("./components/navigation_bar")
 
 window.$ = require("jquery");
 window._ = require("underscore");
@@ -38,15 +39,18 @@ var AppView = Backbone.View.extend({
 
 const app = {
   setView(view) {
-	this.model.get("view")?.close();
+    this.model.get("view")?.close();
     this.model.set("view", view);
   },
   start() {
-    this.router = new Router({ app: this });
-    console.log(this.router);
+    this.navigationBarView = new NavigationBar.NavigationBarView();
 
     this.model = new AppModel({ view: null });
     this.view = new AppView({ model: this.model });
+	
+    this.router = new Router({ app: this });
+	
+    this.navigationBarView.render();
     this.view.render();
 
     Backbone.history.start();

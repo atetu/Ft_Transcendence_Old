@@ -6,22 +6,22 @@ const Channel = require("./components/channel");
 const Router = Backbone.Router.extend({
   routes: {
     "": "home",
-    "channels": "channels",
+    channels: "channels",
     "channel/create": "channelCreate",
     "channel/:channel_id": "channelById",
     "channel/:channel_id/edit": "channelByIdEdit",
-    "guilds": "guilds",
+    guilds: "guilds",
   },
   initialize(options) {
     this.app = options.app;
   },
   home() {
-    console.log("home()");
+    this.setActive(null);
 
     this.app.setView(new Dummy.EmptyView());
   },
   channels() {
-    console.log("channels()");
+    this.setActive("channels");
 
     var channelCollection = new Channel.ChannelCollection();
 
@@ -34,12 +34,12 @@ const Router = Backbone.Router.extend({
     channelCollection.fetch();
   },
   channelCreate() {
-    console.log("channelCreate()");
+    this.setActive("channels");
 
     this.app.setView(new Channel.ChannelCreateOrEditView());
   },
   channelById(channel_id) {
-    console.log("channelById(" + channel_id + ")");
+    this.setActive("channels");
 
     this.app.setView(
       new Channel.ChannelView({
@@ -48,7 +48,7 @@ const Router = Backbone.Router.extend({
     );
   },
   channelByIdEdit(channel_id) {
-    console.log("channelByIdEdit(" + channel_id + ")");
+    this.setActive("channels");
 
     this.app.setView(
       new Channel.ChannelCreateOrEditView({
@@ -57,10 +57,13 @@ const Router = Backbone.Router.extend({
     );
   },
   guilds() {
-    console.log("guilds()");
-	
+    this.setActive("guilds");
+
     this.app.setView(new Dummy.EmptyView());
-  }
+  },
+  setActive(route) {
+    this.app.navigationBarView.setActive(route);
+  },
 });
 
 export default Router;
