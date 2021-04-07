@@ -1,5 +1,6 @@
 import Backbone from "backbone";
 
+const Dummy = require("./components/dummy");
 const Channel = require("./components/channel");
 
 const Router = Backbone.Router.extend({
@@ -9,13 +10,15 @@ const Router = Backbone.Router.extend({
     "channel/create": "channelCreate",
     "channel/:channel_id": "channelById",
     "channel/:channel_id/edit": "channelByIdEdit",
+    "guilds": "guilds",
   },
   initialize(options) {
     this.app = options.app;
   },
   home() {
     console.log("home()");
-    //console.trace();
+
+    this.app.setView(new Dummy.EmptyView());
   },
   channels() {
     console.log("channels()");
@@ -53,6 +56,11 @@ const Router = Backbone.Router.extend({
       })
     );
   },
+  guilds() {
+    console.log("guilds()");
+	
+    this.app.setView(new Dummy.EmptyView());
+  }
 });
 
 export default Router;

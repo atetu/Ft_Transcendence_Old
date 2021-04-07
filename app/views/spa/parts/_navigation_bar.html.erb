@@ -1,29 +1,40 @@
-<header class="p-3 mb-3 border-bottom">
-	<div class="container">
-		<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-end">
-			<li>
-				<a href="#channels">Channels</a>
-			</li>
-			<div class="dropdown text-right">
-				<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-toggle="dropdown">
-					<img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-					<%= current_user.username %>
-				</a>
-				<ul class="dropdown-menu text-small">
-					<li>
-						<a class="dropdown-item" href="#">Settings</a>
+<header class="mb-3 border-bottom">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container">
+			<a class="navbar-brand" href="#">ft_transcendence</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#channels">channels</a>
 					</li>
-					<li>
-						<a class="dropdown-item" href="#">Profile</a>
-					</li>
-					<li>
-						<hr class="dropdown-divider">
-					</li>
-					<li>
-						<%= link_to "Logout", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+					<li class="nav-item">
+						<a class="nav-link" href="#guilds">guilds</a>
 					</li>
 				</ul>
+				<div class="dropdown text-right">
+					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-toggle="dropdown">
+						<img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+						<%= current_user.username %>
+					</a>
+					<ul class="dropdown-menu text-small">
+						<li>
+							<a class="dropdown-item" href="#">Settings</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="#">Profile</a>
+						</li>
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li>
+							<%= link_to "Logout", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
-	</div>
+	</nav>
 </header>

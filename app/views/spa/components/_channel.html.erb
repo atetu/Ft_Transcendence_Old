@@ -53,8 +53,10 @@
 				not connected, connecting...
 			</div>
 		<%% }%>
-		visibility: <%%= channel.visibility %> <br>
-		owner: <%%= channel.owner.username %> <br>
+		<h3>
+			<%%= channel.name %>
+			<small class="text-muted"><%%= channel.visibility %></small>
+		</h3>
   		<div class="dropdown-divider"></div>
 		  <%% if (user_signed_in && current_user.id == channel.owner.id) { %>
 		  	<a href="#channel/<%%= channel.id %>/edit">edit</a>
