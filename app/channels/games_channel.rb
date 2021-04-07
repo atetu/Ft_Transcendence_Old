@@ -1,5 +1,6 @@
 class GamesChannel < ApplicationCable::Channel
     def subscribed
-      stream_from "games_channel"
+      game = Gme.find params[:game]
+      stream_for game
     end
   end

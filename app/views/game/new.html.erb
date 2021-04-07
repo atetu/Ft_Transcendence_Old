@@ -1,101 +1,14 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-	<meta charset="utf-8" />
-	<title>Canvas tutorial</title>
-	<script type="text/javascript">
-		function draw() {
-			var canvas = document.getElementById('tutorial');
-			if (canvas.getContext) {
-				var ctx = canvas.getContext('2d');
-			}
-
-			let y = 0;
-			let ballX = 0, ballY = 0;
-			let enemyPaddleY = 0; 
-			let mySide = 0;
-
-			var socket = new WebSocket('ws://127.0.0.1:7000/');
-			socket.onmessage = ((event) => {
-				const msg = JSON.parse(event.data);
-
-				switch (msg.type) {
-					case "side": {
-						mySide = msg.side;
-						break;
-					}
-
-					case "ball-pos": {
-						ballX = msg.ballX;
-						ballY = msg.ballY;
-						break;
-					}
-
-					case "pos": {
-						if (msg.self) {
-							y = msg.y;
-						} else {
-							enemyPaddleY = msg.y;
-						}
-						break;
-					}
-				}
-
-			});
-
-			document.addEventListener("keydown", (event) => {
-				switch (event.keyCode) {
-
-					case 38: {
-						y -= 5;
-						break;
-					}
-
-					case 40: {
-						y += 5;
-						break;
-					}
-				}
-
-				socket.send(JSON.stringify({
-					type: "move",
-					y
-				}))
-			})
-
-			setInterval(() => {
-				ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-				ctx.fillStyle = "#ff0000";
-				ctx.fillRect(ballX, ballY, 10, 10);
-
-
-				if (mySide) /* left */ {
-					ctx.fillStyle = "#00ff00";
-					ctx.fillRect(5, y, 10, 50);
-
-					ctx.fillStyle = "#0000ff";
-					ctx.fillRect(canvas.width - 10 - 5, enemyPaddleY, 10, 50);
-				} else {
-					ctx.fillStyle = "#00ff00";
-					ctx.fillRect(canvas.width - 10 - 5, y, 10, 50);
-
-					ctx.fillStyle = "#0000ff";
-					ctx.fillRect(5, enemyPaddleY, 10, 50);
-				}
-			}, 1000 / 10);
-		}
-	</script>
-	<style type="text/css">
-		canvas {
-			border: 1px solid black;
-		}
-	</style>
-</head>
-
-<body onload="draw();">
-	<canvas id="tutorial" width="150" height="150"></canvas>
-</body>
-
-</html>
+<div class="container">
+	<div class="row">
+		<div class="col-8">
+			<canvas class="myCanvas"></canvas>
+		</div>
+		<div class="col-3">
+			<div class="GameInfo" value="<%= @game.id %>" >
+			  <p> Game status : <div id="game_status"><%= @game.status %></div> </p>
+			  <p> Spec count : <div id="spec_count">0</div></p>
+			</div>
+			<%= render 'show_rules' %>
+		</div>
+	</div>
+</div>
