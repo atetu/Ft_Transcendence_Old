@@ -14,7 +14,7 @@ class GameController < ApplicationController
       def create
         players_game = Game.new(players_game_params)
         # players_game.save!
-        render :json => players_game
+        # render :json => players_game
       end
 
       def players_game_params

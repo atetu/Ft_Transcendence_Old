@@ -27,10 +27,11 @@ Rails.application.routes.draw do
   #   get "/channels/:channel_id/members", to: "channel_user#all"
   # end
   
-  mount ActionCable.server => '/cable'
-    resources :game
-    resources :user
-    resources :ball
+  # mount ActionCable.server => '/cable'
+  #   resources :game
+  #   resources :user
+  #   resources :ball
+  resources :game, only: [:index, :new, :create]
 
   
 end
