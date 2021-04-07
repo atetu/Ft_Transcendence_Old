@@ -22,7 +22,26 @@ class ChannelController < ApplicationController
       owner: current_user,
     )
 
+    begin
+      ChannelUser.create!(
+        user: current_user,
+        channel: channel,
+      )
+    rescue
+      channel.destroy
+      raise
+    end
+
     render json: ChannelBlueprint.render(channel)
+  end
+
+  def edit
+    load_entities
+
+    @channel.assign_attributes(permitted_parameters)
+    @channel.save!
+
+    render json: ChannelBlueprint.render(@channel)
   end
 
   private
