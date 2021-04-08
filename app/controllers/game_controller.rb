@@ -1,24 +1,39 @@
 class GameController < ApplicationController
-    def index
-        @games = Game.all
-      end
-    
-      def show
-        @game = Game.find(params[:id])
-      end
-    
-      def new
-        @game = Game.new
-      end
-    
-      def create
-        @game = Game.new
-    
-        if @game.save
-          redirect_to @game
-        else
-          render :new
-        end
-      end
-    end
+  def all
+    render json: Game.all
+  end
+
+  def get
+    load_entities
+
+    render json: @game
+  end
+
+  def create
+    args = permitted_parameters
+
+    game = Game.create!(
+    )
+
+    render json: game
+  end
+
+  def edit
+    load_entities
+
+    @game.assign_attributes(permitted_parameters)
+    @game.save!
+
+    render json: @game
+  end
+
+  private
+
+  def load_entities
+    @game = Game.find params[:id]
+  end
+
+  def permitted_parameters
+    params.permit()
+  end
 end

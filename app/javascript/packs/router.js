@@ -2,6 +2,7 @@ import Backbone from "backbone";
 
 const Dummy = require("./components/dummy");
 const Channel = require("./components/channel");
+const Game = require("./components/game");
 
 const Router = Backbone.Router.extend({
   routes: {
@@ -11,6 +12,8 @@ const Router = Backbone.Router.extend({
     "channel/:channel_id": "channelById",
     "channel/:channel_id/edit": "channelByIdEdit",
     guilds: "guilds",
+    "games": "gameNew",
+    "game/:game_id": "gameById",
   },
   initialize(options) {
     this.app = options.app;
@@ -60,6 +63,21 @@ const Router = Backbone.Router.extend({
     this.setActive("guilds");
 
     this.app.setView(new Dummy.EmptyView());
+  },
+  gameNew()
+  {
+    this.setActive("games");
+
+    this.app.setView(new Game.GameView());
+  },
+  gameById(game_id) {
+    this.setActive("games");
+
+    this.app.setView(
+      new Game.GameView({
+        game_id: game_id,
+      })
+    );
   },
   setActive(route) {
     this.app.navigationBarView.setActive(route);

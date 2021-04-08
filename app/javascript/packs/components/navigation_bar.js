@@ -36,6 +36,13 @@ const NavigationBarView = Backbone.View.extend({
         name: "guilds",
       })
     );
+    
+    this.links.add(
+      new NavigationBarLinkModel({
+        route: "games",
+        name: "games",
+      })
+    );
 
     this.model.on("change", this.render);
     this.links.bind("change", this.render);
