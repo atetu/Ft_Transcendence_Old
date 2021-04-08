@@ -13,13 +13,6 @@ Rails.application.routes.draw do
 
   root to: "spa#index"
 
-  #root controller: :chatrooms, action: :index
-
-  scope "/social" do
-    resources :chatrooms
-    resources :messages
-  end
-
   scope "/api" do
     get "/user/current", to: "user#current"
     get "/channels", to: "channel#all"
