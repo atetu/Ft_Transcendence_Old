@@ -2,6 +2,7 @@ import Backbone from "backbone";
 
 const Dummy = require("./components/dummy");
 const Channel = require("./components/channel");
+const User = require("./components/user");
 
 const Router = Backbone.Router.extend({
   routes: {
@@ -11,6 +12,9 @@ const Router = Backbone.Router.extend({
     "channel/:channel_id": "channelById",
     "channel/:channel_id/edit": "channelByIdEdit",
     guilds: "guilds",
+	profile: "profile",
+	"users": "users",
+	"user/:user_id": "userById"
   },
   initialize(options) {
     this.app = options.app;
@@ -43,7 +47,7 @@ const Router = Backbone.Router.extend({
 
     this.app.setView(
       new Channel.ChannelView({
-        channel_id: channel_id,
+        channel_id
       })
     );
   },
@@ -52,7 +56,7 @@ const Router = Backbone.Router.extend({
 
     this.app.setView(
       new Channel.ChannelCreateOrEditView({
-        channel_id: channel_id,
+        channel_id
       })
     );
   },
@@ -60,6 +64,31 @@ const Router = Backbone.Router.extend({
     this.setActive("guilds");
 
     this.app.setView(new Dummy.EmptyView());
+  },
+  profile() {
+    this.setActive("profile");
+
+    this.app.setView(new User.UserProfileView({
+		user_id: current_user.id
+	}));
+  },
+  users() {
+    this.setActive("users");
+
+    var userCollection = new User.UserCollection();
+
+    this.app.setView(new User.UserListView({
+		collection: userCollection
+	}));
+
+    userCollection.fetch();
+  },
+  userById(user_id) {
+    this.setActive("users");
+
+    this.app.setView(new User.UserProfileView({
+		user_id
+	}));
   },
   setActive(route) {
     this.app.navigationBarView.setActive(route);

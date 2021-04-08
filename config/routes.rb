@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   root to: "spa#index"
 
   scope "/api" do
-    get "/user/current", to: "user#current"
+    get "/users", to: "user#all"
+    get "/users/current", to: "user#current"
+    get "/users/:id", to: "user#show"
     get "/channels", to: "channel#all"
     post "/channels", to: "channel#create"
     get "/channels/:id", to: "channel#get"

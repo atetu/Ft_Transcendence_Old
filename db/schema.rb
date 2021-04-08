@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_31_144008) do
+ActiveRecord::Schema.define(version: 2021_04_08_180505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -79,6 +79,15 @@ ActiveRecord::Schema.define(version: 2021_03_31_144008) do
     t.index ["owner_id"], name: "index_channels_on_owner_id"
   end
 
+  create_table "user_statistics", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.integer "win_count", default: 0, null: false
+    t.integer "loss_count", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_statistics_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "username", null: false
@@ -99,4 +108,5 @@ ActiveRecord::Schema.define(version: 2021_03_31_144008) do
   add_foreign_key "channel_users", "channels"
   add_foreign_key "channel_users", "users"
   add_foreign_key "channels", "users", column: "owner_id"
+  add_foreign_key "user_statistics", "users"
 end

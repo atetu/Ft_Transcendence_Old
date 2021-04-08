@@ -7,4 +7,16 @@ const EmptyView = Backbone.View.extend({
   },
 });
 
-export { EmptyView };
+const SimpleView = Backbone.View.extend({
+  initialize(options) {
+    this.template = _.template($(options.template).html());
+    this.data = options.data;
+  },
+  render() {
+    this.$el.html(this.template(this.data));
+
+    return this;
+  },
+});
+
+export { EmptyView, SimpleView };
