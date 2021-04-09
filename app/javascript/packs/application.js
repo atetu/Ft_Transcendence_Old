@@ -7,7 +7,7 @@ require("jquery-ui");
 require("bootstrap");
 
 import Router from "./router";
-const NavigationBar = require("./components/navigation_bar")
+const NavigationBar = require("./components/navigation_bar");
 
 window.$ = require("jquery");
 window._ = require("underscore");
@@ -47,9 +47,9 @@ const app = {
 
     this.model = new AppModel({ view: null });
     this.view = new AppView({ model: this.model });
-	
+
     this.router = new Router({ app: this });
-	
+
     this.navigationBarView.render();
     this.view.render();
 
@@ -58,6 +58,11 @@ const app = {
 };
 
 export default app;
+
+import bsCustomFileInput from 'bs-custom-file-input';
+$(document).ready(function () {
+  bsCustomFileInput.init();
+});
 
 $(document).ready(function () {
   app.start();

@@ -53,11 +53,12 @@ const UserProfileView = Backbone.View.extend({
       this.template({
         error: this.user.get("$error"),
         loading: this.user.get("$loading"),
+        isSelf: user_signed_in && this.user.id === current_user.id,
         user: this.user.toJSON(),
       })
     );
 
-	this.$('[data-toggle="tooltip"]').tooltip();
+    this.$('[data-toggle="tooltip"]').tooltip();
 
     return this;
   },
@@ -75,4 +76,49 @@ const UserProfileView = Backbone.View.extend({
   },
 });
 
-export { UserModel, UserCollection, UserListView, UserProfileView };
+const UserProfileEditView = Backbone.View.extend({
+  template: _.template($("script[id='template-user-profile-edit']").html()),
+  events: {
+    "click #upload-button": "upload",
+    "change #file-input": "changeInput",
+  },
+  initialize(options) {
+    _.bindAll(this, "render");
+  },
+  render() {
+    this.$el.html(this.template({}));
+
+    this.$usernameInput = this.$("#username-input");
+    this.$previewImage = this.$("#preview-image");
+    this.$fileInput = this.$("#file-input");
+
+    if (user_signed_in /* must be always true */) {
+      this.$usernameInput.val(current_user.username);
+      this.$previewImage.attr("src", current_user.picture);
+    }
+
+    return this;
+  },
+  upload() {
+    console.log("x");
+  },
+  changeInput(event) {
+    var input = this.$fileInput[0];
+
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        this.$previewImage.attr("src", e.target.result).fadeIn("slow");
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  },
+});
+
+export {
+  UserModel,
+  UserCollection,
+  UserListView,
+  UserProfileView,
+  UserProfileEditView,
+};

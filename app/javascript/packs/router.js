@@ -13,6 +13,7 @@ const Router = Backbone.Router.extend({
     "channel/:channel_id/edit": "channelByIdEdit",
     guilds: "guilds",
 	profile: "profile",
+	"profile/edit": "profileEdit",
 	"users": "users",
 	"user/:user_id": "userById"
   },
@@ -71,6 +72,11 @@ const Router = Backbone.Router.extend({
     this.app.setView(new User.UserProfileView({
 		user_id: current_user.id
 	}));
+  },
+  profileEdit() {
+    this.setActive("profile");
+	
+    this.app.setView(new User.UserProfileEditView());
   },
   users() {
     this.setActive("users");
