@@ -117,9 +117,9 @@
 														unlocked at <%%= progress.unlocked_at %>
 													<%% } else { %>
 														<%% if (progress.achievement.percent) { %>
-															<%%= progress.value %> / <%%= progress.achievement.max %>
-														<%% } else { %>
 															<%%= (progress.value / progress.achievement.max) * 100 %> %
+														<%% } else { %>
+															<%%= progress.value %> / <%%= progress.achievement.max %>
 														<%% } %>
 													<%% } %>
 												</div>
