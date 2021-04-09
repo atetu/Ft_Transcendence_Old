@@ -21,6 +21,9 @@ class ChannelMessageController < ApplicationController
       view: :user,
     )
 
+    Achievement.DONT_BE_SHY.give(current_user)
+    Achievement.SMALL_TALKER.increment(current_user)
+
     render json: ChannelMessageBlueprint.render(
       @message
     )

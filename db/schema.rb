@@ -10,11 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_08_180505) do
+ActiveRecord::Schema.define(version: 2021_04_09_154409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "achievement_progresses", force: :cascade do |t|
+    t.bigint "achievement_id", null: false
+    t.uuid "user_id", null: false
+    t.integer "value", default: 0, null: false
+    t.datetime "unlocked_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["achievement_id", "user_id"], name: "index_achievement_progresses_on_achievement_id_and_user_id", unique: true
+    t.index ["achievement_id"], name: "index_achievement_progresses_on_achievement_id"
+    t.index ["user_id"], name: "index_achievement_progresses_on_user_id"
+  end
+
+  create_table "achievements", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description", null: false
+    t.boolean "percent", default: true, null: false
+    t.integer "max", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -101,6 +122,8 @@ ActiveRecord::Schema.define(version: 2021_04_08_180505) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "achievement_progresses", "achievements"
+  add_foreign_key "achievement_progresses", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "channel_messages", "channels"

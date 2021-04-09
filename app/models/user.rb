@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   after_create :create_statistics
+  after_create :give_registered_achivement
 
   devise :omniauthable,
          omniauth_providers: [
@@ -11,6 +12,7 @@ class User < ApplicationRecord
 
   has_one :statistics, dependent: :destroy, inverse_of: :user, class_name: "UserStatistics"
   has_one_attached :avatar
+  has_many :achievement_progress, dependent: :destroy, inverse_of: :user
 
   validates :username, uniqueness: true, presence: true
 
@@ -33,5 +35,9 @@ class User < ApplicationRecord
     UserStatistics.create!(
       user: self,
     )
+  end
+
+  def give_registered_achivement
+    Achievement.REGISTERED.give(self)
   end
 end

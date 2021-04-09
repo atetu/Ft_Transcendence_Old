@@ -14,26 +14,26 @@ const UserCollection = Backbone.Collection.extend({
 });
 
 const UserListView = Backbone.View.extend({
-	template: _.template($("script[id='template-user-list']").html()),
-	initialize(options) {
-		this.collection = options.collection;
+  template: _.template($("script[id='template-user-list']").html()),
+  initialize(options) {
+    this.collection = options.collection;
 
-		_.bindAll(this, "render");
+    _.bindAll(this, "render");
 
-		this.collection.bind("reset", this.render);
-		this.collection.bind("add", this.render);
-		this.collection.bind("change", this.render);
-		this.collection.bind("remove", this.render);
-	},
-	render() {
-	  this.$el.html(
-		this.template({
-		  users: this.collection.toJSON(),
-		})
-	  );
-  
-	  return this;
-	},
+    this.collection.bind("reset", this.render);
+    this.collection.bind("add", this.render);
+    this.collection.bind("change", this.render);
+    this.collection.bind("remove", this.render);
+  },
+  render() {
+    this.$el.html(
+      this.template({
+        users: this.collection.toJSON(),
+      })
+    );
+
+    return this;
+  },
 });
 
 const UserProfileView = Backbone.View.extend({
@@ -56,6 +56,8 @@ const UserProfileView = Backbone.View.extend({
         user: this.user.toJSON(),
       })
     );
+
+	this.$('[data-toggle="tooltip"]').tooltip();
 
     return this;
   },

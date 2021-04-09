@@ -32,6 +32,8 @@ class ChannelController < ApplicationController
       raise
     end
 
+    Achievement.COMMUNITY_STARTER.give(current_user)
+
     render json: ChannelBlueprint.render(channel)
   end
 

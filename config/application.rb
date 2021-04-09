@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 Dotenv::Railtie.load
 
-module FtTranscendence2
+module FtTranscendence
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
@@ -20,5 +20,9 @@ module FtTranscendence2
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.after_initialize do
+      Achievement.create_all
+    end
   end
 end
