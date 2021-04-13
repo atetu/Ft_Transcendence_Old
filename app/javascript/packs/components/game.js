@@ -19,6 +19,22 @@ const GameCollection = Backbone.Model.extend({
     url: "/api/games",
 });
 
+paddleMove() {
+    document.addEventListener("keydown", (event) => {
+        switch (event.keyCode) {
+
+            case 38: {
+                y -= 5;
+                break;
+            }
+
+            case 40: {
+                y += 5;
+                break;
+            }
+        }
+    })
+};
 
 const GameView = Backbone.View.extend({
     template: _.template($("script[id='template-game']").html()),
@@ -43,6 +59,7 @@ const GameView = Backbone.View.extend({
 
         return this;
     },
+    
     connect() {
         const self = this;
         console.log("***********************");
@@ -61,26 +78,10 @@ const GameView = Backbone.View.extend({
                         var canvas = document.getElementById('myCanvas');
                         var ctx = canvas.getContext('2d');
                         ctx.fillStyle = "#0000ff";
-                        ctx.fillRect(5, 5, 10, 50);
-                        document.addEventListener("keydown", (event) => {
-                            switch (event.keyCode) {
-            
-                                case 38: {
-                                    y -= 5;
-                                    break;
-                                }
-            
-                                case 40: {
-                                    y += 5;
-                                    break;
-                                }
-                            }
-            
-                            socket.send(JSON.stringify({
-                                type: "move",
-                                y
-                            }))
-                        }),
+                        var y = null;
+                        y = paddleMove();
+                        ctx.fillRect(5, y, 10, 50);
+                        
                     },
                     disconnected() {
                         console.log("disconnected(): ");
