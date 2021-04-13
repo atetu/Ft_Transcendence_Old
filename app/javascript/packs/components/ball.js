@@ -2,52 +2,17 @@ import Backbone from "backbone";
 import _ from "underscore";
 import consumer from "../../channels/consumer"
 
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-var y = null;
-const GameModel = Backbone.Model.extend({
-    urlRoot: "/api/games",
-    default: {
-        $loading: false,
-        $error: null,
-        $connected: false,
-        $subscriber: null,
-    },
-});
-
-const GameCollection = Backbone.Model.extend({
-    model: GameModel,
-    url: "/api/games",
-});
-
-// paddleMove() {
-    // document.addEventListener("keydown", (event) => {
-    //     console.log(self.game.y);
-    //     switch (event.keyCode) {
-
-    //         case 38: {
-    //             self.game.y -= 5;
-    //             break;
-    //         }
-
-    //         case 40: {
-    //             self.game.y += 5;
-    //             break;
-    //         }
-    //     }
-    // });
-// };
-
-const GameView = Backbone.View.extend({
-    template: _.template($("script[id='template-game']").html()),
+const BallView = Backbone.View.extend({
+    template: _.template($("script[id='template-ball']").html()),
     initialize(options) {
-        this.game = new GameModel({ id: options?.game_id });
+        this.ball = new BallModel({ id: options?.ball_id });
         this.y = 5;
         this.ballX = 100;
         this.ballY = 50;
 
         _.bindAll(this, "render", "connect");
 
-        this.game.on("change", this.render);
+        this.ball.on("change", this.render);
     
        this.render();
         this.connect();
@@ -66,13 +31,13 @@ const GameView = Backbone.View.extend({
     connect() {
         const self = this;
         console.log("***********************");
-        this.game.set(
+        this.ball.set(
             "$subscriber",
             consumer.subscriptions.create(
                 {
-                    channel: "GameChannel",
-                    game_id: self.game.id,       // exemple
-                    side: self.game.side         // exemple
+                    channel: "BallChannel",
+                    ball_id: self.ball.id,       // exemple
+                    side: self.ball.side         // exemple
                 },
                 {
                     connected() {
@@ -136,10 +101,9 @@ const GameView = Backbone.View.extend({
         )
     },
     disconnect() {
-        consumer.subscriptions.remove(this.game.get("$subscriber"));
+        consumer.subscriptions.remove(this.ball.get("$subscriber"));
     },
 });
 
 export{
-    GameView
-  };
+    BallView
