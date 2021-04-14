@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     get "/games", to: "game#all"
     post "/games", to: "game#create"
     get "/games/:id", to: "game#get"
+    get "/games/:id/play", to: "game#play"
     put "/games/:id", to: "game#edit"
    
   end

@@ -5,8 +5,14 @@ class GameController < ApplicationController
 
   def get
     load_entities
-
+    play
     render json: @game
+  end
+
+  def play
+    load_entities
+    PlayJob.perform_later(@game)
+    render json: 1
   end
 
   def create
@@ -14,8 +20,9 @@ class GameController < ApplicationController
 
     game = Game.create!(
     )
-
+    
     render json: game
+    GameChannel.broadcast_to @game
   end
 
   def edit
@@ -25,6 +32,7 @@ class GameController < ApplicationController
     @game.save!
 
     render json: @game
+    GameChannel.broadcast_to @game
   end
 
   private

@@ -97,9 +97,17 @@ ActiveRecord::Schema.define(version: 2021_04_07_215206) do
   end
 
   create_table "games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "side"
+    t.integer "side"
+    t.integer "ball_x"
+    t.integer "ball_y"
+    t.integer "paddle1"
+    t.integer "paddle2"
+    t.uuid "player1_id"
+    t.uuid "player2_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["player1_id"], name: "index_games_on_player1_id"
+    t.index ["player2_id"], name: "index_games_on_player2_id"
   end
 
   create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
