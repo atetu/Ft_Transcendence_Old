@@ -15,6 +15,10 @@ module ChannelHelper
       return true
     end
 
-    raise CanCan::AccessDenied.new("not a member")
+    if channel.is_protected?
+      raise CanCan::AccessDenied.new("password protected")
+    else
+      raise CanCan::AccessDenied.new("private")
+    end
   end
 end

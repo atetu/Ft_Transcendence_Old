@@ -25,5 +25,8 @@ Rails.application.routes.draw do
     post "/channels/:channel_id/messages", to: "channel_message#create"
     get "/channels/:channel_id/members", to: "channel_user#all"
     get "/achievements", to: "achievement#all"
+
+    get "/channels/:id/join", to: "channel#join"
+    get "/channels/:id/leave", to: "channel#leave"
   end
 end

@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordInvalid, :with => :render_error
   rescue_from ActiveRecord::RecordNotFound, :with => :render_error_not_found
   rescue_from CanCan::AccessDenied, :with => :render_error_access_denied
+  rescue_from Api::BaseException, :with => :render_error_api
 
   def render_error(error)
     render json: {
@@ -28,5 +29,11 @@ class ApplicationController < ActionController::Base
     render json: {
              message: error.to_s,
            }, status: :forbidden
+  end
+
+  def render_error_api(error)
+    render json: {
+             message: error.message(),
+           }, status: error.status()
   end
 end

@@ -55,11 +55,16 @@ group :development do
 end
 
 group :test do
+  gem "rspec-rails", "~> 4.0.0.beta2" # required for rails 6 compatibility
+  gem "rails-controller-testing"      # rspec 4 requirement
   # Adds support for Capybara system testing and selenium driver
   gem "capybara", ">= 3.26"
   gem "selenium-webdriver"
   # Easy installation and use of web drivers to run system tests with browsers
   gem "webdrivers"
+  gem "factory_bot"
+  gem "faker"
+  gem "database_cleaner"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

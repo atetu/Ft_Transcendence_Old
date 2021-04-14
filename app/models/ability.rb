@@ -16,5 +16,7 @@ class Ability
     end
     can :create, Channel
     can :update, Channel, :owner_id => user.id
+    can :join, Channel
+    can :leave, Channel
   end
 end

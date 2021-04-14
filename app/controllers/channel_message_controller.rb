@@ -1,14 +1,16 @@
 class ChannelMessageController < ApplicationController
   before_action :load_entities
 
-  def all
-    render json: ChannelMessageBlueprint.render(
-      @channel.messages.includes(:user),
-      view: :user,
-    )
+  def all()
+    render({
+      json: ChannelMessageBlueprint.render(
+        @channel.messages.includes(:user),
+        view: :user,
+      ),
+    })
   end
 
-  def create
+  def create()
     @message = ChannelMessage.create!(
       user: current_user,
       channel: @channel,
@@ -16,23 +18,28 @@ class ChannelMessageController < ApplicationController
       content: params[:content],
     )
 
-    ChannelChannel.broadcast_to @channel, ChannelMessageBlueprint.render_as_hash(
-      @message,
-      view: :user,
+    ChannelChannel.broadcast_to(
+      @channel,
+      ChannelMessageBlueprint.render_as_hash(
+        @message,
+        view: :user,
+      )
     )
 
     Achievement.DONT_BE_SHY.give(current_user)
     Achievement.SMALL_TALKER.increment(current_user)
 
-    render json: ChannelMessageBlueprint.render(
-      @message
-    )
+    render({
+      json: ChannelMessageBlueprint.render(
+        @message
+      ),
+    })
   end
 
   private
 
   def load_entities
-    @channel = Channel.find params[:channel_id]
+    @channel = Channel.find(params[:channel_id])
   end
 end
 

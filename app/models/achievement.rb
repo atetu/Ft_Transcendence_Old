@@ -45,7 +45,7 @@ class Achievement < ApplicationRecord
         progress.unlocked_at = DateTime.current
       end
 
-      progress.save!
+      progress.save #!
     end
 
     progress
@@ -64,7 +64,7 @@ class Achievement < ApplicationRecord
         progress.unlocked_at = DateTime.current
       end
 
-      progress.save!
+      progress.save #!
     end
 
     progress
