@@ -1,10 +1,14 @@
 class ChannelController < ApplicationController
+  authorize_resource
+
   def all
     render json: ChannelBlueprint.render(Channel.includes(:owner))
   end
 
-  def get
+  def show
     load_entities
+
+    authorize! :show, @channel
 
     render json: ChannelBlueprint.render(
       @channel,
@@ -13,9 +17,9 @@ class ChannelController < ApplicationController
   end
 
   def create
-    args = permitted_parameters
+    args = permitted_params
 
-    channel = Channel.create!(
+    @channel = Channel.create!(
       name: args[:name],
       visibility: args[:visibility],
       password: args[:password],
@@ -25,23 +29,23 @@ class ChannelController < ApplicationController
     begin
       ChannelUser.create!(
         user: current_user,
-        channel: channel,
+        channel: @channel,
       )
     rescue
-      channel.destroy
+      @channel.destroy
       raise
     end
 
     Achievement.COMMUNITY_STARTER.give(current_user)
 
-    render json: ChannelBlueprint.render(channel)
+    render json: ChannelBlueprint.render(@channel)
   end
 
-  def edit
+  def update
     load_entities
 
-    @channel.assign_attributes(permitted_parameters)
-    @channel.save!
+    @channel.assign_attributes(permitted_params)
+    @channel.save()
 
     render json: ChannelBlueprint.render(@channel)
   end
@@ -49,10 +53,10 @@ class ChannelController < ApplicationController
   private
 
   def load_entities
-    @channel = Channel.find params[:id]
+    @channel = Channel.find(params[:id])
   end
 
-  def permitted_parameters
+  def permitted_params
     params.permit(:name, :visibility, :password)
   end
 end

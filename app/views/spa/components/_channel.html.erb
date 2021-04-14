@@ -5,12 +5,12 @@
   	<div class="dropdown-divider"></div>
 	<div class="list-group">
 		<%% _.each(channels, function(channel) { %>
-			<a href="/#channel/<%%= channel.id %>" class="list-group-item list-group-item-action">
+			<a href="/#channel/<%%- channel.id %>" class="list-group-item list-group-item-action">
 				<div class="d-flex w-100 justify-content-between">
-					<h5 class="mb-1"><%%= channel.name %></h5>
-					<small><%%= channel.visibility %></small>
+					<h5 class="mb-1"><%%- channel.name %></h5>
+					<small><%%- channel.visibility %></small>
 				</div>
-				<small>owner by <%%= channel.owner.username %></small>
+				<small>owner by <%%- channel.owner.username %></small>
 			</a>
 		<%% }); %>
 	</div>
@@ -20,7 +20,7 @@
 	<form>
 		<div class="form-group">
 			<label for="name-input">Name</label>
-			<input class="form-control" id="name-input" value="<%%= name %>">
+			<input class="form-control" id="name-input" value="<%%- name %>">
 			<div class="invalid-feedback">
 				Please choose a username.
 			</div>
@@ -28,9 +28,9 @@
 		<div class="form-group">
 			<label for="visibility-input">Visibility</label>
 			<select class="form-control" id="visibility-select">
-				<option value="public" <%%= visibility == "public" ? 'selected' : '' %>>Public</option>
-				<option value="protected" <%%= visibility == "protected" ? 'selected' : '' %>>Protected <small>(require a password)</small></option>
-				<option value="private" <%%= visibility == "private" ? 'selected' : '' %>>Private</option>
+				<option value="public" <%%- visibility == "public" ? 'selected' : '' %>>Public</option>
+				<option value="protected" <%%- visibility == "protected" ? 'selected' : '' %>>Protected <small>(require a password)</small></option>
+				<option value="private" <%%- visibility == "private" ? 'selected' : '' %>>Private</option>
 			</select>
 			<div class="invalid-feedback">
 				Please choose a username.
@@ -50,51 +50,61 @@
 </script>
 
 <script type="text/template" id="template-channel">
-	<%% if (loading) { %>
+	<%% if (state.loading) { %>
 		<div class="text-center">
 			<div class="spinner-border" role="status">
 				<span class="sr-only">Loading...</span>
 			</div>
 		</div>
-	<%% } else if (error) { %>
-		error: <%%= error %>
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			<%% if (state.error.status == 403) { %>
+				forbidden: <%%- state.error.responseJSON.message %>
+			<%% } else if (state.error.status == 403) { %>
+				error
+			<%% } else { %>
+				error: <%%- state.error.responseJSON.message %> 
+			<%% } %>
+			<small>
+				<a id="error-refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
+			</small>
+		</div>
 	<%% } else { %>
-		<%% if (!connected) { %>
+		<%% if (!state.connected) { %>
 			<div class="alert alert-warning" role="alert">
 				not connected, connecting...
 			</div>
 		<%% }%>
 		<h3>
-			<%%= channel.name %>
-			<small class="text-muted"><%%= channel.visibility %></small>
+			<%%- channel.name %>
+			<small class="text-muted"><%%- channel.visibility %></small>
 		</h3>
   		<div class="dropdown-divider"></div>
-		  <%% if (user_signed_in && current_user.id == channel.owner.id) { %>
-		  	<a href="#channel/<%%= channel.id %>/edit">edit</a>
-		  <%% } %>
+		  <%#% if (user_signed_in && current_user.id == channel.owner.id) { %>
+		  	<a href="#channel/<%%- channel.id %>/edit">edit</a>
+		  <%#% } %>
   		<div class="dropdown-divider"></div>
 		<div class="container">
 			<div class="row">
 				<div class="col-12 col-lg-10">
-					<h3>Messages</h3>
 					<div id="message-container" style="height: 300px; overflow-y: scroll">
 						<%% _.each(messages, function(message) { %>
-							<%%= message.user.username %>: <%%= message.content %> <br>
+							<%%- message.user.username %>: <%%- message.content %> <br>
 						<%% }); %>
 					</div>
 
 					<div class="dropdown-divider"></div>
-					<div class="form-group">
-						<label for="message-input">Message</label>
-						<input class="form-control" id="message-input" placeholder="Hi guys">
+					<div class="input-group">
+						<input id="message-input" type="text" class="form-control" placeholder="hello world">
+						<div class="input-group-append">
+							<button id="send-button" class="btn btn-primary">send</button>
+						</div>
 					</div>
-					<button id="send-button" class="btn btn-primary">Send</button>
 				</div>
 				<div class="col-0 col-lg-2">
-					<h3>Members</h3>
 					<%% _.each(channel.members, function(member) { %>
 						<p>
-							<%%= member.user.username %>
+							<%%- member.user.username %>
 							<%% if (member.user.id == channel.owner.id) { %>
 								<i class="mdi mdi-crown" aria-hidden="true"></i>
 							<%% } %>

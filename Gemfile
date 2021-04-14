@@ -74,3 +74,4 @@ gem "blueprinter", require: true
 #TODO MARVIN gem "omniauth-marvin", "~> 1.0.2"
 gem "omniauth-google-oauth2", "~> 0.8.0" # marvin and google are not compatible - require different library version
 gem "open-uri"
+gem "cancancan"

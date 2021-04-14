@@ -1,4 +1,6 @@
 class UserController < ApplicationController
+  authorize_resource
+
   def current
     render json: UserBlueprint.render(current_user)
   end
