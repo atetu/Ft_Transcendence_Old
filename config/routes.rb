@@ -26,7 +26,11 @@ Rails.application.routes.draw do
     get "/channels/:channel_id/members", to: "channel_user#all"
     get "/achievements", to: "achievement#all"
 
-    get "/channels/:id/join", to: "channel#join"
-    get "/channels/:id/leave", to: "channel#leave"
+    post "/channels/:id/join", to: "channel#join"
+    post "/channels/:id/leave", to: "channel#leave"
+    post "/channels/:id/add/:user_id", to: "channel#add"
+    post "/channels/:id/promote/:user_id", to: "channel#promote"
+    post "/channels/:id/demote/:user_id", to: "channel#demote"
+    post "/channels/:id/transfer-ownership/:user_id", to: "channel#transfer_ownership"
   end
 end
