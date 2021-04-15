@@ -24,27 +24,81 @@ class Game < ApplicationRecord
   end
 
   def broadcast
-    puts data
+    # puts data
     GameChannel.broadcast_to self, data
   end
 
-  # def input_from_front(side, movement)
-  #   if side == 0
-  #     @paddle1 += movement
-  #   else
-  #     @paddle2 += movement
-  # end
+  def input_from_front(side, movement)
+    puts "????????????????????????"
+    if (movement == "down")
+      @down += 1
+    # paddle2 = @paddle2
+    # paddle2 += 1
+    puts @down
+    # if side == 0
+    #   if @paddle1 == nil
+    #     if movement == "down"
+    #       @paddle1 = 1
+    #     end
+    #   else
+    #     if movement == "down"
+    #       @paddle1 += 1
+    #     else
+    #       @paddle1 -= 1
+    #     end
+    #   end
+    # end
+    # if side == 1
+    #   if @paddle2 == nil
+    #     if movement == "down"
+    #             @paddle2 = 1
+    #     else
+    #       if movement == "down"
+    #         @paddle2 += 1
+    #       else
+    #         @paddle2 -= 1
+    #       end
+    #     end
+    #   end
+    end
+     
+      puts "***************************************************************************************"
+      puts @paddle2
+    # elsif side == 1
+      # @paddle2 += movement
+      # puts "***************************************************************************************"
+      # puts @paddle2
+    # end
+   @paddle2.save
+  end
   
+  def moveDown
+    puts "+++++++++++++++++"
+    @paddle2 += 1
+    puts @paddle2
+  end
 
   def start
     @ball_x = 0
     @ball_y = 0
     @y = 50
+    @down = 0;
     loop do 
       broadcast
       @ball_x += 1
       @ball_y += 1
+      update
       sleep 1
+    end
+  end
+
+  def update
+    puts "()()()()()()))()()("
+    puts @down
+    if @paddle2 == nil && @down != 0
+      @paddle2 = 1
+    elsif @down != 0
+      @paddle2 += 1
     end
   end
 end

@@ -44,11 +44,6 @@ ActiveRecord::Schema.define(version: 2021_04_07_215206) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "balls", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "channel_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "content_type", null: false
     t.text "content", null: false
@@ -120,11 +115,6 @@ ActiveRecord::Schema.define(version: 2021_04_07_215206) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
-  end
-
-  create_table "paddles", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

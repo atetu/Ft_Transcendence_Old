@@ -5,6 +5,9 @@ class GameChannel < ApplicationCable::Channel
     end
 
     def input(data)
-      @game.input_from_front(data["side"], data["move"])
+      game = Game.find params[:game_id]
+      puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+      puts data["movement"]
+      game.input_from_front(data["side"], data["movement"])
     end
   end
