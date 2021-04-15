@@ -60,7 +60,9 @@
 		<div class="alert alert-danger" role="alert">
 			<%% if (state.error.status == 403) { %>
 				forbidden: <%%- state.error.responseJSON.message %>
-			<%% } else if (state.error.status == 403) { %>
+			<%% } else if (state.error.status == 404) { %>
+				not found
+			<%% } else if (state.error.status == 0) { %>
 				error
 			<%% } else { %>
 				error: <%%- state.error.responseJSON.message %> 
@@ -69,6 +71,15 @@
 				<a id="error-refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
 			</small>
 		</div>
+		
+		<%% if (state.error?.responseJSON?.message === "password protected") { %>
+			<div class="input-group mb-3">
+				<input id="password-input" type="password" class="form-control" placeholder="password">
+				<div class="input-group-append">
+					<button id="submit-password-button" class="btn btn-primary">submit</button>
+				</div>
+			</div>
+		<%% } %>
 	<%% } else { %>
 		<%% if (!state.connected) { %>
 			<div class="alert alert-warning" role="alert">
@@ -97,7 +108,9 @@
 					<div class="input-group">
 						<input id="message-input" type="text" class="form-control" placeholder="hello world">
 						<div class="input-group-append">
-							<button id="send-button" class="btn btn-primary">send</button>
+							<button id="send-button" class="btn btn-primary">
+								<i class="mdi mdi-send" aria-hidden="true"></i>
+							</button>
 						</div>
 					</div>
 				</div>
