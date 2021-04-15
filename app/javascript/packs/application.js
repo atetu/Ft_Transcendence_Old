@@ -6,6 +6,8 @@ require("channels");
 require("jquery-ui");
 require("bootstrap");
 
+require("./libs/jquery_extra")
+
 import Router from "./router";
 const NavigationBar = require("./components/navigation_bar");
 

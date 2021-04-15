@@ -40,9 +40,120 @@ const ErrorView = Backbone.View.extend({
   },
 });
 
-/*const ProtectedView = Backbone.View.extend({
-  template: _.template($("script[id='template-channel-protected']").html()),
-});*/
+const PasswordProtectedView = Backbone.View.extend({
+  template: _.template(
+    $("script[id='template-channel-password-protected']").html()
+  ),
+  initialize({ channel, refresh }) {
+    this.channel = channel;
+    this.refresh = refresh;
+
+    this.state = new (Backbone.Model.extend())({
+      error: null,
+      loading: false,
+    });
+
+    this.submitRequest = new (Backbone.Model.extend({
+      urlRoot() {
+        return `/api/channels/${channel.id}/join`;
+      },
+      default: {
+        password: null,
+      },
+    }))();
+
+    _.bindAll(this, "render", "disableAll", "enableAll", "toggleDisable");
+
+    this.state.on("change", this.render);
+  },
+  render() {
+    this.$el.html(this.template(this.state.toJSON()));
+
+    this.$passwordInput = this.$("#password-input");
+    this.$submitButton = this.$("#submit-button");
+    this.$refreshLink = this.$("#refresh");
+
+    this.toggleDisable();
+
+    return this;
+  },
+  submit() {
+    if (this.state.get("loading")) {
+      return;
+    }
+
+    const password = this.$passwordInput.val();
+
+    this.disableAll();
+
+    this.state.set({
+      loading: true,
+      error: null,
+    });
+
+    this.submitRequest
+      .save({
+        password,
+      })
+      .then(
+        this.refresh
+      ) /* no need to set loading to false, we are leaving the page */
+      .catch((error) =>
+        this.state.set({
+          loading: false,
+          error: error,
+        })
+      );
+  },
+  events: {
+    "click #refresh"() {
+      this.refresh();
+    },
+    "keyup #password-input"(event) {
+      if (event.keyCode == 13 /* enter */) {
+        this.submit();
+      }
+    },
+    "click #submit-button": "submit",
+  },
+  disableAll() {
+    this.$passwordInput.disable();
+    this.$submitButton.disable();
+    this.$refreshLink.disable();
+  },
+  enableAll() {
+    this.$passwordInput.enable();
+    this.$submitButton.enable();
+    this.$refreshLink.enable();
+  },
+  toggleDisable() {
+    if (this.state.get("loading")) {
+      this.disableAll();
+    } else {
+      this.enableAll();
+    }
+  },
+});
+
+const PrivateView = Backbone.View.extend({
+  template: _.template($("script[id='template-channel-private']").html()),
+  initialize({ channel, refresh }) {
+    this.channel = channel;
+    this.refresh = refresh;
+
+    _.bindAll(this, "render");
+  },
+  render() {
+    this.$el.html(this.template());
+
+    return this;
+  },
+  events: {
+    "click #refresh"() {
+      this.refresh();
+    },
+  },
+});
 
 const MessageView = Backbone.View.extend({
   template: _.template($("script[id='template-channel-message']").html()),
@@ -87,12 +198,12 @@ const MessageListView = Backbone.View.extend({
     return this;
   },
   addOneAndScroll(model) {
-	this.addOne(model);
-	this.scrollToBottom();
+    this.addOne(model);
+    this.scrollToBottom();
   },
   addAll() {
     this.collection.each(this.addOne);
-	this.scrollToBottom();
+    this.scrollToBottom();
   },
   addOne(model) {
     this.$container.append(
@@ -174,6 +285,7 @@ const ChannelView = Backbone.View.extend({
     "click #error-refresh": "refresh",
     "click #send-button": "submit",
     "keyup #message-input": "keyup",
+    "click #leave-link": "askLeave",
   },
   initialize({ id }) {
     this.channel = new ChannelModel({ id });
@@ -189,7 +301,7 @@ const ChannelView = Backbone.View.extend({
       },
     }))();
 
-    _.bindAll(this, "render", "connect");
+    _.bindAll(this, "render", "connect", "refresh");
 
     this.state.on("change", this.render);
     this.channel.on("change", this.render);
@@ -199,18 +311,35 @@ const ChannelView = Backbone.View.extend({
   render() {
     this.$el.empty();
 
-    if (this.state.get("loading") || !this.state.get("connected")) {
+    if (this.state.get("loading")) {
       this.$el.append(new LoadingView().render().$el);
     } else if (this.state.get("error")) {
       const error = this.state.get("error");
+      const message = error.responseJSON?.message;
 
-      this.$el.append(
-        new ErrorView({
-          status: error.status,
-          message: error.responseJSON?.message,
-          refresh: this.refresh,
-        }).render().$el
-      );
+      if (message === "password protected") {
+        this.$el.append(
+          new PasswordProtectedView({
+            channel: this.channel,
+            refresh: this.refresh,
+          }).render().$el
+        );
+      } else if (message === "private") {
+        this.$el.append(
+          new PrivateView({
+            channel: this.channel,
+            refresh: this.refresh,
+          }).render().$el
+        );
+      } else {
+        this.$el.append(
+          new ErrorView({
+            status: error.status,
+            message: error.responseJSON?.message,
+            refresh: this.refresh,
+          }).render().$el
+        );
+      }
     } else {
       this.$el.html(
         this.template({
@@ -229,10 +358,10 @@ const ChannelView = Backbone.View.extend({
         channel: this.channel,
         collection: this.members,
       }).render();
-    }
 
-    this.$messageInput = this.$("#message-input");
-    this.$messageContainer = this.$("#message-container");
+      this.$messageInput = this.$("#message-input");
+      this.$messageContainer = this.$("#message-container");
+    }
 
     return this;
   },
@@ -250,6 +379,8 @@ const ChannelView = Backbone.View.extend({
       .then(() => this.state.set("loading", false));
   },
   refresh() {
+    console.log("refreshing");
+
     this.state.set("error", null);
 
     this.disconnect();
@@ -313,11 +444,27 @@ const ChannelView = Backbone.View.extend({
     this.$messageInput.val("");
 
     new ChannelMessageModel({
-		channel: this.channel
-	}).save({
+      channel: this.channel,
+    }).save({
       content_type: "text",
       content: message,
     });
+  },
+  askLeave() {
+    if (confirm("are you sure")) {
+      const self = this;
+
+      new (Backbone.Model.extend({
+        urlRoot() {
+          return `/api/channels/${self.channel.id}/leave`;
+        },
+        default: {
+          password: null,
+        },
+      }))().save()
+	  .then(() => window.location.hash = `#channels`)
+	  .catch((error) => alert(error.responseJSON?.message || `error: ${error.status}`));
+    }
   },
   onClose() {
     this.disconnect();

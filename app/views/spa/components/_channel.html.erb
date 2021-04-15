@@ -60,14 +60,43 @@
 <script type="text/template" id="template-channel-error">
 	<div class="alert alert-danger" role="alert">
 		<%% if (status == 403) { %>
-			forbidden: <%%- state.error.responseJSON.message %>
+			forbidden: <%%- message %>
 		<%% } else if (status == 404) { %>
 			not found
 		<%% } else if (status == 0) { %>
-			error
+			error: no status
 		<%% } else { %>
 			error: <%%- message %> 
 		<%% } %>
+		<small>
+			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
+		</small>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-password-protected">
+	<div class="alert alert-warning" role="alert">
+		password protected
+		<small>
+			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
+		</small>
+	</div>
+	<%% if (error) { %>
+		<div class="alert alert-danger mb-3" role="alert">
+			error: <%%- error.responseJSON?.message || error.status %>
+		</div>
+	<%% } %>
+	<div class="input-group mb-3">
+		<input id="password-input" type="password" class="form-control" placeholder="password">
+		<div class="input-group-append">
+			<button id="submit-button" class="btn btn-primary">submit</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-private">
+	<div class="alert alert-danger" role="alert">
+		private
 		<small>
 			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
 		</small>
@@ -107,7 +136,7 @@
 
 <script type="text/template" id="template-channel-message">
 	<div class="channel-message">
-		<%%- user.username %>: <%%- content %>
+		<a href="#user/<%%- user.id %>"><%%- user.username %></a>: <%%- content %>
 	</div>
 </script>
 
@@ -156,6 +185,8 @@
 		  <%#% if (user_signed_in && current_user.id == channel.owner.id) { %>
 		  	<a href="#channel/<%%- channel.id %>/edit">edit</a>
 		  <%#% } %>
+		  
+		<a id="leave-link" href="javascript:void(0)">leave</a>
   		<div class="dropdown-divider"></div>
 		<div class="container">
 			<div id="part-container" class="row">
