@@ -9,13 +9,13 @@ const Router = Backbone.Router.extend({
     "": "home",
     channels: "channels",
     "channel/create": "channelCreate",
-    "channel/:channel_id": "channelById",
-    "channel/:channel_id/edit": "channelByIdEdit",
+    "channel/:id": "channelById",
+    "channel/:id/edit": "channelByIdEdit",
     guilds: "guilds",
 	profile: "profile",
 	"profile/edit": "profileEdit",
 	"users": "users",
-	"user/:user_id": "userById"
+	"user/:id": "userById"
   },
   initialize(options) {
     this.app = options.app;
@@ -27,6 +27,8 @@ const Router = Backbone.Router.extend({
   },
   channels() {
     this.setActive("channels");
+
+	console.log(Channel)
 
     var channelCollection = new Channel.ChannelCollection();
 
@@ -43,21 +45,21 @@ const Router = Backbone.Router.extend({
 
     this.app.setView(new Channel.ChannelCreateOrEditView());
   },
-  channelById(channel_id) {
+  channelById(id) {
     this.setActive("channels");
 
     this.app.setView(
       new Channel.ChannelView({
-        channel_id
+        id
       })
     );
   },
-  channelByIdEdit(channel_id) {
+  channelByIdEdit(id) {
     this.setActive("channels");
 
     this.app.setView(
       new Channel.ChannelCreateOrEditView({
-        channel_id
+        id
       })
     );
   },
