@@ -9,8 +9,8 @@ const ChannelCreateOrEditView = Backbone.View.extend({
     "change #visibility-select": "visibilityChange",
     "click #submit-button": "submit",
   },
-  initialize(options) {
-    this.channel = new ChannelModel({ id: options?.channel_id });
+  initialize({ id }) {
+    this.channel = new ChannelModel({ id });
 
     _.bindAll(this, "render");
 
@@ -32,6 +32,8 @@ const ChannelCreateOrEditView = Backbone.View.extend({
     this.$passwordFormGroup = this.$("#password-form-group");
     this.$passwordInput = this.$("#password-input");
 
+    this.visibilityChange();
+
     return this;
   },
   visibilityChange() {
@@ -52,9 +54,42 @@ const ChannelCreateOrEditView = Backbone.View.extend({
       Object.assign(props, { password });
     }
 
-    this.channel.save(props).then(() => {
+    new ChannelModel({ id: this.channel.id }).save(props).then(() => {
       window.location.hash = `#channel/${this.channel.id}`;
-    });
+    }).catch((error) => {
+		switch (error.status) {
+			case 406: {
+				const fields = error.responseJSON.fields;
+
+
+				const selectors = {
+					form: "#channel-form",
+					fields: {
+						name: "#name-invalid",
+						visibility: "#visibility-invalid",
+						password: "#password-invalid",
+					}
+				}
+
+				for (const selector in Object.values(selectors.fields)) {
+					this.$(selector).text("");
+					this.$(selector).hide();
+				}
+
+				for (const field in fields) {
+					const validations = fields[field];
+					const selector = selectors.fields[field];
+
+					this.$(selector).show();
+					this.$(selector).text(validations.join(", "));
+				}
+				
+				//this.$(selectors.form).addClass('was-validated');
+
+				break;
+			}
+		}
+	});
   },
 });
 

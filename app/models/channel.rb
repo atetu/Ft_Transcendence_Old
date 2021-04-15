@@ -10,9 +10,11 @@ class Channel < ApplicationRecord
 
   validates :name, presence: true
   validates :visibility, presence: true
-  validates :password, :presence => true, :if => Proc.new { |x| x.visibility == "protected" }
-  validates :password, :absence => { :message => "can only be set for protected channels" }, :if => Proc.new { |x| x.visibility != "protected" }
-  validates_length_of :password, minimum: 3, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED, :if => Proc.new { |x| x.visibility == "protected" }
+  validates_length_of :password, minimum: 3, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED, allow_nil: true, on: :update, :if => Proc.new { |x| x.visibility == "protected" }
   validates_length_of :name, minimum: 3, maximum: 20
   validate_enum_attributes :visibility
+
+  validates :password, :presence => true, allow_nil: false, on: :create, :if => Proc.new { |x| x.visibility == "protected" }
+  validates :password, :presence => true, allow_nil: false, on: :update, :if => Proc.new { |x| x.visibility == "protected" and (x.password_digest == nil || x.password_digest == "") }
+  validates :password, :absence => { :message => "can only be set for protected channels" }, :if => Proc.new { |x| x.visibility != "protected" }
 end

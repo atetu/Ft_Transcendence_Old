@@ -47,8 +47,16 @@ class ChannelController < ApplicationController
 
     authorize!(:update, @channel)
 
+    puts permitted_params
+    puts permitted_params
+    puts permitted_params
+    puts permitted_params
+    puts permitted_params
+    puts permitted_params
+    puts permitted_params
+
     @channel.assign_attributes(permitted_params)
-    @channel.save()
+    @channel.save!()
 
     render({
       json: ChannelBlueprint.render(@channel),
