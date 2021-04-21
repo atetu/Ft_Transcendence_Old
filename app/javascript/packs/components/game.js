@@ -88,108 +88,6 @@ const GameView = Backbone.View.extend({
                     connected() {
                         console.log("connected(): ")
                         console.log(self.ball_x)
-                        // document.addEventListener("keydown", (event) => {
-                        //     var input;
-                        //     switch (event.keyCode) {
-
-                        //         case 38: {
-                        //             // my_paddle -= 1;
-                        //             input = -1
-				        //             this.perform('input', input)
-                        //             break;
-                        //         }
-
-                        //         case 40: {
-                        //             // my_paddle += 1;
-                        //             input = 1
-				        //             this.perform('input', input)
-                        //             break;
-                        //         }
-                        //     }
-                        // });
-                        // setInterval(() => {
-                        //      var canvas = document.getElementById('myCanvas')
-                        // var ctx = canvas.getContext('2d')
-                        //     ctx.clearRect(0, 0, canvas.width, canvas.height)
-                        //     ctx.fillStyle = 'black';
-                        //     ctx.fillRect(0, 0, canvas.width, canvas.height)
-                            
-                        //     if (self.my_side)
-                        //     {
-                        //         ctx.fillStyle = 'blue'
-                        //         ctx.fillRect(canvas.width - 15, self.my_paddle, 10, 50);
-                        //         ctx.fillStyle = 'red'
-                        //         ctx.fillRect(5, self.enemy_paddle, 10, 50);
-                        //     }
-                        //     else
-                        //     {
-                        //         ctx.fillStyle = 'blue'
-                        //         ctx.fillRect(5, self.my_paddle, 10, 50);
-                        //         ctx.fillStyle = 'red'
-                        //         ctx.fillRect(canvas.width - 5, self.enemy_paddle, 10, 50);
-                        //     }
-                        //     ctx.fillStyle = 'blue'
-                        //     ctx.arc(self.ball_x, self.ball_y, 5, 2 * Math.PI, false);
-                        //     ctx.stroke
-       
-                        // }, 1000 / 10);
-                        // var canvas = document.getElementById('myCanvas')
-                        // var ctx = canvas.getContext('2d')
-                    //    ctx.fillStyle = "#0000ff";
-                        // document.addEventListener("keydown", (event) => {
-                        //     console.log(self.ball_x);
-                        //     switch (event.keyCode) {
-
-                        //         case 38: {
-                        //             self.y -= 1;
-                        //             break;
-                        //         }
-
-                        //         case 40: {
-                        //             self.y += 1;
-                        //             break;
-                        //         }
-                        //     }
-                        // });
-                       
-                        // setInterval(() => {
-                        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        //     ctx.fillStyle = 'black';
-                        //     ctx.fillRect(0, 0, canvas.width, canvas.height);
-                            
-                        //     if (my_side)
-                        //     {
-                        //         ctx.fillStyle = 'blue';
-                        //         ctx.fillRect(canvas.width - 15, my_paddle, 10, 50);
-                        //         ctx.fillStyle = 'red';
-                        //         ctx.fillRect(5, enemy_paddle, 10, 50);
-                        //     }
-                        //     else
-                        //     {
-                        //         ctx.fillStyle = 'blue';
-                        //         ctx.fillRect(5, my_paddle, 10, 50);
-                        //         ctx.fillStyle = 'red';
-                        //         ctx.fillRect(canvas.width - 5, enemy_paddle, 10, 50);
-                        //     }
-                        //     ctx.fillStyle = 'white';
-                        //     ctx.arc(self.ball_x, self.ball_y, 5, 2 * Math.PI, false);
-                        //     ctx.stroke
-            
-            
-                        //     // if (mySide) /* left */ {
-                        //     //     ctx.fillStyle = "#00ff00";
-                        //     //     ctx.fillRect(5, y, 10, 50);
-            
-                        //     //     ctx.fillStyle = "#0000ff";
-                        //     //     ctx.fillRect(canvas.width - 10 - 5, enemyPaddleY, 10, 50);
-                        //     // } else {
-                        //     //     ctx.fillStyle = "#00ff00";
-                        //     //     ctx.fillRect(canvas.width - 10 - 5, y, 10, 50);
-            
-                        //     //     ctx.fillStyle = "#0000ff";
-                        //     //     ctx.fillRect(5, enemyPaddleY, 10, 50);
-                        //     // }
-                        // }, 1000 / 10);
                        
                         
                     },
@@ -200,6 +98,9 @@ const GameView = Backbone.View.extend({
                     received(data) {
                         console.log("received)");
                         var canvas = document.getElementById('myCanvas')
+                        canvas.width = 600
+                        canvas.height = 400
+                    
                         var ctx = canvas.getContext('2d')
                         self.ball_x = data.ball_x
                         self.ball_y = data.ball_y
@@ -255,22 +156,31 @@ const GameView = Backbone.View.extend({
                             if (self.my_side)
                             {
                                 ctx.fillStyle = 'blue'
-                                ctx.fillRect(canvas.width - 15, self.my_paddle, 10, 50);
-                                ctx.fillStyle = 'red'
-                                ctx.fillRect(5, self.enemy_paddle, 10, 50);
+                                ctx.fillRect(canvas.width - 25, self.my_paddle, 15, 80);
+                                ctx.fillStyle = 'blue'
+                                ctx.fillRect(10, self.enemy_paddle, 15, 80);
                             }
                             else
                             {
                                 ctx.fillStyle = 'blue'
-                                ctx.fillRect(5, self.my_paddle, 10, 50);
+                                ctx.fillRect(10, self.my_paddle, 15, 80);
                                 ctx.fillStyle = 'red'
-                                ctx.fillRect(canvas.width - 5, self.enemy_paddle, 10, 50);
+                                ctx.fillRect(canvas.width - 25, self.enemy_paddle, 15, 80);
                             }
+                           
+                            // ball
+                            ctx.beginPath()
+                            ctx.arc(self.ball_x, self.ball_y, 10, 0, Math.PI*2)
                             ctx.fillStyle = 'blue'
-                            ctx.arc(self.ball_x, self.ball_y, 5, 2 * Math.PI, false);
-                            ctx.stroke
+                            ctx.fill()
+                            ctx.closePath()
+
+                            ctx.strokeStyle = "grey";
+                            ctx.moveTo(300, 20);
+                            ctx.lineTo(300, 380);
+                            ctx.stroke();
        
-                        }, 1000 / 10);
+                        }, 1/10000);
                     },
                 }
             )

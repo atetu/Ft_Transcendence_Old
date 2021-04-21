@@ -6,17 +6,17 @@ class GameChannel < ApplicationCable::Channel
 
     def input(data)
       game = Game.find params[:game_id]
-      puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-      puts data["movement"]
+      # puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+      # puts data["movement"]
       if (data["side"] == 0)
-         right = $redis.get("right");
+         right = $redis.get("right:#{@id}");
          right = update(right, data["movement"])
-         $redis.set("right", right)
+         $redis.set("right:#{@id}", right)
       end
       if (data["side"] == 1)
-        left = $redis.get("left");
+        left = $redis.get("left:#{@id}");
         left = update(left, data["movement"])
-        $redis.set("left", left)
+        $redis.set("left:#{@id}", left)
       end
      end
     

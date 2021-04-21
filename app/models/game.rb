@@ -7,20 +7,22 @@ class Game < ApplicationRecord
 
     # after_create :play
   def initialize(game)
-    @ball_x = 50
-    @ball_y = 50
-    $redis.set("left", 0)
-    $redis.set("right", 0)
+    # @ball_x = 50
+    # @ball_y = 50
+    $redis.set("ball_x:#{@id}", 50)
+    $redis.set("ball_y:#{@id}", 50)
+    $redis.set("left:#{@id}", 5)
+    $redis.set("right:#{@id}", 5)
       # @vel_x = nil
       # @vel_y = nil
   end
    
   def data
     {
-      ball_y: @ball_y,
-      ball_x: @ball_x,
-      paddle1: $redis.get("right"),
-      paddle2: $redis.get("left"),
+      ball_x: $redis.get("ball_x:#{@id}"),
+      ball_y: $redis.get("ball_y:#{@id}"),
+      paddle1: $redis.get("left:#{@id}"),
+      paddle2: $redis.get("right:#{@id}"),
       side: @side
     }
   end
@@ -30,68 +32,27 @@ class Game < ApplicationRecord
     GameChannel.broadcast_to self, data
   end
 
-  # def input_from_front(side, movement)
-  #   puts "????????????????????????"
-  #   if (movement == "down")
-  #     @down += 1
-  #   # paddle2 = @paddle2
-  #   # paddle2 += 1
-  #   puts @down
-  #   # if side == 0
-  #   #   if @paddle1 == nil
-  #   #     if movement == "down"
-  #   #       @paddle1 = 1
-  #   #     end
-  #   #   else
-  #   #     if movement == "down"
-  #   #       @paddle1 += 1
-  #   #     else
-  #   #       @paddle1 -= 1
-  #   #     end
-  #   #   end
-  #   # end
-  #   # if side == 1
-  #   #   if @paddle2 == nil
-  #   #     if movement == "down"
-  #   #             @paddle2 = 1
-  #   #     else
-  #   #       if movement == "down"
-  #   #         @paddle2 += 1
-  #   #       else
-  #   #         @paddle2 -= 1
-  #   #       end
-  #   #     end
-  #   #   end
-  #   end
-     
-  #     puts "***************************************************************************************"
-  #     puts @paddle2
-  #   # elsif side == 1
-  #     # @paddle2 += movement
-  #     # puts "***************************************************************************************"
-  #     # puts @paddle2
-  #   # end
-  #  @paddle2.save
-  # end
   
-  # def moveDown
-  #   puts "+++++++++++++++++"
-  #   @paddle2 += 1
-  #   puts @paddle2
-  # end
 
   def start
-    @ball_x = 0
-    @ball_y = 0
-    @y = 50
-    @down = 0;
-    # $redis.set("left:#{@id}", 0)
-    $redis.set("left", 0)
-    $redis.set("right", 0)
+    # @ball_x = 0
+    # @ball_y = 0
+    # @y = 50
+    # @down = 0;
+    $redis.set("left:#{@id}", 5)
+    $redis.set("right:#{@id}", 5)
+    $redis.set("ball_x:#{@id}", 50)
+    $redis.set("ball_y:#{@id}", 50)
     loop do 
       broadcast
-      @ball_x += 1
-      @ball_y += 1
+      ball_x = $redis.get("ball_x:#{@id}")
+      ball_y = $redis.get("ball_y:#{@id}")
+      puts "%%%%%%%%%%%%%%%%%%%%%"
+      puts ball_x
+      ball_x = ball_x.to_i + "30".to_i
+      ball_y = ball_y.to_i + "10".to_i
+      $redis.set("ball_x:#{@id}", ball_x)
+      $redis.set("ball_y:#{@id}", ball_y)
       sleep 1
     end
   end
