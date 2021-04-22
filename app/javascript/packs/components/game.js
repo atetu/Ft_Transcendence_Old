@@ -1,6 +1,7 @@
 import Backbone from "backbone";
 import _ from "underscore";
 import consumer from "../../channels/consumer"
+import Ma
 
 console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 var y = null;
@@ -111,6 +112,10 @@ const GameView = Backbone.View.extend({
                         self.my_paddle = 0
                         self.enemy_paddle
                    
+                        console.log("side before : " + self.my_side)
+                        console.log("player1 : " + self.player1)
+                        console.log("current : " + current_user)
+                       
 
                         if (self.player1 == current_user.id)
                             self.my_side = 0
@@ -124,8 +129,8 @@ const GameView = Backbone.View.extend({
                         }
                         else
                         {
-                            self.my_paddle = self.data.paddle1
-                            self.enemy_paddle = self.data.paddle2
+                            self.my_paddle = data.paddle1
+                            self.enemy_paddle = data.paddle2
                         }
                         console.log("my paddle: " + self.my_paddle)
                         document.addEventListener("keydown", (event) => {
@@ -142,6 +147,26 @@ const GameView = Backbone.View.extend({
                                 case 40: {
                                     console.log("GO DOWN")
                                     input = {side: self.my_side, movement: "down"}
+				                    sub.perform('input', input)
+                                    break;
+                                }
+                            }
+                        });
+                        
+                        document.addEventListener("keyup", (event) => {
+                            var input;
+                            switch (event.keyCode) {
+
+                                case 38: {
+                                    // console.log("GO UP")
+                                    input = {side: self.my_side, movement: "/"}
+				                    sub.perform('input', input)
+                                    break;
+                                }
+
+                                case 40: {
+                                    // console.log("GO DOWN")
+                                    input = {side: self.my_side, movement: "/"}
 				                    sub.perform('input', input)
                                     break;
                                 }
@@ -180,7 +205,7 @@ const GameView = Backbone.View.extend({
                             ctx.lineTo(300, 380);
                             ctx.stroke();
        
-                        }, 1/10000);
+                        }, 1/100);
                     },
                 }
             )

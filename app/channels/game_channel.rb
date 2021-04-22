@@ -8,16 +8,17 @@ class GameChannel < ApplicationCable::Channel
       game = Game.find params[:game_id]
       # puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
       # puts data["movement"]
-      if (data["side"] == 0)
+      if (data["side"] == 0 && data["movement"] != "/")
          right = $redis.get("right:#{@id}");
-         right = update(right, data["movement"])
+         right = update_paddle(right, data["movement"])
          $redis.set("right:#{@id}", right)
       end
-      if (data["side"] == 1)
+      if (data["side"] == 1 && data["movement"] != "/")
         left = $redis.get("left:#{@id}");
-        left = update(left, data["movement"])
+        left = update_paddle(left, data["movement"])
         $redis.set("left:#{@id}", left)
       end
+
      end
     
       
@@ -38,13 +39,14 @@ class GameChannel < ApplicationCable::Channel
       # end
  
 
-    def update(paddle, movement)
+    def update_paddle(paddle, movement)
       if movement == "down"
-        paddle = paddle.to_i + "1".to_i
+        paddle = paddle.to_f + "0.2".to_f
       end
       if movement == "up"
-        paddle = paddle.to_i - "1".to_i
+        paddle = paddle.to_f - "0.2".to_f
       end
       return paddle
     end
+
   end
