@@ -10,22 +10,12 @@ require("channels");
 require("jquery-ui");
 require("bootstrap");
 
-console.log("before extras")
-
-require("./libs/jquery_extra")
-
-console.log("before requires")
-
 window._ = require("underscore");
 window.$ = require("jquery");
 window.Backbone = require("backbone");
 
+require("./libs/jquery_extra")
 require("./libs/underscore_extra")
-
-console.log("before logs")
-
-console.log(window._);
-console.log(window._.templateSettings);
 
 const Router = require("./router");
 const NavigationBar = require("./components/navigation_bar");
