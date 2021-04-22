@@ -3,8 +3,8 @@ import _ from "underscore";
 
 const ChannelListView = Backbone.View.extend({
   template: _.template($("script[id='template-channel-list']").html()),
-  initialize(options) {
-    this.collection = options.collection;
+  initialize({ collection, fetch }) {
+    this.collection = collection;
 
     _.bindAll(this, "render");
 
@@ -12,6 +12,10 @@ const ChannelListView = Backbone.View.extend({
     this.collection.bind("add", this.render);
     this.collection.bind("change", this.render);
     this.collection.bind("remove", this.render);
+
+    if (fetch) {
+      this.collection.fetch();
+    }
   },
   render() {
     this.$el.html(

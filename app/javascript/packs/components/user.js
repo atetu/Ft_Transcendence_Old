@@ -15,8 +15,8 @@ const UserCollection = Backbone.Collection.extend({
 
 const UserListView = Backbone.View.extend({
   template: _.template($("script[id='template-user-list']").html()),
-  initialize(options) {
-    this.collection = options.collection;
+  initialize({ collection, fetch }) {
+    this.collection = collection;
 
     _.bindAll(this, "render");
 
@@ -24,6 +24,10 @@ const UserListView = Backbone.View.extend({
     this.collection.bind("add", this.render);
     this.collection.bind("change", this.render);
     this.collection.bind("remove", this.render);
+
+	if (fetch) {
+		this.collection.fetch();
+	}
   },
   render() {
     this.$el.html(
