@@ -15,6 +15,7 @@
     "jquery-ui": "^1.12.1",
     "jquery-ujs": "^1.2.2",
     "popper.js": "^1.16.1",
+    "select2": "^4.1.0-rc.0",
     "underscore": "^1.12.1"
   },
   "version": "0.1.0",

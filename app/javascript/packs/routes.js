@@ -113,13 +113,7 @@ export default {
   },
   "/channel/:id/add": {
     group: "channels",
-    view: (id) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-add']",
-        data: {
-          id,
-        },
-      }),
+    view: (id) => new Channel.ChannelAddUserView({ id }),
   },
   "/channel/:id/remove/:userid": {
     group: "channels",

@@ -332,17 +332,19 @@
 <script type="text/template" id="template-channel-add">
 	<h3>
 		add?
-		<small><%%e id %></small>
+		<small><%%e channel.id %></small>
 		<br />
 		target
 		<small>
-			<input type="text" placeholder="username">
+			<select id="username-select" style="width: 300px">
+				<option selected disabled hidden value="">username</option>
+			</select>
 		</small>
 	</h3>
 	<div class="dropdown-divider"></div>
 	<div class="container text-center">
 		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e channel.id %>'">[no]</a>
 	</div>
 </script>
 

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
 
   rescue_from ActiveRecord::RecordInvalid, :with => :render_error_validation
+  rescue_from ActionController::ParameterMissing, :with => :render_error_parameter_missing
   rescue_from ActiveRecord::RecordNotFound, :with => :render_error_not_found
   rescue_from CanCan::AccessDenied, :with => :render_error_access_denied
   rescue_from Api::BaseException, :with => :render_error_api
@@ -19,6 +20,13 @@ class ApplicationController < ActionController::Base
     render_error({
       message: "validation failed",
       fields: error.record.errors.as_json,
+    }, :not_acceptable)
+  end
+
+  def render_error_parameter_missing(error)
+    render_error({
+      message: "parameter missing",
+      name: error.param,
     }, :not_acceptable)
   end
 
