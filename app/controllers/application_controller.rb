@@ -3,37 +3,40 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
-  rescue_from ActiveRecord::RecordInvalid, :with => :render_error
+  rescue_from ActiveRecord::RecordInvalid, :with => :render_error_validation
   rescue_from ActiveRecord::RecordNotFound, :with => :render_error_not_found
   rescue_from CanCan::AccessDenied, :with => :render_error_access_denied
   rescue_from Api::BaseException, :with => :render_error_api
 
-  def render_error(error)
-    render json: {
-             message: "validation failed",
-             fields: error.record.errors.as_json,
-           }, status: :not_acceptable
+  def render_error(json, status)
+    render({
+      json: json,
+      status: status,
+    })
+  end
+
+  def render_error_validation(error)
+    render_error({
+      message: "validation failed",
+      fields: error.record.errors.as_json,
+    }, :not_acceptable)
   end
 
   def render_error_not_found(error)
-    render json: {
-             message: error.to_s,
-           }, status: :not_found
+    render_error({
+      message: error.to_s,
+    }, :not_found)
   end
 
   def render_error_access_denied(error)
-    # error.instance_variables.each do |x|
-    #   puts x
-    #   puts error.instance_variable_get("#{x}")
-    # end
-    render json: {
-             message: error.to_s,
-           }, status: :forbidden
+    render_error({
+      message: error.to_s,
+    }, :forbidden)
   end
 
   def render_error_api(error)
-    render json: {
-             message: error.message(),
-           }, status: error.status()
+    render({
+      message: error.message(),
+    }, error.status())
   end
 end
