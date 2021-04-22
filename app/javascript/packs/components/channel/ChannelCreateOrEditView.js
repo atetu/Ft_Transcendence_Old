@@ -12,12 +12,19 @@ const ChannelCreateOrEditView = Backbone.View.extend({
   initialize({ id }) {
     this.channel = new ChannelModel({ id });
 
+    this.state = new (Backbone.Model.extend())({
+      error: null,
+      loading: false,
+    });
+
     _.bindAll(this, "render");
 
     if (this.channel.id) {
       this.channel.on("change", this.render);
       this.channel.fetch();
     }
+
+    this.state.on("change", this.render);
   },
   render() {
     this.$el.html(
@@ -54,42 +61,49 @@ const ChannelCreateOrEditView = Backbone.View.extend({
       Object.assign(props, { password });
     }
 
-    new ChannelModel({ id: this.channel.id }).save(props).then(() => {
-      window.location.hash = `#channel/${this.channel.id}`;
-    }).catch((error) => {
-		switch (error.status) {
-			case 406: {
-				const fields = error.responseJSON.fields;
+    this.state.set({
+      error: null,
+      loading: true,
+    });
 
+    this.channel = new ChannelModel({ id: this.channel.id, ...props });
+    this.channel
+      .save()
+      .then(() => {
+        window.location.hash = `#channel/${this.channel.id}`;
+      })
+      .catch((error) => {
+        this.state.set({
+          error,
+          loading: false,
+        });
 
-				const selectors = {
-					form: "#channel-form",
-					fields: {
-						name: "#name-invalid",
-						visibility: "#visibility-invalid",
-						password: "#password-invalid",
-					}
-				}
+        if (error.status == 406) {
+          const fields = error.responseJSON.fields;
 
-				for (const selector in Object.values(selectors.fields)) {
-					this.$(selector).text("");
-					this.$(selector).hide();
-				}
+          const selectors = {
+            form: "#channel-form",
+            fields: {
+              name: "#name-invalid",
+              visibility: "#visibility-invalid",
+              password: "#password-invalid",
+            },
+          };
 
-				for (const field in fields) {
-					const validations = fields[field];
-					const selector = selectors.fields[field];
+          for (const selector in Object.values(selectors.fields)) {
+            this.$(selector).text("");
+            this.$(selector).hide();
+          }
 
-					this.$(selector).show();
-					this.$(selector).text(validations.join(", "));
-				}
-				
-				//this.$(selectors.form).addClass('was-validated');
+          for (const field in fields) {
+            const validations = fields[field];
+            const selector = selectors.fields[field];
 
-				break;
-			}
-		}
-	});
+            this.$(selector).show();
+            this.$(selector).text(validations.join(", "));
+          }
+        }
+      });
   },
 });
 

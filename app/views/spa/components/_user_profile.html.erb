@@ -9,7 +9,7 @@
 			</div>
 		</div>
 	<%% } else if (error) { %>
-		error: <%%= error %>
+		error: <%%e error %>
 	<%% } else { %>
 		<div class="container">
 			<div class="main-body">
@@ -20,14 +20,14 @@
 								<div class="d-flex flex-column align-items-center text-center">
 									<%% if (isSelf) { %>
 										<a href="#profile/edit">
-											<img src="<%%= user.picture %>" alt="<%%= user.username %>" class="rounded-circle" width="150">
+											<img src="<%%e user.picture %>" alt="<%%e user.username %>" class="rounded-circle" width="150">
 										</a>
 									<%% } else { %>
-										<img src="<%%= user.picture %>" alt="<%%= user.username %>" class="rounded-circle" width="150">
+										<img src="<%%e user.picture %>" alt="<%%e user.username %>" class="rounded-circle" width="150">
 									<%% } %>
 									<div class="mt-3">
 										<h4>
-											<%%= user.username %>
+											<%%e user.username %>
 											<%% if (isSelf) { %>
 												<a href="#profile/edit">
 													<small>
@@ -38,7 +38,7 @@
 										</h4>
 										<p class="text-secondary mb-4">
 											joined <br />
-											<%%= user.created_at %>
+											<%%e user.created_at %>
 										</p>
 										<button class="btn btn-primary">Follow</button>
 										<button class="btn btn-outline-primary">Message</button>
@@ -51,14 +51,14 @@
 								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
 									<h6 class="mb-0">
 										<i class="mdi mdi-crown" aria-hidden="true"></i>
-										<%%= user.statistics.win_count %>
+										<%%e user.statistics.win_count %>
 									</h6>
 									<span class="text-secondary">win</span>
 								</li>
 								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
 									<h6 class="mb-0">
 										<i class="mdi mdi-skull-crossbones" aria-hidden="true"></i>
-										<%%= user.statistics.loss_count %>
+										<%%e user.statistics.loss_count %>
 									</h6>
 									<span class="text-secondary">loss</span>
 								</li>
@@ -123,18 +123,18 @@
 											Achievements
 										</h6>
 										<%% _.each(user.achievement_progresses, function(progress) { %>
-											<small  data-toggle="tooltip" data-placement="top" title="<%%= progress.achievement.description %>">
-												<%%= progress.achievement.name %>
+											<small  data-toggle="tooltip" data-placement="top" title="<%%e progress.achievement.description %>">
+												<%%e progress.achievement.name %>
 											</small>
 											<div class="progress mb-3" style="height: 15px">
-												<div class="progress-bar bg-primary" role="progressbar" style="height: 15px; width: <%%= (progress.value / progress.achievement.max) * 100 %>%; <%%= progress.unlocked ? 'background-color: green !important' : '' %>">
+												<div class="progress-bar bg-primary" role="progressbar" style="height: 15px; width: <%%e (progress.value / progress.achievement.max) * 100 %>%; <%%e progress.unlocked ? 'background-color: green !important' : '' %>">
 													<%% if (progress.unlocked) { %>
-														unlocked at <%%= progress.unlocked_at %>
+														unlocked at <%%e progress.unlocked_at %>
 													<%% } else { %>
 														<%% if (progress.achievement.percent) { %>
-															<%%= (progress.value / progress.achievement.max) * 100 %> %
+															<%%e (progress.value / progress.achievement.max) * 100 %> %
 														<%% } else { %>
-															<%%= progress.value %> / <%%= progress.achievement.max %>
+															<%%e progress.value %> / <%%e progress.achievement.max %>
 														<%% } %>
 													<%% } %>
 												</div>

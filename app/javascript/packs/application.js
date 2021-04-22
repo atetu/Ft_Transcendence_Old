@@ -1,3 +1,7 @@
+
+
+
+
 import "@mdi/font/css/materialdesignicons";
 
 require("@rails/ujs").start();
@@ -6,14 +10,25 @@ require("channels");
 require("jquery-ui");
 require("bootstrap");
 
+console.log("before extras")
+
 require("./libs/jquery_extra")
 
-import Router from "./router";
-const NavigationBar = require("./components/navigation_bar");
+console.log("before requires")
 
-window.$ = require("jquery");
 window._ = require("underscore");
+window.$ = require("jquery");
 window.Backbone = require("backbone");
+
+require("./libs/underscore_extra")
+
+console.log("before logs")
+
+console.log(window._);
+console.log(window._.templateSettings);
+
+const Router = require("./router");
+const NavigationBar = require("./components/navigation_bar");
 
 Backbone.View.prototype.close = function () {
   this.remove();
@@ -50,7 +65,8 @@ const app = {
     this.model = new AppModel({ view: null });
     this.view = new AppView({ model: this.model });
 
-    this.router = new Router({ app: this });
+	/* the Router.default is a hack... */
+    this.router = new Router.default({ app: this });
 
     this.navigationBarView.render();
     this.view.render();

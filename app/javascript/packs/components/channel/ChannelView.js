@@ -470,5 +470,6 @@ const ChannelView = Backbone.View.extend({
     this.disconnect();
   },
 });
+console.log(_.templateSettings);
 
 export default ChannelView;

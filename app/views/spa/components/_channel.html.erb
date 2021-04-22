@@ -2,15 +2,15 @@
 	<a href="/#channel/create">
 		create a channel
 	</a> <br />
-  	<div class="dropdown-divider"></div>
+	<div class="dropdown-divider"></div>
 	<div class="list-group">
 		<%% _.each(channels, function(channel) { %>
-			<a href="/#channel/<%%- channel.id %>" class="list-group-item list-group-item-action">
+			<a href="/#channel/<%%e channel.id %>" class="list-group-item list-group-item-action">
 				<div class="d-flex w-100 justify-content-between">
-					<h5 class="mb-1"><%%- channel.name %></h5>
-					<small><%%- channel.visibility %></small>
+					<h5 class="mb-1"><%%e channel.name %></h5>
+					<small><%%e channel.visibility %></small>
 				</div>
-				<small>owner by <%%- channel.owner.username %></small>
+				<small>owner by <%%e channel.owner.username %></small>
 			</a>
 		<%% }); %>
 	</div>
@@ -20,21 +20,21 @@
 	<form id="channel-form" autocomplete="off">
 		<div class="form-group has-validation">
 			<label for="name-input">Name</label>
-			<input class="form-control" id="name-input" value="<%%- name %>" autocomplete="off">
+			<input class="form-control" id="name-input" value="<%%e name %>" autocomplete="off">
 			<div id="name-invalid" class="invalid-feedback"></div>
 		</div>
 		<div class="form-group has-validation">
 			<label for="visibility-input">Visibility</label>
 			<select class="form-control" id="visibility-select">
-				<option value="public" <%%- visibility == "public" ? 'selected' : '' %>>Public</option>
-				<option value="protected" <%%- visibility == "protected" ? 'selected' : '' %>>Protected <small>(require a password)</small></option>
-				<option value="private" <%%- visibility == "private" ? 'selected' : '' %>>Private</option>
+				<option value="public" <%%e visibility == "public" ? 'selected' : '' %>>Public</option>
+				<option value="protected" <%%e visibility == "protected" ? 'selected' : '' %>>Protected <small>(require a password)</small></option>
+				<option value="private" <%%e visibility == "private" ? 'selected' : '' %>>Private</option>
 			</select>
 			<div id="visibility-invalid" class="invalid-feedback"></div>
 		</div>
 		<div class="form-group has-validation" style="display: none" id="password-form-group">
 			<label for="password-input">Password (leave empty to not change it)</label>
-			<input type="password" class="form-control" id="password-input" autocomplete="new-password">
+			<input type="password" class="form-control" id="password-input" value="<%%e this.password %>" autocomplete="new-password">
 			<div id="password-invalid" class="invalid-feedback"></div>
 		</div>
 	</form>
@@ -54,13 +54,13 @@
 <script type="text/template" id="template-channel-error">
 	<div class="alert alert-danger" role="alert">
 		<%% if (status == 403) { %>
-			forbidden: <%%- message %>
+			forbidden: <%%e message %>
 		<%% } else if (status == 404) { %>
 			not found
 		<%% } else if (status == 0) { %>
 			error: no status
 		<%% } else { %>
-			error: <%%- message %> 
+			error: <%%e message %>
 		<%% } %>
 		<small>
 			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
@@ -77,7 +77,7 @@
 	</div>
 	<%% if (error) { %>
 		<div class="alert alert-danger mb-3" role="alert">
-			error: <%%- error.responseJSON?.message || error.status %>
+			error: <%%e error.responseJSON?.message || error.status %>
 		</div>
 	<%% } %>
 	<div class="input-group mb-3">
@@ -99,7 +99,7 @@
 
 <script type="text/template" id="template-channel-member">
 	<p class="channel-member">
-		<%%- member.user.username %>
+		<%%e member.user.username %>
 		<%% if (member.user.id == channelOwner.id) { %>
 			<i class="mdi mdi-crown" aria-hidden="true"></i>
 		<%% } %>
@@ -116,7 +116,7 @@
 	<div id="message-container" style="height: 300px; overflow-y: scroll">
 		<!-- items -->
 	</div>
-
+	
 	<div class="dropdown-divider"></div>
 	<div class="input-group">
 		<input id="message-input" type="text" class="form-control" placeholder="hello world">
@@ -130,7 +130,7 @@
 
 <script type="text/template" id="template-channel-message">
 	<div class="channel-message">
-		<a href="#user/<%%- user.id %>"><%%- user.username %></a>: <%%- content %>
+		<a href="#user/<%%e user.id %>"><%%e user.username %></a>: <%%e content %>
 	</div>
 </script>
 
@@ -144,19 +144,19 @@
 	<%% } else if (state.error) { %>
 		<div class="alert alert-danger" role="alert">
 			<%% if (state.error.status == 403) { %>
-				forbidden: <%%- state.error.responseJSON.message %>
+				forbidden: <%%e state.error.responseJSON.message %>
 			<%% } else if (state.error.status == 404) { %>
 				not found
 			<%% } else if (state.error.status == 0) { %>
 				error
 			<%% } else { %>
-				error: <%%- state.error.responseJSON.message %> 
+				error: <%%e state.error.responseJSON.message %>
 			<%% } %>
 			<small>
 				<a id="error-refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
 			</small>
 		</div>
-		
+	
 		<%% if (state.error?.responseJSON?.message === "password protected") { %>
 			<div class="input-group mb-3">
 				<input id="password-input" type="password" class="form-control" placeholder="password">
@@ -172,16 +172,19 @@
 			</div>
 		<%% }%>
 		<h3>
-			<%%- channel.name %>
-			<small class="text-muted"><%%- channel.visibility %></small>
+			<%%e channel.name %>
+			<small class="text-muted"><%%e channel.visibility %></small>
 		</h3>
-  		<div class="dropdown-divider"></div>
-		  <%#% if (user_signed_in && current_user.id == channel.owner.id) { %>
-		  	<a href="#channel/<%%- channel.id %>/edit">edit</a>
-		  <%#% } %>
-		  
-		<a id="leave-link" href="javascript:void(0)">leave</a>
-  		<div class="dropdown-divider"></div>
+		<div class="dropdown-divider"></div>
+		<div>
+			<%% if (channel.owner && user_signed_in && current_user.id == channel.owner.id) { %>
+				<a href="#channel/<%%e channel.id %>/edit">[edit]</a>
+				<a href="#channel/<%%e channel.id %>/transfer-ownership">[transfer-ownership]</a>
+				<a href="#channel/<%%e channel.id %>/delete">[delete]</a>
+			<%% } %>
+			<a id="leave-link" href="javascript:void(0)">[leave]</a>
+		</div>
+		<div class="dropdown-divider"></div>
 		<div class="container">
 			<div id="part-container" class="row">
 				<div id="messages-part" class="col-12 col-lg-10"></div>
