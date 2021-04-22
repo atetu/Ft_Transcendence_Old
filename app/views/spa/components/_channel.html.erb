@@ -100,7 +100,7 @@
 <script type="text/template" id="template-channel-member">
 	<p class="channel-member">
 		<%%e member.user.username %>
-		<%% if (member.user.id == channelOwner.id) { %>
+		<%% if (member.user.id == channel.owner.id) { %>
 			<i class="mdi mdi-crown" aria-hidden="true"></i>
 		<%% } %>
 		<%% if (member.admin) { %>
@@ -109,6 +109,22 @@
 		<%% if (member.muted) { %>
 			<i class="mdi mdi-volume-mute" aria-hidden="true"></i>
 		<%% } %>
+		<br>
+		<a href="#channel/<%%e channel.id %>/mute/<%%e member.user.id %>">[mute]</a>
+		<%% if (member.muted) { %>
+			<a href="#channel/<%%e channel.id %>/unmute/<%%e member.user.id %>">[unmute]</a>
+		<%% } %>
+		<%% if (member.admin) { %>
+			<a href="#channel/<%%e channel.id %>/demote/<%%e member.user.id %>">[demote]</a>
+		<%% } else { %>
+			<a href="#channel/<%%e channel.id %>/promote/<%%e member.user.id %>">[promote]</a>
+		<%% } %>
+		<%% if (member.banned) { %>
+			<a href="#channel/<%%e channel.id %>/unban/<%%e member.user.id %>">[unban]</a>
+		<%% } else { %>
+			<a href="#channel/<%%e channel.id %>/ban/<%%e member.user.id %>">[ban]</a>
+		<%% } %>
+		<a href="#channel/<%%e channel.id %>/remove/<%%e member.user.id %>">[remove]</a>
 	</p>
 </script>
 
@@ -166,11 +182,6 @@
 			</div>
 		<%% } %>
 	<%% } else { %>
-		<%% if (!state.connected) { %>
-			<div class="alert alert-warning" role="alert">
-				not connected, connecting...
-			</div>
-		<%% }%>
 		<h3>
 			<%%e channel.name %>
 			<small class="text-muted"><%%e channel.visibility %></small>
@@ -181,15 +192,215 @@
 				<a href="#channel/<%%e channel.id %>/edit">[edit]</a>
 				<a href="#channel/<%%e channel.id %>/transfer-ownership">[transfer-ownership]</a>
 				<a href="#channel/<%%e channel.id %>/delete">[delete]</a>
+				<a href="#channel/<%%e channel.id %>/add">[add]</a>
 			<%% } %>
-			<a id="leave-link" href="javascript:void(0)">[leave]</a>
+			<a href="#channel/<%%e channel.id %>/leave" id="leave-link">[leave]</a>
 		</div>
 		<div class="dropdown-divider"></div>
 		<div class="container">
 			<div id="part-container" class="row">
-				<div id="messages-part" class="col-12 col-lg-10"></div>
-				<div id="members-part" class="col-0 col-lg-2"></div>
+				<div id="messages-part" class="col-12 col-lg-9"></div>
+				<div id="members-part" class="col-0 col-lg-3"></div>
 			</div>
 		</div>
+		<%% if (!state.connected) { %>
+			<div class="alert alert-warning" role="alert">
+				not connected, connecting...
+			</div>
+		<%% }%>
 	<%% } %>
+</script>
+
+<script type="text/template" id="template-channel-join">
+	<h3>
+		join?
+		<small><%%e id %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="#/channels">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-leave">
+	<h3>
+		leave?
+		<small><%%e id %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-transfer-ownership">
+	<h3>
+		transfer ownership?
+		<small><%%e id %></small>
+		<br />
+		to
+		<small>
+			<select>
+				<option value="" selected disabled hidden>&lt;target&gt;</option>
+				<option>a</option>
+				<option>b</option>
+				<option>c</option>
+			</select>
+		</small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-delete">
+	<h3>
+		delete?
+		<small><%%e id %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-ban">
+	<h3>
+		ban?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small><%%e userId %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-unban">
+	<h3>
+		unban?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small><%%e userId %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-promote">
+	<h3>
+		promote?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small><%%e userId %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-demote">
+	<h3>
+		demote?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small><%%e userId %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-add">
+	<h3>
+		add?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small>
+			<input type="text" placeholder="username">
+		</small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-remove">
+	<h3>
+		remove?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small><%%e userId %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-mute">
+	<h3>
+		mute?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small><%%e userId %></small>
+		<br />
+		duration
+		<small>
+			<select>
+				<option value="0" selected>indefinitely</option>
+				<option value="60">1 minute</option>
+				<option value="300">5 minutes</option>
+				<option value="600">10 minutes</option>
+				<option value="3600">1 hour</option>
+				<option value="21600">6 hours</option>
+				<option value="86400">1 day</option>
+				<option value="259200">3 days</option>
+			</select>
+		</small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-unmute">
+	<h3>
+		unmute?
+		<small><%%e id %></small>
+		<br />
+		target
+		<small><%%e userId %></small>
+	</h3>
+	<div class="dropdown-divider"></div>
+	<div class="container text-center">
+		<a href="javascript:void(0)">[yes]</a>
+		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
+	</div>
 </script>

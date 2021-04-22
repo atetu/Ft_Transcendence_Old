@@ -235,7 +235,7 @@ const MemberView = Backbone.View.extend({
     this.$el.html(
       this.template({
         member: this.model.toJSON(),
-        channelOwner: this.channel.get("owner"),
+        channel: this.channel.toJSON(),
       })
     );
 

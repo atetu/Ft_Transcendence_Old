@@ -27,6 +27,133 @@ export default {
     group: "channels",
     view: (id) => new Channel.ChannelCreateOrEditView({ id }),
   },
+  "/channel/:id/join": {
+    group: "channels",
+    view: (id) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-join']",
+        data: {
+          id,
+        },
+      }),
+  },
+  "/channel/:id/leave": {
+    group: "channels",
+    view: (id) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-leave']",
+        data: {
+          id,
+        },
+      }),
+  },
+  "/channel/:id/transfer-ownership": {
+    group: "channels",
+    view: (id) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-transfer-ownership']",
+        data: {
+          id,
+        },
+      }),
+  },
+  "/channel/:id/delete": {
+    group: "channels",
+    view: (id) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-delete']",
+        data: {
+          id,
+        },
+      }),
+  },
+  "/channel/:id/ban/:userid": {
+    group: "channels",
+    view: (id, userId) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-ban']",
+        data: {
+          id,
+          userId,
+        },
+      }),
+  },
+  "/channel/:id/unban/:userid": {
+    group: "channels",
+    view: (id, userId) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-unban']",
+        data: {
+          id,
+          userId,
+        },
+      }),
+  },
+  "/channel/:id/promote/:userid": {
+    group: "channels",
+    view: (id, userId) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-promote']",
+        data: {
+          id,
+          userId,
+        },
+      }),
+  },
+  "/channel/:id/demote/:userid": {
+    group: "channels",
+    view: (id, userId) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-demote']",
+        data: {
+          id,
+          userId,
+        },
+      }),
+  },
+  "/channel/:id/add": {
+    group: "channels",
+    view: (id) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-add']",
+        data: {
+          id,
+        },
+      }),
+  },
+  "/channel/:id/remove/:userid": {
+    group: "channels",
+    view: (id, userId) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-remove']",
+        data: {
+          id,
+          userId,
+        },
+      }),
+  },
+  "/channel/:id/mute/:userid": {
+    group: "channels",
+    view: (id, userId) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-mute']",
+        data: {
+          id,
+          userId,
+        },
+      }),
+  },
+  "/channel/:id/unmute/:userid": {
+    group: "channels",
+    view: (id, userId) =>
+      new Dummy.SimpleView({
+        template: "script[id='template-channel-unmute']",
+        data: {
+          id,
+          userId,
+        },
+      }),
+  },
   "/guilds": {
     group: "guilds",
     view: () => new Dummy.EmptyView(),
