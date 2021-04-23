@@ -51,7 +51,9 @@ class Game < ApplicationRecord
     @canvas_height = 400
     loop do 
       broadcast
-      update_ball
+      if !update_ball
+        break
+      end
       # ball_x = $redis.get("ball_x:#{@id}")
       # ball_y = $redis.get("ball_y:#{@id}")
       # ball_x = ball_x.to_i + "30".to_i
@@ -69,6 +71,10 @@ class Game < ApplicationRecord
     #   puts "strike"
     # end
     radius = "5".to_f * @direction
+    if ((ball_x.to_f + radius.to_f) < "0" .to_f ||  (ball_x.to_f + radius.to_f) > @canvas_width.to_f ||
+      (ball_y.to_f + radius.to_f) < "0".to_f || (ball_y.to_f + radius.to_f) > @canvas_height.to_f)
+      return 0
+    end
     if (((ball_x.to_f + radius.to_f) >= ("10".to_f) && (ball_x.to_f + radius.to_f) <= ("25".to_f) && (ball_y.to_f + radius.to_f) >= (@paddle1.to_f) && (ball_y.to_f + radius.to_f) <= (@paddle1.to_f + "80".to_f)) ||
       (ball_x.to_f + radius.to_f >= @canvas_width.to_f - "25".to_f && ball_x.to_f + radius.to_f <= @canvas_width.to_f - "10".to_f && ball_y.to_f + radius.to_f >= @paddle2.to_f && ball_y.to_f + radius.to_f <= @paddle2.to_f + "80".to_f))
       @direction*= -1
@@ -77,6 +83,7 @@ class Game < ApplicationRecord
     ball_y = ball_y.to_i + @vel_y.to_f * @direction.to_f
     $redis.set("ball_x:#{@id}", ball_x)
     $redis.set("ball_y:#{@id}", ball_y)
+    return 1
   end
 
  

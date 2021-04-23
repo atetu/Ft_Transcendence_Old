@@ -1,22 +1,22 @@
 class GameChannel < ApplicationCable::Channel
     def subscribed
-      game = Game.find params[:game_id]
-      stream_for game
+      @game = Game.find params[:game_id]
+      stream_for @game
     end
 
     def input(data)
-      game = Game.find params[:game_id]
+      # game = Game.find params[:game_id]
       # puts "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
       # puts data["movement"]
-      if (data["side"] == 0 && data["movement"] != "/")
-         right = $redis.get("right:#{@id}");
+      if (data["side"] == 0)
+         right = $redis.get("right:#{@game.id}");
          right = update_paddle(right, data["movement"])
-         $redis.set("right:#{@id}", right)
+         $redis.set("right:#{@game.id}", right)
       end
-      if (data["side"] == 1 && data["movement"] != "/")
-        left = $redis.get("left:#{@id}");
+      if (data["side"] == 1)
+        left = $redis.get("left:#{@game.id}");
         left = update_paddle(left, data["movement"])
-        $redis.set("left:#{@id}", left)
+        $redis.set("left:#{@game.id}", left)
       end
 
      end

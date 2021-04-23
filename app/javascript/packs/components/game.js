@@ -1,7 +1,7 @@
 import Backbone from "backbone";
 import _ from "underscore";
 import consumer from "../../channels/consumer"
-import Ma
+
 
 console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 var y = null;
@@ -153,25 +153,25 @@ const GameView = Backbone.View.extend({
                             }
                         });
                         
-                        document.addEventListener("keyup", (event) => {
-                            var input;
-                            switch (event.keyCode) {
+                        // document.addEventListener("keyup", (event) => {
+                        //     var input;
+                        //     switch (event.keyCode) {
 
-                                case 38: {
-                                    // console.log("GO UP")
-                                    input = {side: self.my_side, movement: "/"}
-				                    sub.perform('input', input)
-                                    break;
-                                }
+                        //         case 38: {
+                        //             // console.log("GO UP")
+                        //             input = {side: self.my_side, movement: "/"}
+				        //             sub.perform('input', input)
+                        //             break;
+                        //         }
 
-                                case 40: {
-                                    // console.log("GO DOWN")
-                                    input = {side: self.my_side, movement: "/"}
-				                    sub.perform('input', input)
-                                    break;
-                                }
-                            }
-                        });
+                        //         case 40: {
+                        //             // console.log("GO DOWN")
+                        //             input = {side: self.my_side, movement: "/"}
+				        //             sub.perform('input', input)
+                        //             break;
+                        //         }
+                        //     }
+                        // });
 
                         setInterval(() => {
                             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -180,8 +180,8 @@ const GameView = Backbone.View.extend({
                             
                             if (self.my_side)
                             {
-                                ctx.fillStyle = 'blue'
-                                ctx.fillRect(canvas.width - 25, self.my_paddle, 15, 80);
+                                ctx.fillStyle = 'yellow'
+                                ctx.fillRect(canvas.width - 25, self.my_paddle.round, 15, 80);
                                 ctx.fillStyle = 'blue'
                                 ctx.fillRect(10, self.enemy_paddle, 15, 80);
                             }
