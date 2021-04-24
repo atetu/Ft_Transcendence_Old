@@ -43,9 +43,7 @@
 
 <script type="text/template" id="template-channel-loading">
 	<div class="text-center">
-		<div class="spinner-border" role="status">
-			<span class="sr-only">loading...</span>
-		</div>
+		<div class="spinner-border" role="status"></div>
 	</div>
 </script>
 
@@ -73,16 +71,8 @@
 			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
 		</small>
 	</div>
-	<%% if (error) { %>
-		<div class="alert alert-danger mb-3" role="alert">
-			error: <%%e error.responseJSON?.message || error.status %>
-		</div>
-	<%% } %>
-	<div class="input-group mb-3">
-		<input id="password-input" type="password" class="form-control" placeholder="password">
-		<div class="input-group-append">
-			<button id="submit-button" class="btn btn-primary">submit</button>
-		</div>
+	<div class="text-center" role="alert">
+		<a href="#channel/<%%e channel.id %>/unlock">[unlock]</a>
 	</div>
 </script>
 
@@ -132,13 +122,22 @@
 	</div>
 	
 	<div class="dropdown-divider"></div>
-	<div class="input-group">
-		<input id="message-input" type="text" class="form-control" placeholder="hello world">
+
+	<div id="message-input-container">
+		<!-- message input -->
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-message-input">
+	<div class="input-group has-validation">
+		<input id="message-input" type="text" class="form-control" autocomplete="off" placeholder="hello world">
 		<div class="input-group-append">
 			<button id="send-button" class="btn btn-primary">
+				<div id="loading-container" class="spinner-border spinner-border-sm text-secondary" role="status"></div>
 				<i class="mdi mdi-send" aria-hidden="true"></i>
 			</button>
 		</div>
+		<div id="message-invalid" class="invalid-feedback"></div>
 	</div>
 </script>
 

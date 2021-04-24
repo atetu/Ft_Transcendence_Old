@@ -6,6 +6,6 @@ class ChannelMessage < ApplicationRecord
 
   validates :user, presence: true
   validates :channel, presence: true
-  validates :content, presence: true
+  validates :content, presence: true, length: { minimum: 1, maximum: 100 }
   validate_enum_attributes :content_type
 end

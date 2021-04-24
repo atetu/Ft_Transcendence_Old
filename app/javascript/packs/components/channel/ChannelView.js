@@ -2,6 +2,8 @@ import Backbone from "backbone";
 import _ from "underscore";
 import consumer from "../../../channels/consumer";
 
+import ValidationHelper from "../../helper/validation";
+
 import ChannelModel from "./ChannelModel";
 
 import { ChannelMessageModel, ChannelMessageCollection } from "./message";
@@ -22,6 +24,8 @@ const ErrorView = Backbone.View.extend({
     this.status = status;
     this.message = message;
     this.refresh = refresh;
+
+    _.bindAll(this, "render");
   },
   events: {
     "click #refresh"() {
@@ -48,90 +52,21 @@ const PasswordProtectedView = Backbone.View.extend({
     this.channel = channel;
     this.refresh = refresh;
 
-    this.state = new (Backbone.Model.extend())({
-      error: null,
-      loading: false,
-    });
-
-    this.submitRequest = new (Backbone.Model.extend({
-      urlRoot() {
-        return `/api/channels/${channel.id}/join`;
-      },
-      default: {
-        password: null,
-      },
-    }))();
-
-    _.bindAll(this, "render", "disableAll", "enableAll", "toggleDisable");
-
-    this.state.on("change", this.render);
+    _.bindAll(this, "render");
   },
   render() {
-    this.$el.html(this.template(this.state.toJSON()));
-
-    this.$passwordInput = this.$("#password-input");
-    this.$submitButton = this.$("#submit-button");
-    this.$refreshLink = this.$("#refresh");
-
-    this.toggleDisable();
+    this.$el.html(
+      this.template({
+        channel: this.channel.toJSON(),
+      })
+    );
 
     return this;
-  },
-  submit() {
-    if (this.state.get("loading")) {
-      return;
-    }
-
-    const password = this.$passwordInput.val();
-
-    this.disableAll();
-
-    this.state.set({
-      loading: true,
-      error: null,
-    });
-
-    this.submitRequest
-      .save({
-        password,
-      })
-      .then(
-        this.refresh
-      ) /* no need to set loading to false, we are leaving the page */
-      .catch((error) =>
-        this.state.set({
-          loading: false,
-          error: error,
-        })
-      );
   },
   events: {
     "click #refresh"() {
       this.refresh();
     },
-    "keyup #password-input"(event) {
-      if (event.keyCode == 13 /* enter */) {
-        this.submit();
-      }
-    },
-    "click #submit-button": "submit",
-  },
-  disableAll() {
-    this.$passwordInput.disable();
-    this.$submitButton.disable();
-    this.$refreshLink.disable();
-  },
-  enableAll() {
-    this.$passwordInput.enable();
-    this.$submitButton.enable();
-    this.$refreshLink.enable();
-  },
-  toggleDisable() {
-    if (this.state.get("loading")) {
-      this.disableAll();
-    } else {
-      this.enableAll();
-    }
   },
 });
 
@@ -176,10 +111,143 @@ const MessageView = Backbone.View.extend({
   },
 });
 
+const MessageInputView = Backbone.View.extend({
+  template: _.template($("script[id='template-channel-message-input']").html()),
+  validationSelectors: {
+    form: "",
+    fields: {
+      content: "#message-invalid",
+    },
+  },
+  initialize({ channel, collection }) {
+    this.channel = channel;
+    this.collection = collection;
+
+    this.state = new (Backbone.Model.extend({}))({
+      loading: false,
+      error: null,
+    });
+
+    _.bindAll(
+      this,
+      "$",
+      "render",
+      "submit",
+      "updateLoadingState",
+      "updateErrorState",
+      "setInputEnabledState"
+    );
+
+    this.state.bind("change:loading", this.updateLoadingState);
+    this.state.bind("change:error", this.updateErrorState);
+  },
+  render() {
+    this.$el.html(this.template());
+
+    this.$messageInput = this.$("#message-input");
+    this.$loadingContainer = this.$("#loading-container");
+
+    this.updateLoadingState();
+
+    return this;
+  },
+  submit() {
+    if (this.state.get("loading")) {
+      return;
+    }
+
+    const message = this.$messageInput.val();
+
+    if (!message) {
+      return;
+    }
+
+    this.state.set({
+      loading: true,
+      error: null,
+    });
+
+    this.setInputEnabledState();
+
+    new ChannelMessageModel({
+      channel: this.channel,
+    })
+      .save({
+        content_type: "text",
+        content: message,
+      })
+      .then(() => {
+        this.$messageInput.val("");
+        this.state.set({
+          loading: false,
+        });
+      })
+      .catch((error) => {
+        this.state.set({
+          error,
+          loading: false,
+        });
+      })
+      .then(this.setInputEnabledState);
+  },
+  setInputEnabledState() {
+    const loading = this.state.get("loading");
+
+    if (loading) {
+      this.$messageInput.disable();
+    } else {
+      this.$messageInput.enable();
+      this.$messageInput.focus();
+    }
+  },
+  updateLoadingState() {
+    const loading = this.state.get("loading");
+
+    if (loading) {
+      this.$loadingContainer.show();
+    } else {
+      this.$loadingContainer.hide();
+    }
+  },
+  updateErrorState() {
+    const error = this.state.get("error");
+
+    if (error) {
+      if (error.status == 406) {
+        const fields = error.responseJSON.fields;
+
+        ValidationHelper.failed(this.$, fields, this.validationSelectors);
+      } else {
+        const selector = this.validationSelectors.fields.content;
+
+        this.$(selector).show();
+        this.$(selector).text(
+          error.responseJSON?.message ||
+            error.status ||
+            "failed to send the message"
+        );
+      }
+    } else {
+      ValidationHelper.clear(this.$, this.validationSelectors);
+    }
+  },
+  events: {
+    "click #send-button"() {
+      this.submit();
+    },
+    "keyup #message-input"(event) {
+      if (event.keyCode == 13 /* enter */) {
+        this.submit();
+      }
+    },
+  },
+});
+
 const MessageListView = Backbone.View.extend({
   template: _.template($("script[id='template-channel-message-list']").html()),
-  initialize({ collection }) {
+  initialize({ collection, channel }) {
     this.collection = collection;
+    this.channel = channel;
 
     _.bindAll(this, "render", "addOne", "addOneAndScroll");
 
@@ -192,6 +260,14 @@ const MessageListView = Backbone.View.extend({
     this.$el.html(this.template());
 
     this.$container = this.$("#message-container");
+    this.$inputContainer = this.$("#message-input-container");
+
+    this.$inputContainer.append(
+      new MessageInputView({
+        channel: this.channel,
+        collection: this.collection,
+      }).render().el
+    );
 
     this.addAll();
 
@@ -283,22 +359,18 @@ const ChannelView = Backbone.View.extend({
   template: _.template($("script[id='template-channel']").html()),
   events: {
     "click #error-refresh": "refresh",
-    "click #send-button": "submit",
-    "keyup #message-input": "keyup"
   },
   initialize({ id }) {
     this.channel = new ChannelModel({ id });
     this.members = new ChannelUserCollection([], { channel: this.channel });
     this.messages = new ChannelMessageCollection([], { channel: this.channel });
 
-    this.state = new (Backbone.Model.extend({
-      default: {
-        loading: false,
-        error: null,
-        connected: false,
-        $subscriber: null,
-      },
-    }))();
+    this.state = new (Backbone.Model.extend({}))({
+      loading: false,
+      error: null,
+      connected: false,
+      rejected: false,
+    });
 
     _.bindAll(this, "render", "connect", "refresh");
 
@@ -349,6 +421,7 @@ const ChannelView = Backbone.View.extend({
 
       new MessageListView({
         el: this.$("#messages-part"),
+        channel: this.channel,
         collection: this.messages,
       }).render();
 
@@ -358,7 +431,6 @@ const ChannelView = Backbone.View.extend({
         collection: this.members,
       }).render();
 
-      this.$messageInput = this.$("#message-input");
       this.$messageContainer = this.$("#message-container");
     }
 
@@ -369,20 +441,19 @@ const ChannelView = Backbone.View.extend({
       return;
     }
 
-    this.state.set("loading", true);
+    this.state.set({ loading: true });
 
     return this.channel
       .fetch()
       .then(() => this.messages.fetch())
-      .catch((error) => this.state.set("error", error))
-      .then(() => this.state.set("loading", false));
+      .catch((error) => this.state.set({ error }))
+      .then(() => this.state.set({ loading: false }));
   },
   refresh() {
-    console.log("refreshing");
-
-    this.state.set("error", null);
+    this.state.set({ error: null, rejected: false, connected: false });
 
     this.disconnect();
+    this.subscriber = null;
 
     this.fetch().then(this.connect);
   },
@@ -391,63 +462,35 @@ const ChannelView = Backbone.View.extend({
       return;
     }
 
-    const self = this;
-
-    self.state.set("rejected", false);
-
-    this.state.set(
-      "subscriber",
-      consumer.subscriptions.create(
-        {
-          channel: "ChannelChannel",
-          channel_id: self.channel.id,
+    this.subscriber = consumer.subscriptions.create(
+      {
+        channel: "ChannelChannel",
+        channel_id: this.channel.id,
+      },
+      {
+        connected: (x) => {
+          console.log("connected(): " + x);
+          this.state.set("connected", true);
         },
-        {
-          connected(x) {
-            console.log("connected(): " + x);
-            self.state.set("connected", true);
-          },
-          rejected(x) {
-            self.state.set("rejected", true);
-            console.log("rejected(): " + x);
-          },
-          disconnected(x) {
-            console.log("disconnected(): " + x);
-            self.state.set("connected", false);
-          },
-          received(data) {
-            console.log("received(" + JSON.stringify(data) + ")");
-            self.messages.add(data);
-          },
-        }
-      )
+        rejected: (x) => {
+          this.state.set("rejected", true);
+          console.log("rejected(): " + x);
+        },
+        disconnected: (x) => {
+          console.log("disconnected(): " + x);
+          this.state.set("connected", false);
+        },
+        received: (data) => {
+          console.log("received(" + JSON.stringify(data) + ")");
+          this.messages.add(data);
+        },
+      }
     );
   },
   disconnect() {
-    if (this.state.get("connected")) {
-      consumer.subscriptions.remove(this.state.get("subscriber"));
+    if (this.subscriber) {
+      consumer.subscriptions.remove(this.subscriber);
     }
-  },
-  keyup(event) {
-    if (event.keyCode == 13 /* enter */) {
-      this.submit();
-    }
-  },
-  submit() {
-    const message = this.$messageInput.val();
-
-    if (!message) {
-      return;
-    }
-
-    this.$messageInput.val("");
-
-    new ChannelMessageModel({
-      channel: this.channel,
-    }).save({
-      content_type: "text",
-      content: message,
-    });
   },
   onClose() {
     this.disconnect();

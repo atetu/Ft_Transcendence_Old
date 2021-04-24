@@ -1,6 +1,8 @@
 import Backbone from "backbone";
 import _ from "underscore";
 
+import ValidationHelper from "../../helper/validation";
+
 import ChannelModel from "./ChannelModel";
 
 const ChannelCreateOrEditView = Backbone.View.extend({
@@ -17,7 +19,7 @@ const ChannelCreateOrEditView = Backbone.View.extend({
       loading: false,
     });
 
-    _.bindAll(this, "render");
+    _.bindAll(this, "$", "render");
 
     if (this.channel.id) {
       this.channel.on("change", this.render);
@@ -80,7 +82,6 @@ const ChannelCreateOrEditView = Backbone.View.extend({
 
         if (error.status == 406) {
           const fields = error.responseJSON.fields;
-
           const selectors = {
             form: "#channel-form",
             fields: {
@@ -90,18 +91,7 @@ const ChannelCreateOrEditView = Backbone.View.extend({
             },
           };
 
-          for (const selector in Object.values(selectors.fields)) {
-            this.$(selector).text("");
-            this.$(selector).hide();
-          }
-
-          for (const field in fields) {
-            const validations = fields[field];
-            const selector = selectors.fields[field];
-
-            this.$(selector).show();
-            this.$(selector).text(validations.join(", "));
-          }
+          ValidationHelper.failed(this.$, fields, selectors);
         }
       });
   },
