@@ -36,6 +36,14 @@ class ChannelMessageController < ApplicationController
     })
   end
 
+  def clear()
+    ChannelMessage.where(channel: @channel).delete_all()
+
+    render({
+      json: ChannelMessageBlueprint.render([]), # empty list
+    })
+  end
+
   private
 
   def load_entities

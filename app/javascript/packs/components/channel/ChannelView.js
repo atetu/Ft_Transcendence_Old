@@ -359,6 +359,7 @@ const ChannelView = Backbone.View.extend({
   template: _.template($("script[id='template-channel']").html()),
   events: {
     "click #error-refresh": "refresh",
+    "click #refresh-action": "refresh",
   },
   initialize({ id }) {
     this.channel = new ChannelModel({ id });

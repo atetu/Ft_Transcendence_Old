@@ -43,6 +43,10 @@ export default {
     group: "channels",
     view: (id) => new Channel.ChannelDeleteView({ id }),
   },
+  "/channel/:id/clear": {
+    group: "channels",
+    view: (id) => new Channel.ChannelClearView({ id }),
+  },
   "/channel/:id/ban/:userid": {
     group: "channels",
     view: (id, userId) =>

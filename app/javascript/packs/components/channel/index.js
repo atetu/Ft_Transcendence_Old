@@ -9,6 +9,7 @@ import ChannelDeleteView from "./ChannelDeleteView";
 import ChannelLeaveView from "./ChannelLeaveView";
 import ChannelJoinView from "./ChannelJoinView";
 import ChannelTransferOwnershipView from "./ChannelTransferOwnershipView";
+import ChannelClearView from "./ChannelClearView";
 
 export {
   ChannelModel,
@@ -22,4 +23,5 @@ export {
   ChannelLeaveView,
   ChannelJoinView,
   ChannelTransferOwnershipView,
+  ChannelClearView,
 };

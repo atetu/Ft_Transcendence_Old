@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     post "/channels/:id/transfer-ownership", to: "channel#transfer_ownership"
 
     delete "/channels/:id", to: "channel#delete"
+    delete "/channels/:channel_id/messages", to: "channel_message#clear"
     delete "/channels/:channel_id/members/:user_id", to: "channel_user#remove"
 
     post "/channels/:id/promote/:user_id", to: "channel_user_admin#promote"
