@@ -31,8 +31,19 @@ class ApplicationController < ActionController::Base
   end
 
   def render_error_not_found(error)
+    model = error.model
+    model ||= "model"
+    model = model.underscore.humanize.downcase
+
+    primary_key = error.primary_key
+    primary_key ||= "primary key"
+    primary_key = primary_key.underscore.humanize.downcase
+
     render_error({
-      message: error.to_s,
+      message: "no #{model} with #{primary_key} = `#{error.id}`",
+      model: error.model,
+      primary_key: error.primary_key,
+      id: error.id,
     }, :not_found)
   end
 
