@@ -284,8 +284,7 @@ const ChannelView = Backbone.View.extend({
   events: {
     "click #error-refresh": "refresh",
     "click #send-button": "submit",
-    "keyup #message-input": "keyup",
-    "click #leave-link": "askLeave",
+    "keyup #message-input": "keyup"
   },
   initialize({ id }) {
     this.channel = new ChannelModel({ id });
@@ -449,22 +448,6 @@ const ChannelView = Backbone.View.extend({
       content_type: "text",
       content: message,
     });
-  },
-  askLeave() {
-    if (confirm("are you sure")) {
-      const self = this;
-
-      new (Backbone.Model.extend({
-        urlRoot() {
-          return `/api/channels/${self.channel.id}/leave`;
-        },
-        default: {
-          password: null,
-        },
-      }))().save()
-	  .then(() => window.location.hash = `#channels`)
-	  .catch((error) => alert(error.responseJSON?.message || `error: ${error.status}`));
-    }
   },
   onClose() {
     this.disconnect();

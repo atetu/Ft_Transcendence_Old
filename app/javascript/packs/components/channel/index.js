@@ -6,6 +6,8 @@ import ChannelCreateOrEditView from "./ChannelCreateOrEditView";
 import ChannelAddUserView from "./ChannelAddUserView";
 import ChannelRemoveUserView from "./ChannelRemoveUserView";
 import ChannelDeleteView from "./ChannelDeleteView";
+import ChannelLeaveView from "./ChannelLeaveView";
+import ChannelJoinView from "./ChannelJoinView";
 
 export {
   ChannelModel,
@@ -16,4 +18,6 @@ export {
   ChannelAddUserView,
   ChannelRemoveUserView,
   ChannelDeleteView,
+  ChannelLeaveView,
+  ChannelJoinView,
 };

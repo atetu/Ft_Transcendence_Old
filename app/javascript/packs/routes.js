@@ -29,23 +29,11 @@ export default {
   },
   "/channel/:id/join": {
     group: "channels",
-    view: (id) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-join']",
-        data: {
-          id,
-        },
-      }),
+    view: (id) => new Channel.ChannelJoinView({ id, fetch: true })
   },
   "/channel/:id/leave": {
     group: "channels",
-    view: (id) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-leave']",
-        data: {
-          id,
-        },
-      }),
+    view: (id) => new Channel.ChannelLeaveView({ id, fetch: true }),
   },
   "/channel/:id/transfer-ownership": {
     group: "channels",

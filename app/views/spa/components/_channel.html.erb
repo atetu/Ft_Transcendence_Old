@@ -212,25 +212,29 @@
 <script type="text/template" id="template-channel-join">
 	<h3>
 		join?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="#/channels">[no]</a>
-	</div>
+	<%% if (state.loading) { %>
+		loading...
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			error: <%%e state.error.responseJSON?.message || state.error.status || state.error %>
+		</div>
+	<%% } %>
 </script>
 
 <script type="text/template" id="template-channel-leave">
 	<h3>
 		leave?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
-	</div>
+	<%% if (state.loading) { %>
+		loading...
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			error: <%%e state.error.responseJSON?.message || state.error.status || state.error %>
+		</div>
+	<%% } %>
 </script>
 
 <script type="text/template" id="template-channel-transfer-ownership">
