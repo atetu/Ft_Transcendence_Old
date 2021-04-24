@@ -112,67 +112,51 @@
 	<div id="error-container"></div>
 </script>
 
-<!-- TODO -->
-
 <script type="text/template" id="template-channel-ban">
 	<h3>
 		ban?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 		<br />
 		target
-		<small><%%e userId %></small>
+		<small><%%e user.user?.username || user.id %></small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
-	</div>
+	<div id="error-container"></div>
 </script>
 
 <script type="text/template" id="template-channel-unban">
 	<h3>
 		unban?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 		<br />
 		target
-		<small><%%e userId %></small>
+		<small><%%e user.user?.username || user.id %></small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
-	</div>
+	<div id="error-container"></div>
 </script>
 
 <script type="text/template" id="template-channel-promote">
 	<h3>
 		promote?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 		<br />
 		target
-		<small><%%e userId %></small>
+		<small><%%e user.user?.username || user.id %></small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
-	</div>
+	<div id="error-container"></div>
 </script>
 
 <script type="text/template" id="template-channel-demote">
 	<h3>
 		demote?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 		<br />
 		target
-		<small><%%e userId %></small>
+		<small><%%e user.user?.username || user.id %></small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
-	</div>
+	<div id="error-container"></div>
 </script>
+
+<!-- TODO -->
 
 <script type="text/template" id="template-channel-mute">
 	<h3>

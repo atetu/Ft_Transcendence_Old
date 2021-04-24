@@ -97,6 +97,9 @@
 		<%% if (member.muted) { %>
 			<i class="mdi mdi-volume-mute" aria-hidden="true"></i>
 		<%% } %>
+		<%% if (member.banned) { %>
+			<i class="mdi mdi-cancel" aria-hidden="true"></i>
+		<%% } %>
 		<br>
 		<a href="#channel/<%%e channel.id %>/mute/<%%e member.user.id %>">[mute]</a>
 		<%% if (member.muted) { %>

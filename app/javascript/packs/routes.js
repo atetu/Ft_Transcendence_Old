@@ -29,7 +29,7 @@ export default {
   },
   "/channel/:id/join": {
     group: "channels",
-    view: (id) => new Channel.ChannelJoinView({ id })
+    view: (id) => new Channel.ChannelJoinView({ id }),
   },
   "/channel/:id/leave": {
     group: "channels",
@@ -37,7 +37,7 @@ export default {
   },
   "/channel/:id/transfer-ownership": {
     group: "channels",
-    view: (id) => new Channel.ChannelTransferOwnershipView({ id })
+    view: (id) => new Channel.ChannelTransferOwnershipView({ id }),
   },
   "/channel/:id/delete": {
     group: "channels",
@@ -49,47 +49,19 @@ export default {
   },
   "/channel/:id/ban/:userid": {
     group: "channels",
-    view: (id, userId) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-ban']",
-        data: {
-          id,
-          userId,
-        },
-      }),
+    view: (id, userId) => new Channel.ChannelBanUserView({ id, userId }),
   },
   "/channel/:id/unban/:userid": {
     group: "channels",
-    view: (id, userId) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-unban']",
-        data: {
-          id,
-          userId,
-        },
-      }),
+    view: (id, userId) => new Channel.ChannelUnbanUserView({ id, userId }),
   },
   "/channel/:id/promote/:userid": {
     group: "channels",
-    view: (id, userId) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-promote']",
-        data: {
-          id,
-          userId,
-        },
-      }),
+    view: (id, userId) => new Channel.ChannelPromoteUserView({ id, userId }),
   },
   "/channel/:id/demote/:userid": {
     group: "channels",
-    view: (id, userId) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-demote']",
-        data: {
-          id,
-          userId,
-        },
-      }),
+    view: (id, userId) => new Channel.ChannelDemoteUserView({ id, userId }),
   },
   "/channel/:id/add": {
     group: "channels",
@@ -97,8 +69,7 @@ export default {
   },
   "/channel/:id/remove/:userid": {
     group: "channels",
-    view: (id, userId) =>
-      new Channel.ChannelRemoveUserView({ id, userId }),
+    view: (id, userId) => new Channel.ChannelRemoveUserView({ id, userId }),
   },
   "/channel/:id/mute/:userid": {
     group: "channels",

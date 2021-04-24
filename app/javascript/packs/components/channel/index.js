@@ -10,6 +10,10 @@ import ChannelLeaveView from "./ChannelLeaveView";
 import ChannelJoinView from "./ChannelJoinView";
 import ChannelTransferOwnershipView from "./ChannelTransferOwnershipView";
 import ChannelClearView from "./ChannelClearView";
+import ChannelBanUserView from "./ChannelBanUserView";
+import ChannelUnbanUserView from "./ChannelUnbanUserView";
+import ChannelDemoteUserView from "./ChannelDemoteUserView";
+import ChannelPromoteUserView from "./ChannelPromoteUserView";
 
 export {
   ChannelModel,
@@ -24,4 +28,8 @@ export {
   ChannelJoinView,
   ChannelTransferOwnershipView,
   ChannelClearView,
+  ChannelBanUserView,
+  ChannelUnbanUserView,
+  ChannelDemoteUserView,
+  ChannelPromoteUserView,
 };

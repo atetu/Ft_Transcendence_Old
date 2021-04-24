@@ -1,2 +1,0 @@
-class ChannelUserMuteController < ApplicationController
-end

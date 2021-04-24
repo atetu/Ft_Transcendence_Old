@@ -37,12 +37,7 @@ Rails.application.routes.draw do
     delete "/channels/:channel_id/messages", to: "channel_message#clear"
     delete "/channels/:channel_id/members/:user_id", to: "channel_user#remove"
 
-    post "/channels/:id/promote/:user_id", to: "channel_user_admin#promote"
-    post "/channels/:id/demote/:user_id", to: "channel_user_admin#demote"
-    post "/channels/:id/ban/:user_id", to: "channel_user_ban#ban"
-    post "/channels/:id/unban/:user_id", to: "channel_user_ban#unban"
-    post "/channels/:id/mute/:user_id", to: "channel_user_mute#mute"
-    post "/channels/:id/unmute/:user_id", to: "channel_user_mute#unmute"
+    patch "/channels/:channel_id/members/:user_id", to: "channel_user#patch"
 
     get "/search/users", to: "search#users"
     get "/search/channels", to: "search#channels"
