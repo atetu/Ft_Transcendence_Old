@@ -1,7 +1,6 @@
 import Backbone from "backbone";
 import _ from "underscore";
 
-import { ChannelUserModel } from "./user";
 import ChannelBaseActionView from "./ChannelBaseActionView";
 
 const ChannelAddUserView = ChannelBaseActionView.extend({
@@ -64,10 +63,10 @@ const ChannelAddUserView = ChannelBaseActionView.extend({
           user_id: selected,
         })
         .then(() => (newState.success = true))
-        .catch((error) => (newState.error = error))
-        .then(() => {
-			this.state2.set(newState)
-		});
+        .catch((error) => { /* seems to not like the returned value of the anonymous function */
+          newState.error = error;
+        })
+        .then(() => this.state2.set(newState));
     }
   },
 });

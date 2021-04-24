@@ -68,13 +68,9 @@ const ChannelBaseActionView = Backbone.View.extend({
 	const members = Object.values(this.channel.get("members") || {});
 	const member = members.filter((x) => x.user.id == this.user.id)[0];
 
-	console.log(member)
-
 	if (member) {
 		this.user.set(member);
 	}
-	
-	console.log(this.user)
   },
   notifyImpl(instance) {
 	  this.impl = instance;
