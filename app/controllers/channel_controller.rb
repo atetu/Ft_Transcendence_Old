@@ -47,19 +47,23 @@ class ChannelController < ApplicationController
 
     authorize!(:update, @channel)
 
-    puts permitted_params
-    puts permitted_params
-    puts permitted_params
-    puts permitted_params
-    puts permitted_params
-    puts permitted_params
-    puts permitted_params
-
     @channel.assign_attributes(permitted_params)
     @channel.save!()
 
     render({
       json: ChannelBlueprint.render(@channel),
+    })
+  end
+
+  def delete()
+    load_entities()
+
+    authorize!(:delete, @channel)
+
+    @channel.destroy!()
+
+    render({
+      json: ChannelOnlyIdBlueprint.render(@channel),
     })
   end
 

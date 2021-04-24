@@ -59,13 +59,7 @@ export default {
   },
   "/channel/:id/delete": {
     group: "channels",
-    view: (id) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-delete']",
-        data: {
-          id,
-        },
-      }),
+    view: (id) => new Channel.ChannelDeleteView({ id, fetch: true }),
   },
   "/channel/:id/ban/:userid": {
     group: "channels",
@@ -117,7 +111,8 @@ export default {
   },
   "/channel/:id/remove/:userid": {
     group: "channels",
-    view: (id, userId) => new Channel.ChannelRemoveUserView({ id, userId, fetch: true })
+    view: (id, userId) =>
+      new Channel.ChannelRemoveUserView({ id, userId, fetch: true }),
   },
   "/channel/:id/mute/:userid": {
     group: "channels",
