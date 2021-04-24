@@ -52,21 +52,12 @@ const ChannelAddUserView = ChannelBaseActionView.extend({
     if (selected) {
       this.state2.set({ loading: true });
 
-      const newState = {
-        error: null,
-        success: false,
-        loading: false,
-      };
-
       this.user
         .save({
           user_id: selected,
         })
-        .then(() => (newState.success = true))
-        .catch((error) => { /* seems to not like the returned value of the anonymous function */
-          newState.error = error;
-        })
-        .then(() => this.state2.set(newState));
+        .then(() => (window.location.hash = `#channel/${this.channel.id}`))
+        .catch((error) => this.state2.set({ loading: false, error }));
     }
   },
 });
