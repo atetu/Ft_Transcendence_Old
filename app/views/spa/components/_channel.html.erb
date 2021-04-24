@@ -1,7 +1,5 @@
 <script type="text/template" id="template-channel-list">
-	<a href="/#channel/create">
-		create a channel
-	</a> <br />
+	<a href="/#channel/create">[create]</a> <br />
 	<div class="dropdown-divider"></div>
 	<div class="list-group">
 		<%% _.each(channels, function(channel) { %>
@@ -19,27 +17,27 @@
 <script type="text/template" id="template-channel-create">
 	<form id="channel-form" autocomplete="off">
 		<div class="form-group has-validation">
-			<label for="name-input">Name</label>
+			<label for="name-input">name</label>
 			<input class="form-control" id="name-input" value="<%%e name %>" autocomplete="off">
 			<div id="name-invalid" class="invalid-feedback"></div>
 		</div>
 		<div class="form-group has-validation">
-			<label for="visibility-input">Visibility</label>
+			<label for="visibility-input">visibility</label>
 			<select class="form-control" id="visibility-select">
-				<option value="public" <%%e visibility == "public" ? 'selected' : '' %>>Public</option>
-				<option value="protected" <%%e visibility == "protected" ? 'selected' : '' %>>Protected <small>(require a password)</small></option>
-				<option value="private" <%%e visibility == "private" ? 'selected' : '' %>>Private</option>
+				<option value="public" <%%e visibility == "public" ? 'selected' : '' %>>public</option>
+				<option value="protected" <%%e visibility == "protected" ? 'selected' : '' %>>protected <small>(require a password)</small></option>
+				<option value="private" <%%e visibility == "private" ? 'selected' : '' %>>private</option>
 			</select>
 			<div id="visibility-invalid" class="invalid-feedback"></div>
 		</div>
 		<div class="form-group has-validation" style="display: none" id="password-form-group">
-			<label for="password-input">Password (leave empty to not change it)</label>
+			<label for="password-input">password (leave empty to not change it)</label>
 			<input type="password" class="form-control" id="password-input" value="<%%e this.password %>" autocomplete="new-password">
 			<div id="password-invalid" class="invalid-feedback"></div>
 		</div>
 	</form>
 	<div class="text-center">
-		<button type="button" class="btn btn-primary" id="submit-button">submit</button>
+		<a href="javascript:void(0)" id="submit-button">[submit]</a>
 	</div>
 </script>
 
@@ -242,7 +240,7 @@
 		<br />
 		to
 		<small>
-			<select>
+			<select class="form-control" style="display: unset !important; width: fit-content !important;">
 				<option value="" selected disabled hidden>&lt;target&gt;</option>
 				<option>a</option>
 				<option>b</option>
@@ -332,35 +330,55 @@
 <script type="text/template" id="template-channel-add">
 	<h3>
 		add?
-		<small><%%e channel.id %></small>
+		<small><%%e channel.name %></small>
 		<br />
 		target
 		<small>
-			<select id="username-select" style="width: 300px">
+			<select id="username-select" class="form-control" style="display: unset !important; width: fit-content !important;">
 				<option selected disabled hidden value="">username</option>
 			</select>
 		</small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e channel.id %>'">[no]</a>
-	</div>
+	<%% if (state.loading) { %>
+		loading...
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			error: <%%e state.error.responseJSON?.message || state.error.status || state.error %>
+		</div>
+	<%% } else if (state.success) { %>
+		<div class="alert alert-success" role="alert">
+			<a href="#user/<%%e user.user.id %>">
+				<%%e user.user.username %>
+			</a> added!
+		</div>
+	<%% } %>
 </script>
 
 <script type="text/template" id="template-channel-remove">
 	<h3>
 		remove?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 		<br />
 		target
-		<small><%%e userId %></small>
+		<small>
+			<a href="#user/<%%e user.id %>">
+				<%%e user.user?.username || user.id %>
+			</a>
+		</small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
-	</div>
+	<%% if (state.loading) { %>
+		loading...
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			error: <%%e state.error.responseJSON?.message || state.error.status || state.error %>
+		</div>
+	<%% } else if (state.success) { %>
+		<div class="alert alert-success" role="alert">
+			<a href="#user/<%%e user.user.id %>">
+				<%%e user.user.username %>
+			</a> removed!
+		</div>
+	<%% } %>
 </script>
 
 <script type="text/template" id="template-channel-mute">
@@ -405,4 +423,24 @@
 		<a href="javascript:void(0)">[yes]</a>
 		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
 	</div>
+</script>
+
+<script type="text/template" id="template-channel-base-action">
+	<%% if (state.loading) { %>
+		loading...
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			<%%e state.error.responseJSON?.message || state.error.status || state.error %>
+		</div>
+		<div class="container text-center">
+			<a href="javascript:void(0)" id="back-button">[back]</a>
+		</div>
+	<%% } else { %>
+		<div id="impl-container"></div>
+		<div class="dropdown-divider"></div>
+		<div class="container text-center">
+			<a href="javascript:void(0)" id="yes-button">[yes]</a>
+			<a href="javascript:void(0)" id="back-button">[back]</a>
+		</div>
+	<%% } %>
 </script>

@@ -17,4 +17,12 @@ class Channel < ApplicationRecord
   validates :password, :presence => true, allow_nil: false, on: :create, :if => Proc.new { |x| x.visibility == "protected" }
   validates :password, :presence => true, allow_nil: false, on: :update, :if => Proc.new { |x| x.visibility == "protected" and (x.password_digest == nil || x.password_digest == "") }
   validates :password, :absence => { :message => "can only be set for protected channels" }, :if => Proc.new { |x| x.visibility != "protected" }
+
+  def is_owner(user)
+    return owner == user
+  end
+
+  def is_owner!(user)
+    raise Api::Channel::NotTheOwner.new(self) unless is_owner(user)
+  end
 end

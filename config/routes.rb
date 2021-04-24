@@ -24,13 +24,17 @@ Rails.application.routes.draw do
     get "/channels/:channel_id/messages", to: "channel_message#all"
     post "/channels/:channel_id/messages", to: "channel_message#create"
     get "/channels/:channel_id/members", to: "channel_user#all"
+    get "/channels/:channel_id/members/:user_id", to: "channel_user#get"
     get "/achievements", to: "achievement#all"
 
     post "/channels/:id/join", to: "channel#join"
     post "/channels/:id/leave", to: "channel#leave"
-    delete "/channels/:id/leave", to: "channel#delete"
-    post "/channels/:id/add/:user_id", to: "channel_user#add"
-    post "/channels/:id/remove/:user_id", to: "channel_user#remove"
+
+    post "/channels/:channel_id/members", to: "channel_user#add"
+
+    delete "/channels/:id", to: "channel#delete"
+    delete "/channels/:channel_id/members/:user_id", to: "channel_user#remove"
+
     post "/channels/:id/promote/:user_id", to: "channel_user_admin#promote"
     post "/channels/:id/demote/:user_id", to: "channel_user_admin#demote"
     post "/channels/:id/ban/:user_id", to: "channel_user_ban#ban"

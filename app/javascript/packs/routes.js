@@ -113,18 +113,11 @@ export default {
   },
   "/channel/:id/add": {
     group: "channels",
-    view: (id) => new Channel.ChannelAddUserView({ id }),
+    view: (id) => new Channel.ChannelAddUserView({ id, fetch: true }),
   },
   "/channel/:id/remove/:userid": {
     group: "channels",
-    view: (id, userId) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-remove']",
-        data: {
-          id,
-          userId,
-        },
-      }),
+    view: (id, userId) => new Channel.ChannelRemoveUserView({ id, userId, fetch: true })
   },
   "/channel/:id/mute/:userid": {
     group: "channels",

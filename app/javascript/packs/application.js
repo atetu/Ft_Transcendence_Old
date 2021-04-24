@@ -1,7 +1,3 @@
-
-
-
-
 import "@mdi/font/css/materialdesignicons";
 
 require("@rails/ujs").start();
@@ -14,25 +10,22 @@ window._ = require("underscore");
 window.$ = require("jquery");
 window.Backbone = require("backbone");
 
-require("./libs/jquery_extra")
-require("./libs/underscore_extra")
+require("./libs/jquery_extra");
+require("./libs/underscore_extra");
+require("./libs/backbone_extra");
 
 const Router = require("./router");
 const NavigationBar = require("./components/navigation_bar");
 
-Backbone.View.prototype.close = function () {
-  this.remove();
-  this.unbind();
-  if (this.onClose) {
-    this.onClose();
-  }
-};
-
-var AppModel = Backbone.Model.extend({});
-
 var AppView = Backbone.View.extend({
   el: "#app",
-  initialize(options) {
+  initialize() {
+    this.model = new (Backbone.Model.extend({
+      default: {
+        view: null,
+      },
+    }))();
+
     this.model.on("change:view", this.render, this);
   },
   render() {
@@ -40,22 +33,26 @@ var AppView = Backbone.View.extend({
 
     if (view) {
       this.$el.html(view.render().el);
+    } else {
+      this.$el.html();
     }
+  },
+  set(view) {
+    this.model.get("view")?.close();
+    this.model.set("view", view);
   },
 });
 
 const app = {
   setView(view) {
-    this.model.get("view")?.close();
-    this.model.set("view", view);
+    this.view.set(view);
   },
   start() {
     this.navigationBarView = new NavigationBar.NavigationBarView();
 
-    this.model = new AppModel({ view: null });
-    this.view = new AppView({ model: this.model });
+    this.view = new AppView();
 
-	/* the Router.default is a hack... */
+    /* the Router.default is a hack... */
     this.router = new Router.default({ app: this });
 
     this.navigationBarView.render();
@@ -67,7 +64,7 @@ const app = {
 
 export default app;
 
-import bsCustomFileInput from 'bs-custom-file-input';
+import bsCustomFileInput from "bs-custom-file-input";
 $(document).ready(function () {
   bsCustomFileInput.init();
 });

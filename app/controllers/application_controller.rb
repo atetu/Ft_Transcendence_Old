@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_error_api(error)
-    render({
+    render_error({
       message: error.message(),
     }, error.status())
   end
