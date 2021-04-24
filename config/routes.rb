@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     post "/channels/:id/leave", to: "channel#leave"
 
     post "/channels/:channel_id/members", to: "channel_user#add"
+    post "/channels/:id/transfer-ownership", to: "channel#transfer_ownership"
 
     delete "/channels/:id", to: "channel#delete"
     delete "/channels/:channel_id/members/:user_id", to: "channel_user#remove"
@@ -41,7 +42,6 @@ Rails.application.routes.draw do
     post "/channels/:id/unban/:user_id", to: "channel_user_ban#unban"
     post "/channels/:id/mute/:user_id", to: "channel_user_mute#mute"
     post "/channels/:id/unmute/:user_id", to: "channel_user_mute#unmute"
-    post "/channels/:id/transfer-ownership/:user_id", to: "channel#transfer_ownership"
 
     get "/search/users", to: "search#users"
     get "/search/channels", to: "search#channels"

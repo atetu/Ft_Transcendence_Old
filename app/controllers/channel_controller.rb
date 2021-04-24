@@ -201,6 +201,7 @@ class ChannelController < ApplicationController
     @channel = Channel.find(params[:id])
 
     if user_too
+      params.require(:user_id)
       @user = User.find(params[:user_id])
     else
       @user = nil

@@ -15,6 +15,7 @@ class Ability
       ChannelHelper.can_user_show(channel, user)
     end
     can :create, Channel
+    can :transfer_ownership, Channel, :owner_id => user.id
     can :update, Channel, :owner_id => user.id
     can :delete, Channel, :owner_id => user.id
     can :join, Channel

@@ -9,7 +9,7 @@ const ChannelBaseActionView = Backbone.View.extend({
     $("script[id='template-channel-base-action']").html()
   ),
   initialize(options) {
-	const { id, userId, fetch } = options;
+	const { id, userId, fetch = true } = options;
 
     this.channel = new ChannelModel({ id });
     this.user = new ChannelUserModel({ id: userId, channel: this.channel });

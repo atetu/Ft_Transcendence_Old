@@ -240,23 +240,27 @@
 <script type="text/template" id="template-channel-transfer-ownership">
 	<h3>
 		transfer ownership?
-		<small><%%e id %></small>
+		<small><%%e channel.name || channel.id %></small>
 		<br />
 		to
 		<small>
-			<select class="form-control" style="display: unset !important; width: fit-content !important;">
+			<select id="user-select" class="form-control" style="display: unset !important; width: fit-content !important;">
 				<option value="" selected disabled hidden>&lt;target&gt;</option>
-				<option>a</option>
-				<option>b</option>
-				<option>c</option>
+				<%% _.each(channel.members, function(member) { %>
+					<%% if (channel.owner.id != member.user.id) { %>
+						<option value="<%%e member.user.id %>"><%%e member.user.username %></option>
+					<%% } %>
+				<%% }) %>
 			</select>
 		</small>
 	</h3>
-	<div class="dropdown-divider"></div>
-	<div class="container text-center">
-		<a href="javascript:void(0)">[yes]</a>
-		<a href="javascript:history.length ? history.back() : window.location.hash = '#channel/<%%e id %>'">[no]</a>
-	</div>
+	<%% if (state.loading) { %>
+		loading...
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			error: <%%e state.error.responseJSON?.message || state.error.status || state.error %>
+		</div>
+	<%% } %>
 </script>
 
 <script type="text/template" id="template-channel-delete">

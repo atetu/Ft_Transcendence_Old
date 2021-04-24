@@ -29,25 +29,19 @@ export default {
   },
   "/channel/:id/join": {
     group: "channels",
-    view: (id) => new Channel.ChannelJoinView({ id, fetch: true })
+    view: (id) => new Channel.ChannelJoinView({ id })
   },
   "/channel/:id/leave": {
     group: "channels",
-    view: (id) => new Channel.ChannelLeaveView({ id, fetch: true }),
+    view: (id) => new Channel.ChannelLeaveView({ id }),
   },
   "/channel/:id/transfer-ownership": {
     group: "channels",
-    view: (id) =>
-      new Dummy.SimpleView({
-        template: "script[id='template-channel-transfer-ownership']",
-        data: {
-          id,
-        },
-      }),
+    view: (id) => new Channel.ChannelTransferOwnershipView({ id })
   },
   "/channel/:id/delete": {
     group: "channels",
-    view: (id) => new Channel.ChannelDeleteView({ id, fetch: true }),
+    view: (id) => new Channel.ChannelDeleteView({ id }),
   },
   "/channel/:id/ban/:userid": {
     group: "channels",
@@ -95,12 +89,12 @@ export default {
   },
   "/channel/:id/add": {
     group: "channels",
-    view: (id) => new Channel.ChannelAddUserView({ id, fetch: true }),
+    view: (id) => new Channel.ChannelAddUserView({ id }),
   },
   "/channel/:id/remove/:userid": {
     group: "channels",
     view: (id, userId) =>
-      new Channel.ChannelRemoveUserView({ id, userId, fetch: true }),
+      new Channel.ChannelRemoveUserView({ id, userId }),
   },
   "/channel/:id/mute/:userid": {
     group: "channels",
