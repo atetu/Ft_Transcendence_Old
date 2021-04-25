@@ -99,7 +99,7 @@ export default {
   },
   "/profile": {
     group: "profile",
-    view: () => new User.UserProfileView({ user_id: current_user.id }),
+    view: () => new User.UserProfileView({ user_id: currentUser.id }),
   },
   "/profile/edit": {
     group: "profile",

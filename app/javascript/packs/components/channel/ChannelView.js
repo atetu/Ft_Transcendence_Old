@@ -511,6 +511,10 @@ const ChannelView = Backbone.View.extend({
               break;
             }
           }
+
+          if (event.startsWith("member") && item.user.id == currentUser.id) {
+            this.refresh();
+          }
         },
       }
     );

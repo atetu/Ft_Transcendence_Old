@@ -188,7 +188,7 @@
 		</h3>
 		<div class="dropdown-divider"></div>
 		<div>
-			<%% if (channel.owner && user_signed_in && current_user.id == channel.owner.id) { %>
+			<%% if (channel.owner && currentUser.id == channel.owner.id) { %>
 				<a href="#channel/<%%e channel.id %>/edit">[edit]</a>
 				<a href="#channel/<%%e channel.id %>/transfer-ownership">[transfer-ownership]</a>
 				<a href="#channel/<%%e channel.id %>/delete">[delete]</a>

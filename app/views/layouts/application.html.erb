@@ -8,11 +8,9 @@
 
 	<script>
 		<% if user_signed_in? %>
-		window.user_signed_in = true;
-		window.current_user = <%= raw(current_user.to_json(methods: :picture)) %>;
+			window.currentUser = <%= raw(current_user.to_json(methods: :picture)) %>;
 		<% else %>
-		window.user_signed_in = false;
-		window.current_user = null;
+			window.currentUser = null;
 		<% end %>
 	</script>
 

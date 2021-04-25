@@ -25,9 +25,9 @@ const UserListView = Backbone.View.extend({
     this.collection.bind("change", this.render);
     this.collection.bind("remove", this.render);
 
-	if (fetch) {
-		this.collection.fetch();
-	}
+    if (fetch) {
+      this.collection.fetch();
+    }
   },
   render() {
     this.$el.html(
@@ -57,7 +57,7 @@ const UserProfileView = Backbone.View.extend({
       this.template({
         error: this.user.get("$error"),
         loading: this.user.get("$loading"),
-        isSelf: user_signed_in && this.user.id === current_user.id,
+        isSelf: this.user.id === currentUser.id,
         user: this.user.toJSON(),
       })
     );
@@ -96,10 +96,8 @@ const UserProfileEditView = Backbone.View.extend({
     this.$previewImage = this.$("#preview-image");
     this.$fileInput = this.$("#file-input");
 
-    if (user_signed_in /* must be always true */) {
-      this.$usernameInput.val(current_user.username);
-      this.$previewImage.attr("src", current_user.picture);
-    }
+    this.$usernameInput.val(currentUser.username);
+    this.$previewImage.attr("src", currentUser.picture);
 
     return this;
   },
