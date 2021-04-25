@@ -62,6 +62,8 @@ class ChannelController < ApplicationController
 
     @channel.destroy!()
 
+    ChannelChannel.broadcast_delete(@channel)
+
     render({
       json: ChannelOnlyIdBlueprint.render(@channel),
     })

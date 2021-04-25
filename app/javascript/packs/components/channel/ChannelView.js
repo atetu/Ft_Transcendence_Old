@@ -257,7 +257,7 @@ const MessageInputViewMustJoin = Backbone.View.extend({
       })
     );
 
-	return this;
+    return this;
   },
 });
 
@@ -541,6 +541,18 @@ const ChannelView = Backbone.View.extend({
               );
               break;
             }
+
+            case "clear": {
+              this.messages.reset();
+              break;
+            }
+
+            case "delete": {
+              this.refresh();
+              break;
+            }
+
+			// TODO Implement transfer ownership update
           }
 
           if (event.startsWith("member") && item.user.id == currentUser.id) {

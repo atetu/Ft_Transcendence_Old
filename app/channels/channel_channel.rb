@@ -49,6 +49,14 @@ class ChannelChannel < ApplicationCable::Channel
     broadcast_member_action(channel, :update, member)
   end
 
+  def self.broadcast_clear(channel)
+    broadcast_event(channel, :clear, nil)
+  end
+
+  def self.broadcast_delete(channel)
+    broadcast_event(channel, :delete, nil)
+  end
+
   def self.broadcast_member_action(channel, action, member)
     broadcast_event(channel, "member.#{action}", ChannelMemberBlueprint.render_as_hash(
       member
