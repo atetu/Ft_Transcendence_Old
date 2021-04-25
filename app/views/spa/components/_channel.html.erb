@@ -1,17 +1,36 @@
 <script type="text/template" id="template-channel-list">
-	<a href="/#channel/create">[create]</a> <br />
-	<div class="dropdown-divider"></div>
-	<div class="list-group">
-		<%% _.each(channels, function(channel) { %>
-			<a href="/#channel/<%%e channel.id %>" class="list-group-item list-group-item-action">
-				<div class="d-flex w-100 justify-content-between">
-					<h5 class="mb-1"><%%e channel.name %></h5>
-					<small><%%e channel.visibility %></small>
-				</div>
-				<small>owner by <%%e channel.owner.username %></small>
-			</a>
-		<%% }); %>
+	<div>
+		<a href="/#channel/create">[create]</a>
+		<a href="javascript:void(0)" id="refresh-button">[refresh]</a>
 	</div>
+	<div class="dropdown-divider"></div>
+	<%% if (state.loading) { %>
+		<div class="d-flex justify-content-center">
+			<div class="spinner-border" role="status"></div>
+		</div>
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			<%%e state.error.responseJSON?.message || state.error.status || "failed to fetch the channels" %>
+		</div>
+	<%% } else { %>
+		<%% if (Object.keys(channels).length) { %>
+			<div class="list-group">
+				<%% _.each(channels, function(channel) { %>
+					<a href="/#channel/<%%e channel.id %>" class="list-group-item list-group-item-action">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1"><%%e channel.name %></h5>
+							<small><%%e channel.visibility %></small>
+						</div>
+						<small>owner by <%%e channel.owner.username %></small>
+					</a>
+				<%% }); %>
+			</div>
+		<%% } else { %>
+			<div class="alert alert-secondary" role="alert">
+				no channel
+			</div>
+		<%% } %>
+	<%% } %>
 </script>
 
 <script type="text/template" id="template-channel-create">
