@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_154409) do
     t.string "username", null: false
     t.string "provider"
     t.string "uid"
+    t.boolean "admin", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true

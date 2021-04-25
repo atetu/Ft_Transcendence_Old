@@ -22,22 +22,23 @@ class User < ApplicationRecord
       user.username = auth.info.nickname
       user.username ||= auth.info.email.split(/@/, 2)[0]
       user.avatar.attach(io: URI.open(auth.info.image), filename: "#{user.username}.png")
+      user.admin = (User.count() == 0) # is first user?
     end
   end
 
-  def picture
-    rails_blob_path(avatar, only_path: true) if avatar.attached?
+  def picture()
+    rails_blob_path(avatar, only_path: true) if avatar.attached?()
   end
 
   private
 
-  def create_statistics
+  def create_statistics()
     UserStatistics.create!(
       user: self,
     )
   end
 
-  def give_registered_achivement
+  def give_registered_achivement()
     Achievement.REGISTERED.give(self)
   end
 end

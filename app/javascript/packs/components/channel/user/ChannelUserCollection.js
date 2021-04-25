@@ -16,7 +16,7 @@ const ChannelUserCollection = Backbone.Collection.extend({
     return `/api/channels/${this.channel.id}/members`;
   },
   merge() {
-    this.add(this.channel.get("members") || {});
+    this.set(this.channel.get("members") || {});
   },
 });
 

@@ -80,13 +80,15 @@ class ChannelController < ApplicationController
       raise Api::Channel::OwnerCannotLeave.new(@channel)
     end
 
-    channel_user = channel_user_of(current_user)
+    @channel_user = channel_user_of(current_user)
 
-    if not channel_user
+    if not @channel_user
       raise Api::Channel::UserNotInChannelException.new(@channel)
     end
 
-    channel_user.destroy!
+    @channel_user.destroy!
+
+    ChannelChannel.broadcast_member_leave(@channel, @channel_user)
 
     render json: ChannelOnlyIdBlueprint.render(@channel)
   end
@@ -187,10 +189,12 @@ class ChannelController < ApplicationController
       end
     end
 
-    ChannelUser.create!(
+    @channel_user = ChannelUser.create!(
       channel: @channel,
       user: current_user,
     )
+
+    ChannelChannel.broadcast_member_join(@channel, @channel_user)
 
     render({
       json: ChannelOnlyIdBlueprint.render(@channel),

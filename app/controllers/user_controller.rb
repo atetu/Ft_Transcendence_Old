@@ -1,30 +1,36 @@
 class UserController < ApplicationController
   authorize_resource
 
-  def current
-    render json: UserBlueprint.render(current_user)
+  def current()
+    render({
+      json: UserBlueprint.render(current_user),
+    })
   end
 
-  def all
-    render json: UserBlueprint.render(User.all)
+  def all()
+    render({
+      json: UserBlueprint.render(User.all()),
+    })
   end
 
-  def show
-    load_entities_full
+  def show()
+    load_entities_full()
 
-    render json: UserBlueprint.render(
-      @user,
-      view: :full,
-    )
+    render({
+      json: UserBlueprint.render(
+        @user,
+        view: :full,
+      ),
+    })
   end
 
   private
 
-  def load_entities
+  def load_entities()
     @user = User.includes(avatar_attachment: :blob).find(params[:id])
   end
 
-  def load_entities_full
+  def load_entities_full()
     @user = User.includes(
       achievement_progress: :achievement,
       avatar_attachment: :blob,
@@ -50,7 +56,7 @@ end
 class UserBlueprint < Blueprinter::Base
   identifier :id
 
-  fields :username, :email, :picture, :updated_at, :created_at
+  fields :username, :email, :picture, :admin, :updated_at, :created_at
 
   view :full do
     association :statistics, blueprint: UserStatisticsBlueprint

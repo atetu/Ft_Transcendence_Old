@@ -64,6 +64,8 @@ class ChannelUserController < ApplicationController
       raise StandardError.new("unexpected patch key")
     end
 
+    ChannelChannel.broadcast_member_update(@channel, @channel_user)
+
     render({
       json: ChannelMemberBlueprint.render(@channel_user),
     })
@@ -78,13 +80,15 @@ class ChannelUserController < ApplicationController
       raise Api::Channel::UserAlreadyInChannelException.new(@channel)
     end
 
-    channel_user = ChannelUser.create!(
+    @channel_user = ChannelUser.create!(
       user: @user,
       channel: @channel,
     )
 
+    ChannelChannel.broadcast_member_join(@channel, @channel_user)
+
     render({
-      json: ChannelMemberBlueprint.render(channel_user),
+      json: ChannelMemberBlueprint.render(@channel_user),
     })
   end
 
@@ -100,6 +104,8 @@ class ChannelUserController < ApplicationController
     load_channel_user()
 
     @channel_user.destroy()
+
+    ChannelChannel.broadcast_member_leave(@channel, @channel_user)
 
     render({
       json: ChannelMemberBlueprint.render(@channel_user),

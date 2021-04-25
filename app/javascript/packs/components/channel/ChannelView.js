@@ -7,7 +7,7 @@ import ValidationHelper from "../../helper/validation";
 import ChannelModel from "./ChannelModel";
 
 import { ChannelMessageModel, ChannelMessageCollection } from "./message";
-import { ChannelUserCollection } from "./user";
+import { ChannelUserModel, ChannelUserCollection } from "./user";
 
 const LoadingView = Backbone.View.extend({
   template: _.template($("script[id='template-channel-loading']").html()),
@@ -483,7 +483,34 @@ const ChannelView = Backbone.View.extend({
         },
         received: (data) => {
           console.log("received(" + JSON.stringify(data) + ")");
-          this.messages.add(data);
+
+          const { event, item } = data;
+
+          switch (event) {
+            case "message": {
+              this.messages.add(item);
+              break;
+            }
+
+            case "member.update": {
+              this.members
+                .where((x) => x.get("user").id == item.user.id, true)
+                ?.set(item);
+              break;
+            }
+
+            case "member.join": {
+              this.members.add([new ChannelUserModel(item)]);
+              break;
+            }
+
+            case "member.leave": {
+              this.members.remove(
+                this.members.where((x) => x.get("user").id == item.user.id)
+              );
+              break;
+            }
+          }
         },
       }
     );

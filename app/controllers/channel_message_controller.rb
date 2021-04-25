@@ -18,13 +18,7 @@ class ChannelMessageController < ApplicationController
       content: params[:content],
     )
 
-    ChannelChannel.broadcast_to(
-      @channel,
-      ChannelMessageBlueprint.render_as_hash(
-        @message,
-        view: :user,
-      )
-    )
+    ChannelChannel.broadcast_message(@channel, @message)
 
     Achievement.DONT_BE_SHY.give(current_user)
     Achievement.SMALL_TALKER.increment(current_user)
