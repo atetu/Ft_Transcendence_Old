@@ -243,6 +243,24 @@ const MessageInputView = Backbone.View.extend({
   },
 });
 
+const MessageInputViewMustJoin = Backbone.View.extend({
+  template: _.template(
+    $("script[id='template-channel-message-input-must-join']").html()
+  ),
+  initialize({ channel }) {
+    this.channel = channel;
+  },
+  render() {
+    this.$el.html(
+      this.template({
+        channel: this.channel.toJSON(),
+      })
+    );
+
+	return this;
+  },
+});
+
 const MessageListView = Backbone.View.extend({
   template: _.template($("script[id='template-channel-message-list']").html()),
   initialize({ collection, channel }) {
@@ -262,12 +280,20 @@ const MessageListView = Backbone.View.extend({
     this.$container = this.$("#message-container");
     this.$inputContainer = this.$("#message-input-container");
 
-    this.$inputContainer.append(
-      new MessageInputView({
-        channel: this.channel,
-        collection: this.collection,
-      }).render().el
-    );
+    if (this.channel.isMember(currentUser)) {
+      this.$inputContainer.append(
+        new MessageInputView({
+          channel: this.channel,
+          collection: this.collection,
+        }).render().el
+      );
+    } else {
+      this.$inputContainer.append(
+        new MessageInputViewMustJoin({
+          channel: this.channel,
+        }).render().el
+      );
+    }
 
     this.addAll();
 
@@ -312,6 +338,8 @@ const MemberView = Backbone.View.extend({
       this.template({
         member: this.model.toJSON(),
         channel: this.channel.toJSON(),
+        isOwner: this.channel.isOwner(currentUser),
+        isAdmin: this.channel.isAdmin(currentUser),
       })
     );
 
@@ -417,6 +445,9 @@ const ChannelView = Backbone.View.extend({
         this.template({
           state: this.state.toJSON(),
           channel: this.channel.toJSON(),
+          isOwner: this.channel.isOwner(currentUser),
+          isAdmin: this.channel.isAdmin(currentUser),
+          isMember: this.channel.isMember(currentUser),
         })
       );
 

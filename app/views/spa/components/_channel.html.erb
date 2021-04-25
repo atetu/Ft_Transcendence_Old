@@ -101,21 +101,25 @@
 			<i class="mdi mdi-cancel" aria-hidden="true"></i>
 		<%% } %>
 		<br>
-		<a href="#channel/<%%e channel.id %>/mute/<%%e member.user.id %>">[mute]</a>
-		<%% if (member.muted) { %>
-			<a href="#channel/<%%e channel.id %>/unmute/<%%e member.user.id %>">[unmute]</a>
+		<%% if (isOwner && member.user.id != channel.owner.id) { %>
+			<%% if (member.admin) { %>
+				<a href="#channel/<%%e channel.id %>/demote/<%%e member.user.id %>">[demote]</a>
+			<%% } else { %>
+				<a href="#channel/<%%e channel.id %>/promote/<%%e member.user.id %>">[promote]</a>
+			<%% } %>
 		<%% } %>
-		<%% if (member.admin) { %>
-			<a href="#channel/<%%e channel.id %>/demote/<%%e member.user.id %>">[demote]</a>
-		<%% } else { %>
-			<a href="#channel/<%%e channel.id %>/promote/<%%e member.user.id %>">[promote]</a>
+		<%% if (isAdmin || isOwner) { %>
+			<a href="#channel/<%%e channel.id %>/mute/<%%e member.user.id %>">[mute]</a>
+			<%% if (member.muted) { %>
+				<a href="#channel/<%%e channel.id %>/unmute/<%%e member.user.id %>">[unmute]</a>
+			<%% } %>
+			<%% if (member.banned) { %>
+				<a href="#channel/<%%e channel.id %>/unban/<%%e member.user.id %>">[unban]</a>
+			<%% } else { %>
+				<a href="#channel/<%%e channel.id %>/ban/<%%e member.user.id %>">[ban]</a>
+			<%% } %>
+			<a href="#channel/<%%e channel.id %>/remove/<%%e member.user.id %>">[remove]</a>
 		<%% } %>
-		<%% if (member.banned) { %>
-			<a href="#channel/<%%e channel.id %>/unban/<%%e member.user.id %>">[unban]</a>
-		<%% } else { %>
-			<a href="#channel/<%%e channel.id %>/ban/<%%e member.user.id %>">[ban]</a>
-		<%% } %>
-		<a href="#channel/<%%e channel.id %>/remove/<%%e member.user.id %>">[remove]</a>
 	</p>
 </script>
 
@@ -141,6 +145,13 @@
 			</button>
 		</div>
 		<div id="message-invalid" class="invalid-feedback"></div>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-message-input-must-join">
+	<div class="alert alert-primary" role="alert">
+		do you want to send messages?
+		<a href="#channel/<%%e channel.id %>/join">[join]</a>
 	</div>
 </script>
 
@@ -188,14 +199,20 @@
 		</h3>
 		<div class="dropdown-divider"></div>
 		<div>
-			<%% if (channel.owner && currentUser.id == channel.owner.id) { %>
+			<%% if (isOwner) { %>
 				<a href="#channel/<%%e channel.id %>/edit">[edit]</a>
 				<a href="#channel/<%%e channel.id %>/transfer-ownership">[transfer-ownership]</a>
 				<a href="#channel/<%%e channel.id %>/delete">[delete]</a>
-				<a href="#channel/<%%e channel.id %>/add">[add]</a>
 				<a href="#channel/<%%e channel.id %>/clear">[clear]</a>
 			<%% } %>
-			<a href="#channel/<%%e channel.id %>/leave">[leave]</a>
+			<%% if (isOwner || isAdmin) { %>
+				<a href="#channel/<%%e channel.id %>/add">[add]</a>
+			<%% } %>
+			<%% if (isMember) { %>
+				<a href="#channel/<%%e channel.id %>/leave">[leave]</a>
+			<%% } else { %>
+				<a href="#channel/<%%e channel.id %>/join">[join]</a>
+			<%% } %>
 			<a href="javascript:void(0)" id="refresh-action">[refresh]</a>
 		</div>
 		<div class="dropdown-divider"></div>
