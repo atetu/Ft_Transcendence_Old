@@ -180,8 +180,8 @@ const GameView = Backbone.View.extend({
                             
                             if (self.my_side)
                             {
-                                ctx.fillStyle = 'yellow'
-                                ctx.fillRect(canvas.width - 25, self.my_paddle.round, 15, 80);
+                                ctx.fillStyle = 'red'
+                                ctx.fillRect(canvas.width - 25, self.my_paddle, 15, 80);
                                 ctx.fillStyle = 'blue'
                                 ctx.fillRect(10, self.enemy_paddle, 15, 80);
                             }
