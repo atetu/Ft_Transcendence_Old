@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 2021_04_09_154409) do
     t.boolean "admin", default: false, null: false
     t.string "provider"
     t.string "uid"
-    t.boolean "otp_enabled", default: false, null: false
+    t.boolean "otp", default: false, null: false
     t.string "otp_secret_key"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

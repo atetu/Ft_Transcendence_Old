@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_many :achievement_progress, dependent: :destroy, inverse_of: :user
 
   validates :username, uniqueness: true, presence: true
+  validates :otp, inclusion: { in: [true, false] }
 
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
@@ -27,12 +28,15 @@ class User < ApplicationRecord
       user.username ||= auth.info.email.split(/@/, 2)[0]
       user.avatar.attach(io: URI.open(auth.info.image), filename: "#{user.username}.png")
       user.admin = (User.count() == 0) # is first user?
-      user.otp_secret_key = nil
     end
   end
 
   def picture()
-    rails_blob_path(avatar, only_path: true) if avatar.attached?()
+    return rails_blob_path(avatar, only_path: true) if avatar.attached?()
+  end
+
+  def otp_provisioning_uri()
+    return provisioning_uri(nil, issuer: "ft_transcendence")
   end
 
   private

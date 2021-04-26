@@ -37,9 +37,12 @@ Backbone.View.fullExtend = function (protoProps, staticProps) {
 };
 
 Backbone.View.prototype.close = function () {
-  this.remove();
-  this.unbind();
   if (this.onClose) {
     this.onClose();
+  }
+  this.remove();
+  this.unbind();
+  if (this.afterClose) {
+    this.afterClose();
   }
 };

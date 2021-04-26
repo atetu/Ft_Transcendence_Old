@@ -7,7 +7,7 @@ require("jquery-ui");
 require("bootstrap");
 
 window._ = require("underscore");
-window.$ = require("jquery");
+window.$ = window.jQuery = require("jquery");
 window.Backbone = require("backbone");
 
 require("./libs/jquery_extra");
@@ -64,7 +64,8 @@ const app = {
 
 export default app;
 
-import bsCustomFileInput from "bs-custom-file-input";
+const bsCustomFileInput = require("bs-custom-file-input");
+require("jquery-qrcode2");
 $(document).ready(function () {
   bsCustomFileInput.init();
 });

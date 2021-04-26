@@ -11,7 +11,7 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :provider
       t.string :uid
 
-      t.boolean :otp_enabled, null: false, default: false
+      t.boolean :otp, null: false, default: false
       t.string :otp_secret_key
 
       t.timestamps

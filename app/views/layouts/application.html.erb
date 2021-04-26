@@ -8,7 +8,7 @@
 
 	<script>
 		<% if user_signed_in? %>
-			window.currentUser = <%= raw(current_user.to_json(methods: :picture)) %>;
+			window.currentUser = <%= raw(current_user.to_json(methods: [:picture, :otp_provisioning_uri])) %>;
 		<% else %>
 			window.currentUser = null;
 		<% end %>

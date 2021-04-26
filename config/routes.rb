@@ -29,6 +29,9 @@ Rails.application.routes.draw do
     get "/channels/:channel_id/members/:user_id", to: "channel_user#get"
     get "/achievements", to: "achievement#all"
 
+    get "/users/current/settings", to: "user_settings#get"
+    post "/users/current/settings", to: "user_settings#update"
+
     post "/channels/:id/join", to: "channel#join"
     post "/channels/:id/leave", to: "channel#leave"
 

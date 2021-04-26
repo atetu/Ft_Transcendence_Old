@@ -3,7 +3,7 @@ class UserController < ApplicationController
 
   def current()
     render({
-      json: UserBlueprint.render(current_user),
+      json: UserBlueprint.render(current_user, view: :self),
     })
   end
 
@@ -61,5 +61,9 @@ class UserBlueprint < Blueprinter::Base
   view :full do
     association :statistics, blueprint: UserStatisticsBlueprint
     association :achievement_progress, name: :achievement_progresses, blueprint: UserAchievementProgressBlueprint
+  end
+
+  view :self do
+    fields :otp_provisioning_uri
   end
 end

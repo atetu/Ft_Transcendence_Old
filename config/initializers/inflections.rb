@@ -17,4 +17,5 @@
 
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.uncountable "UserStatistics"
+  inflect.uncountable "UserSettings"
 end
