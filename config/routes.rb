@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   root to: "spa#index"
 
+  post "/", to: "spa#unlock"
+
   scope "/api" do
     get "/users", to: "user#all"
     get "/users/current", to: "user#current"

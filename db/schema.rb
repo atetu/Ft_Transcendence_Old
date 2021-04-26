@@ -112,9 +112,11 @@ ActiveRecord::Schema.define(version: 2021_04_09_154409) do
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.string "username", null: false
+    t.boolean "admin", default: false, null: false
     t.string "provider"
     t.string "uid"
-    t.boolean "admin", default: false, null: false
+    t.boolean "otp_enabled", default: false, null: false
+    t.string "otp_secret_key"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true

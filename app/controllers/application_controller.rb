@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   include CanCan::ControllerAdditions
 
+  before_action :ensure_otp_logged
+
   skip_before_action :verify_authenticity_token
 
   rescue_from ActiveRecord::RecordInvalid, :with => :render_error_validation
@@ -8,6 +10,16 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, :with => :render_error_not_found
   rescue_from CanCan::AccessDenied, :with => :render_error_access_denied
   rescue_from Api::BaseException, :with => :render_error_api
+
+  protected
+
+  def ensure_otp_logged()
+    if session[:require_otp]
+      raise Api::Auth::OtpRequired.new()
+    end
+  end
+
+  private
 
   def render_error(json, status)
     render({

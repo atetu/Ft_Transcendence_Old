@@ -71,6 +71,7 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "devise"
+gem "active_model_otp"
 gem "simple_form"
 gem "dotenv-rails"
 gem "enum_attributes_validation"

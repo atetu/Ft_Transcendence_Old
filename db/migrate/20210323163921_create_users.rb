@@ -5,9 +5,14 @@ class CreateUsers < ActiveRecord::Migration[6.1]
     create_table :users, id: :uuid do |t|
       t.string :email, null: false
       t.string :username, null: false
+
+      t.boolean :admin, null: false, default: false
+
       t.string :provider
       t.string :uid
-      t.boolean :admin, null: false, default: false
+
+      t.boolean :otp_enabled, null: false, default: false
+      t.string :otp_secret_key
 
       t.timestamps
     end

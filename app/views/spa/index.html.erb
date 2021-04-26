@@ -1,5 +1,17 @@
 <% if !user_signed_in? %>
 	<%= render "spa/indexes/auth" %>
+<% elsif session[:require_otp] %>
+	<%= render "spa/indexes/otp" %>
 <% else %>
 	<%= render "spa/indexes/home" %>
 <% end %>
+<%= puts session.to_h %>
+<%= puts session[:require_otp] %>
+<%= puts session %>
+<%= puts session %>
+<%= puts session %>
+<%= puts session %>
+<%= puts session %>
+<%= puts session %>
+<%= puts session %>
+<%= puts session %>
