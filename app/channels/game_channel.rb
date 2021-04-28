@@ -8,14 +8,14 @@ class GameChannel < ApplicationCable::Channel
       if (data["side"] == 0)
         #  right = $redis.get("right:#{@id}");
         #  puts right
-         right = update_paddle(right, data["movement"])
+         right = update_paddle("right", data["movement"])
         #  $redis.set("right:#{@game.id}", right)
       end
       if (data["side"] == 1)
         # left = $redis.get("left:#{@game.id}");
         # left = $redis.get("left:#{@id}");
         #  puts left
-        left = update_paddle(left, data["movement"])
+        left = update_paddle("left", data["movement"])
         # $redis.set("left:#{@game.id}", left)
       end
 
@@ -24,18 +24,15 @@ class GameChannel < ApplicationCable::Channel
     def update_paddle(paddle, movement)
       if movement == "down"
         if paddle == "right"
-          puts "HERE"
           $redis.incr("right:#{@id}")
         elsif paddle == "left"
-          puts "THERE"
           $redis.incr("left:#{@id}")
         end
       end
-      puts "***********************************************"
-      right = $redis.get("right:#{@id}")
-      puts right
-      left = $redis.get("left:#{@id}")
-      puts left
+      # right = $redis.get("right:#{@id}")
+      # puts right
+      # left = $redis.get("left:#{@id}")
+      # puts left
       if movement == "up"
         if paddle == "right"
           $redis.decr("right:#{@id}")
