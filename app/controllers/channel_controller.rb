@@ -1,22 +1,29 @@
 class ChannelController < ApplicationController
   authorize_resource
 
-  def all
-    render json: ChannelBlueprint.render(Channel.includes(:owner))
+  # GET /channels
+  def all()
+    render({
+      json: ChannelBlueprint.render(Channel.includes(:owner)),
+    })
   end
 
-  def show
+  # GET /channels/<id>
+  def show()
     load_entities
 
     authorize! :show, @channel
 
-    render json: ChannelBlueprint.render(
-      @channel,
-      view: :members,
-    )
+    render({
+      json: ChannelBlueprint.render(
+        @channel,
+        view: :members,
+      ),
+    })
   end
 
-  def create
+  # POST /channels
+  def create()
     args = permitted_params
 
     @channel = Channel.create!(
@@ -33,15 +40,19 @@ class ChannelController < ApplicationController
         admin: true,
       )
     rescue
-      @channel.destroy
+      @channel.destroy()
       raise
     end
 
     Achievement.COMMUNITY_STARTER.give(current_user)
 
-    render json: ChannelBlueprint.render(@channel), status: :created
+    render({
+      json: ChannelBlueprint.render(@channel),
+      status: :created,
+    })
   end
 
+  # POST /channels/<id>
   def update()
     load_entities()
 
@@ -55,6 +66,7 @@ class ChannelController < ApplicationController
     })
   end
 
+  # DELETE /channels/<id>
   def delete()
     load_entities()
 
@@ -69,12 +81,14 @@ class ChannelController < ApplicationController
     })
   end
 
+  # POST /channels/<id>/join
   def join()
     load_entities()
 
     add_user(current_user, true)
   end
 
+  # POST /channels/<id>/leave
   def leave()
     load_entities()
 
@@ -88,31 +102,37 @@ class ChannelController < ApplicationController
       raise Api::Channel::UserNotInChannelException.new(@channel)
     end
 
-    @channel_user.destroy!
+    @channel_user.destroy!()
 
     ChannelChannel.broadcast_member_leave(@channel, @channel_user)
 
-    render json: ChannelOnlyIdBlueprint.render(@channel)
+    render({
+      json: ChannelOnlyIdBlueprint.render(@channel),
+    })
   end
 
+  # POST /channels/<id>/add/<user_id>
   def add()
     load_entities(true)
 
     add_user(@user, false)
   end
 
+  # POST /channels/<id>/promote/<user_id>
   def promote()
     load_entities(true)
 
     set_as_administrator(true)
   end
 
+  # POST /channels/<id>/demote/<user_id>
   def demote()
     load_entities(true)
 
     set_as_administrator(false)
   end
 
+  # POST /channels/<id>/transfer-ownership/<user_id>
   def transfer_ownership()
     load_entities(true)
 

@@ -1,6 +1,7 @@
 class ChannelMessageController < ApplicationController
   before_action :load_entities
 
+  # GET /channels/<channel_id>/messages
   def all()
     render({
       json: ChannelMessageBlueprint.render(
@@ -10,6 +11,7 @@ class ChannelMessageController < ApplicationController
     })
   end
 
+  # POST /channels/<channel_id>/messages
   def create()
     @message = ChannelMessage.create!(
       user: current_user,
@@ -30,6 +32,7 @@ class ChannelMessageController < ApplicationController
     })
   end
 
+  # DELETE /channels/<channel_id>/messages
   def clear()
     ChannelMessage.where(channel: @channel).delete_all()
 

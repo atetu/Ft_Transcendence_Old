@@ -1,10 +1,13 @@
 class UserSettingsController < ApplicationController
+
+  # GET /users/current/settings
   def get()
     render({
       json: UserSettingsBlueprint.render(UserSettings.new(current_user)),
     })
   end
 
+  # POST /users/current/settings
   def update()
     args = params.permit(:username, :otp)
 

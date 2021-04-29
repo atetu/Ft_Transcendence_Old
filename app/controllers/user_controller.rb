@@ -1,18 +1,21 @@
 class UserController < ApplicationController
   authorize_resource
 
+  # GET /users/current
   def current()
     render({
       json: UserBlueprint.render(current_user, view: :self),
     })
   end
 
+  # GET /users
   def all()
     render({
       json: UserBlueprint.render(User.all()),
     })
   end
 
+  # GET /users/<id>
   def show()
     load_entities_full()
 

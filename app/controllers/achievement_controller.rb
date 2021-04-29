@@ -1,6 +1,8 @@
 class AchievementController < ApplicationController
   def all
-    render json: AchievementBlueprint.render(Achievement.all)
+    render({
+      json: AchievementBlueprint.render(Achievement.all()),
+    })
   end
 end
 

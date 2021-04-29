@@ -1,6 +1,7 @@
 class ChannelUserController < ApplicationController
   before_action :load_entities
 
+  # GET /channels/<channel_id>/members
   def all()
     render({
       json: ChannelMemberBlueprint.render(
@@ -9,6 +10,7 @@ class ChannelUserController < ApplicationController
     })
   end
 
+  # GET /channels/<channel_id>/members/<user_id>
   def get()
     load_entities(true)
     load_channel_user()
@@ -18,6 +20,7 @@ class ChannelUserController < ApplicationController
     })
   end
 
+  # PATCH /channels/<channel_id>/members/<user_id>
   def patch()
     load_entities(true)
     load_channel_user()
@@ -71,6 +74,7 @@ class ChannelUserController < ApplicationController
     })
   end
 
+  # POST /channels/<channel_id>/members
   def add()
     load_entities(true)
 
@@ -92,6 +96,7 @@ class ChannelUserController < ApplicationController
     })
   end
 
+  # DELETE /channels/<channel_id>/members/<user_id>
   def remove()
     load_entities(true)
 

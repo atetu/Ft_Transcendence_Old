@@ -1,4 +1,6 @@
 class SpaController < ApplicationController
+
+  # POST /
   def unlock()
     otp_code = params["otp-code"]
 
