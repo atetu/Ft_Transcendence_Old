@@ -6,15 +6,9 @@ class GameChannel < ApplicationCable::Channel
 
     def input(data)
       if (data["side"] == 0)
-        #  right = $redis.get("right:#{@id}");
-        #  puts right
-         right = update_paddle("right", data["movement"])
-        #  $redis.set("right:#{@game.id}", right)
+        right = update_paddle("right", data["movement"])
       end
       if (data["side"] == 1)
-        # left = $redis.get("left:#{@game.id}");
-        # left = $redis.get("left:#{@id}");
-        #  puts left
         left = update_paddle("left", data["movement"])
         # $redis.set("left:#{@game.id}", left)
       end

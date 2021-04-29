@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 2021_04_07_215206) do
   end
 
   create_table "games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
     t.uuid "player1_id"
     t.uuid "player2_id"
     t.datetime "created_at", precision: 6, null: false
