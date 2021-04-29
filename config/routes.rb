@@ -46,5 +46,12 @@ Rails.application.routes.draw do
 
     get "/search/users", to: "search#users"
     get "/search/channels", to: "search#channels"
+
+    get "/users/:user_id/friends", to: "friendship#get"
+    get "/users/:user_id/friends/pending", to: "friendship#pending"
+    get "/users/:user_id/friends/requests", to: "friendship#requests"
+    post "/users/:user_id/friends", to: "friendship#create"
+    post "/users/:user_id/friends/<friend_id>", to: "friendship#accept"
+    delete "/users/:user_id/friends/<friend_id>", to: "friendship#delete"
   end
 end

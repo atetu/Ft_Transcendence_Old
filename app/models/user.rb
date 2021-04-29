@@ -18,6 +18,13 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :achievement_progress, dependent: :destroy, inverse_of: :user
 
+  has_many :friendships, dependent: :destroy, inverse_of: :user
+  has_many :friendships2, dependent: :destroy, inverse_of: :friend
+
+  has_many :friends, -> { where(accepted: true) }, class_name: "Friendship"
+  has_many :pending_requests, -> { where(accepted: false) }, class_name: "Friendship"
+  has_many :pending_friends, -> { where(accepted: false) }, class_name: "Friendship", foreign_key: :friend_id
+
   validates :username, uniqueness: true, presence: true
   validates :otp, inclusion: { in: [true, false] }
 
