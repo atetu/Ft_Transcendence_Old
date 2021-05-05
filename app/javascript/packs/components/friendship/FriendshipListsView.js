@@ -19,12 +19,15 @@ const FriendshipListsView = Backbone.View.extend({
     this.views = {
       friends: new FriendshipListView({
         collection: new FriendshipCollection([], { user }),
+        type: "friend"
       }),
       pending: new FriendshipListView({
         collection: new FriendshipCollection([], { user, mode: "pending" }),
+        type: "pending"
       }),
       requested: new FriendshipListView({
         collection: new FriendshipCollection([], { user, mode: "requests" }),
+        type: "request"
       }),
     };
 

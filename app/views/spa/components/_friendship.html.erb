@@ -13,26 +13,47 @@
 		</div>
 	<%% } else { %>
 		<%% if (Object.keys(friendships).length) { %>
-			<div class="list-group">
-				<%% _.each(friendships, function(friendship) { %>
-					<a href="/#user/<%%e (friendship.friend || friendship.user).id %>" class="list-group-item list-group-item-action">
-						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1"><%%e (friendship.friend || friendship.user).username %></h5>
-              <%% if (friendship.accepted) { %>
-			          <i class="mdi mdi-check mdi-18px text-success" aria-hidden="true"></i>
-              <%% } else { %>
-			          <i class="mdi mdi-clock mdi-18px text-warning" aria-hidden="true"></i>
-              <%% } %>
-						</div>
-					</a>
-				<%% }); %>
-			</div>
+			<div class="friendship-list list-group"></div>
 		<%% } else { %>
 			<div class="alert alert-secondary" role="alert">
 				no friendship
 			</div>
 		<%% } %>
 	<%% } %>
+</script>
+
+<script type="text/template" id="template-friendship-pending">
+  <div class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">
+        <a href="/#user/<%%e friendship.user.id %>" ><%%e friendship.user.username %></a>
+      </h5>
+      <a href="#friendship/accept/<%%e friendship.user.id %>">[accept]</a>
+      <a href="#friendship/refuse/<%%e friendship.user.id %>">[refuse]</a>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="template-friendship-request">
+  <div href="/#user/<%%e friendship.friend.id %>" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">
+        <a href="/#user/<%%e friendship.friend.id %>" ><%%e friendship.friend.username %></a>
+      </h5>
+      <a href="#friendship/cancel/<%%e friendship.friend.id %>">[cancel]</a>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="template-friendship-friend">
+  <div href="/#user/<%%e friendship.friend.id %>" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">
+        <a href="/#user/<%%e friendship.friend.id %>" ><%%e friendship.friend.username %></a>
+      </h5>
+      <a href="#friendship/delete/<%%e friendship.friend.id %>">[delete]</a>
+    </div>
+  </div>
 </script>
 
 <script type="text/template" id="template-friendship-lists">
