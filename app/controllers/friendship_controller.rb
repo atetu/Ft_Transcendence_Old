@@ -49,6 +49,8 @@ class FriendshipController < ApplicationController
   def create()
     load_entities(false)
 
+    raise Api::Friendship::CannotRequestToSelf.new(@user) if @user == current_user
+
     friendship = Friendship.find_by(
       user: current_user,
       friend: @user,

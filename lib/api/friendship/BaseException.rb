@@ -1,5 +1,7 @@
 class Api::Friendship::BaseException < Api::BaseException
-  def initialize()
+  def initialize(user)
     super()
+
+    @user = user
   end
 end
