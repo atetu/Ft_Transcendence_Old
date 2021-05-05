@@ -1,36 +1,14 @@
 import Backbone from "backbone";
 import _ from "underscore";
 
+import { GenericErrorView } from "../generic"
+
 import ChannelModel from "./ChannelModel";
 import { ChannelUserModel } from "./user";
 
-const ErrorView = Backbone.View.extend({
-  template: _.template(
-    $("script[id='template-channel-base-action-error']").html()
-  ),
-  initialize({ state, into }) {
-    this.state = state;
-    this.into = into;
-
-    _.bindAll(this, "render");
-
-    this.state.bind("change", this.render);
-  },
-  render() {
-    const el = this.into.find("#error-container");
-
-    if (el) {
-      el.empty();
-      el.html(this.template(this.state.toJSON()));
-    }
-
-    return this;
-  },
-});
-
 const ChannelBaseActionView = Backbone.View.extend({
   baseTemplate: _.template(
-    $("script[id='template-channel-base-action']").html()
+    $("script[id='template-generic-action']").html()
   ),
   initialize(options) {
     const { id, userId, fetch = true } = options;
@@ -82,7 +60,7 @@ const ChannelBaseActionView = Backbone.View.extend({
     if (this.$2 && this.impl) {
       this.impl.render2(this.$2, data);
 
-      new ErrorView({
+      new GenericErrorView({
         state: this.impl.state2,
         into: this.$2,
       }).render();

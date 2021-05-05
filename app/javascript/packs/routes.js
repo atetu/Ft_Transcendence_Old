@@ -103,6 +103,10 @@ export default {
         }),
       }),
   },
+  "/friendship/add/:user_id": {
+    group: "friendships",
+    view: (userId) => new Friendship.FriendshipAddView({ userId }),
+  },
   "/guilds": {
     group: "guilds",
     view: () => new Dummy.EmptyView(),

@@ -47,6 +47,24 @@ class FriendshipController < ApplicationController
 
   # POST /users/<user_id>/friends
   def create()
+    load_entities(false)
+
+    friendship = Friendship.find_by(
+      user: current_user,
+      friend: @user,
+    )
+
+    if friendship.blank?()
+      friendship = Friendship.create!(
+        user: current_user,
+        friend: @user,
+        accepted: false,
+      )
+    end
+
+    render({
+      json: FriendshipBlueprint.render(friendship, view: :normal),
+    })
   end
 
   # POST /users/<user_id>/friends/<friend_id>
@@ -97,11 +115,11 @@ class FriendshipBlueprint < Blueprinter::Base
   fields :accepted
 
   view :received_side do
-    association :user, blueprint: FriendshipUserBlueprint, name: "from"
+    association :user, blueprint: FriendshipUserBlueprint
   end
 
   view :send_side do
-    association :friend, blueprint: FriendshipUserBlueprint, name: "to"
+    association :friend, blueprint: FriendshipUserBlueprint
   end
 
   view :friend do

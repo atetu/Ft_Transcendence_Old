@@ -1,12 +1,12 @@
 import Backbone from "backbone";
 import _ from "underscore";
 
-import ChannelBaseActionView from "./ChannelBaseActionView";
+import FriendshipBaseActionView from "./FriendshipBaseActionView";
 
-const ChannelRemoveUserView = ChannelBaseActionView.extend({
-  template: _.template($("script[id='template-channel-remove']").html()),
+const FriendshipAddView = FriendshipBaseActionView.extend({
+  template: _.template($("script[id='template-friendship-add']").html()),
   initialize() {
-    ChannelBaseActionView.prototype.initialize.apply(this, arguments);
+    FriendshipBaseActionView.prototype.initialize.apply(this, arguments);
 
     this.state2 = new (Backbone.Model.extend({}))({
       loading: false,
@@ -21,7 +21,6 @@ const ChannelRemoveUserView = ChannelBaseActionView.extend({
   render2() {
     this.$2.html(
       this.template({
-        channel: this.channel.toJSON(),
         user: this.user.toJSON(),
         state: this.state2.toJSON(),
       })
@@ -30,13 +29,15 @@ const ChannelRemoveUserView = ChannelBaseActionView.extend({
     return this;
   },
   onYes() {
-    this.state2.set({ loading: true });
+    this.state2.set({ loading: true, error: null });
 
-    this.user
-      .destroy()
-      .then(() => (window.location.hash = `#channel/${this.channel.id}`))
+    console.log("startibg");
+
+    this.friendship
+      .save()
+      .then(() => (window.location.hash = `#friendships`))
       .catch((error) => this.state2.set({ loading: false, error }));
   },
 });
 
-export default ChannelRemoveUserView;
+export default FriendshipAddView;
