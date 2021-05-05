@@ -4,7 +4,7 @@ import _ from "underscore";
 const FriendshipListView = Backbone.View.extend({
   template: _.template($("script[id='template-friendship-list']").html()),
   events: {
-    "click #refresh-button"() {
+    "click .refresh-button"() {
       this.refresh();
     },
   },

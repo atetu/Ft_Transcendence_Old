@@ -1,6 +1,6 @@
 <script type="text/template" id="template-friendship-list">
 	<div>
-		<a href="javascript:void(0)" id="refresh-button">[refresh]</a>
+		<a href="javascript:void(0)" class="refresh-button">[refresh]</a>
 	</div>
 	<div class="dropdown-divider"></div>
 	<%% if (state.loading) { %>
@@ -15,9 +15,9 @@
 		<%% if (Object.keys(friendships).length) { %>
 			<div class="list-group">
 				<%% _.each(friendships, function(friendship) { %>
-					<a href="/#user/<%%e friendship.friend.id %>" class="list-group-item list-group-item-action">
+					<a href="/#user/<%%e (friendship.friend || friendship.user).id %>" class="list-group-item list-group-item-action">
 						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1"><%%e friendship.friend.username %></h5>
+							<h5 class="mb-1"><%%e (friendship.friend || friendship.user).username %></h5>
               <%% if (friendship.accepted) { %>
 			          <i class="mdi mdi-check mdi-18px text-success" aria-hidden="true"></i>
               <%% } else { %>
@@ -33,4 +33,33 @@
 			</div>
 		<%% } %>
 	<%% } %>
+</script>
+
+<script type="text/template" id="template-friendship-lists">
+	<div>
+		<a href="javascript:void(0)" class="refresh-all-button">[refresh]</a>
+	</div>
+	<div class="dropdown-divider"></div>
+	<div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <h3>
+          friends
+        </h3>
+        <div id="container-friends"></div>
+      </div>
+      <div class="col-sm">
+        <h3>
+          pending
+        </h3>
+        <div id="container-pending"></div>
+      </div>
+      <div class="col-sm">
+        <h3>
+          requested
+        </h3>
+        <div id="container-requested"></div>
+      </div>
+    </div>
+  </div>
 </script>

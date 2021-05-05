@@ -96,12 +96,7 @@ export default {
   },
   "/friendships": {
     group: "friendships",
-    view: () =>
-      new Friendship.FriendshipListView({
-        collection: new Friendship.FriendshipCollection([], {
-          user: currentUser,
-        }),
-      }),
+    view: () => new Friendship.FriendshipListsView({ userId: currentUser.id }),
   },
   "/friendship/add/:user_id": {
     group: "friendships",
