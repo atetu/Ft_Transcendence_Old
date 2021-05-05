@@ -24,7 +24,7 @@ const NavigationBarView = Backbone.View.extend({
 
     _.bindAll(this, "render", "setActive");
 
-    ["channels", "guilds", "users"].forEach((item) => {
+    ["channels", "guilds", "users", "friendships"].forEach((item) => {
       this.links.add(
         new NavigationBarLinkModel({
           route: item,

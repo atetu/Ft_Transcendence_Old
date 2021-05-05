@@ -1,0 +1,36 @@
+<script type="text/template" id="template-friendship-list">
+	<div>
+		<a href="javascript:void(0)" id="refresh-button">[refresh]</a>
+	</div>
+	<div class="dropdown-divider"></div>
+	<%% if (state.loading) { %>
+		<div class="d-flex justify-content-center">
+			<div class="spinner-border" role="status"></div>
+		</div>
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			<%%e state.error.responseJSON?.message || "failed to fetch the friendships" %>
+		</div>
+	<%% } else { %>
+		<%% if (Object.keys(friendships).length) { %>
+			<div class="list-group">
+				<%% _.each(friendships, function(friendship) { %>
+					<a href="/#user/<%%e friendship.friend.id %>" class="list-group-item list-group-item-action">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1"><%%e friendship.friend.username %></h5>
+              <%% if (friendship.accepted) { %>
+			          <i class="mdi mdi-check mdi-18px text-success" aria-hidden="true"></i>
+              <%% } else { %>
+			          <i class="mdi mdi-clock mdi-18px text-warning" aria-hidden="true"></i>
+              <%% } %>
+						</div>
+					</a>
+				<%% }); %>
+			</div>
+		<%% } else { %>
+			<div class="alert alert-secondary" role="alert">
+				no friendship
+			</div>
+		<%% } %>
+	<%% } %>
+</script>

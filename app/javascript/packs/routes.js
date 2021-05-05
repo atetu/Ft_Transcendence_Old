@@ -1,6 +1,7 @@
 const Dummy = require("./components/dummy");
 const Channel = require("./components/channel");
 const User = require("./components/user");
+const Friendship = require("./components/friendship");
 
 export default {
   "/": {
@@ -91,6 +92,15 @@ export default {
           id,
           userId,
         },
+      }),
+  },
+  "/friendships": {
+    group: "friendships",
+    view: () =>
+      new Friendship.FriendshipListView({
+        collection: new Friendship.FriendshipCollection([], {
+          user: currentUser,
+        }),
       }),
   },
   "/guilds": {

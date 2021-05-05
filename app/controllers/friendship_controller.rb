@@ -14,7 +14,7 @@ class FriendshipController < ApplicationController
     end
 
     render({
-      json: FriendshipBlueprint.render(@user.friends),
+      json: FriendshipBlueprint.render(@user.friends, view: :friend),
     })
   end
 
@@ -38,6 +38,11 @@ class FriendshipController < ApplicationController
 
   # GET /users/<user_id>/friends/<friend_id>
   def status()
+    load_entities(true)
+
+    render({
+      json: FriendshipBlueprint.render(@user.pending_requests, view: :normal),
+    })
   end
 
   # POST /users/<user_id>/friends
@@ -46,10 +51,24 @@ class FriendshipController < ApplicationController
 
   # POST /users/<user_id>/friends/<friend_id>
   def accept()
+    load_entities(true)
+
+    @friendship.confirm!()
+
+    render({
+      json: FriendshipBlueprint.render(@friendship, view: :normal),
+    })
   end
 
   # DELETE /users/<user_id>/friends/<friend_id>
   def delete()
+    load_entities(true)
+
+    @friendship.destroy_model!()
+
+    render({
+      json: FriendshipBlueprint.render(@friendship, view: :normal),
+    })
   end
 
   private
@@ -85,8 +104,12 @@ class FriendshipBlueprint < Blueprinter::Base
     association :friend, blueprint: FriendshipUserBlueprint, name: "to"
   end
 
+  view :friend do
+    association :friend, blueprint: FriendshipUserBlueprint
+  end
+
   view :normal do
-    include_view :received_side
-    include_view :send_side
+    association :user, blueprint: FriendshipUserBlueprint
+    include_view :friend
   end
 end
