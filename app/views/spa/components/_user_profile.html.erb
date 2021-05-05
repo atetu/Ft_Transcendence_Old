@@ -40,10 +40,12 @@
 											joined <br />
 											<%%e user.created_at %>
 										</p>
-                    <a href="#friendship/add/<%%e user.id %>" class="btn btn-primary">
-                      request friendship
-                    </a>
-										<button class="btn btn-outline-primary">Message</button>
+									  <%% if (!isSelf) { %>
+                      <a href="#friendship/add/<%%e user.id %>" class="btn btn-primary">
+                        request friendship
+                      </a>
+                      <button class="btn btn-outline-primary">Message</button>
+                    <%% } %>
 									</div>
 								</div>
 							</div>
