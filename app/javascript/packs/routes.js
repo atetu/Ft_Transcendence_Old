@@ -102,6 +102,10 @@ export default {
     group: "friendships",
     view: (userId) => new Friendship.FriendshipAddView({ userId }),
   },
+  "/friendship/accept/:user_id": {
+    group: "friendships",
+    view: (userId) => new Friendship.FriendshipAcceptView({ userId }),
+  },
   "/guilds": {
     group: "guilds",
     view: () => new Dummy.EmptyView(),
